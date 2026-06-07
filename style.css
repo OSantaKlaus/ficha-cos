@@ -1,0 +1,2322 @@
+/* ============================================================
+   FICHA DE D&D 5e — style.css  (Redesign Moderno-Medieval)
+============================================================ */
+
+/* ── 1. VARIÁVEIS ── */
+:root {
+    /* ── Pergaminho Solar — paleta totalmente clara ── */
+    --parch: #fefaf0;
+    /* cards: branco-creme luminoso */
+    --parch-mid: #f5e8c8;
+    /* inputs, linhas alternas: creme dourado */
+    --parch-deep: #e8cc80;
+    /* hover, abas ativas: âmbar suave */
+    --parch-border: #c8901a;
+    /* bordas: cobre-dourado rico */
+
+    /* Tinta — alta legibilidade sobre fundo claro */
+    --ink: #1a0c00;
+    /* texto principal: quase-preto quente */
+    --ink-mid: #2e1400;
+    /* texto secundário */
+    --ink-light: #5c3010;
+    /* labels, legendas — era muito claro, corrigido */
+    --ink-muted: #9a6828;
+    /* placeholders, detalhes sutis */
+
+    /* Dourado */
+    --gold: #a86400;
+    /* dourado escuro: legível sobre claro */
+    --gold-light: #c87e10;
+    --gold-pale: #e8b830;
+
+    /* Status */
+    --red: #881010;
+    --green: #185818;
+
+    /* Fundo da página — claro, cor de pergaminho envelhecido */
+    --page: #e8d8b0;
+
+    /* Atributos — cores com contraste reforçado */
+    --for-color: #a82418;
+    --des-color: #1e8a4a;
+    --con-color: #b86010;
+    --int-color: #1a6898;
+    --sab-color: #6e2e9a;
+    --car-color: #9a7c00;
+
+    /* Fontes */
+    --font-title: 'Cinzel Decorative', Luminari, 'Philosopher', fantasy;
+    --font-heading: Luminari, 'Cinzel', 'Philosopher', fantasy;
+    --font-body: 'Crimson Pro', 'IM Fell English', serif;
+    /* Crimson Pro primeiro: mais legível para texto */
+    --font-number: 'Crimson Pro', 'Georgia', serif;
+    /* fonte limpa e legível para valores numéricos */
+
+    /* Sombras e raios */
+    --shadow-sm: 0 2px 8px rgba(120, 70, 0, 0.14);
+    --shadow-md: 0 5px 18px rgba(120, 70, 0, 0.22);
+    --radius: 10px;
+    --radius-sm: 6px;
+}
+
+/* ── 2. RESET ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--page);
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(220, 180, 80, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(180, 120, 30, 0.15) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    font-family: var(--font-body);
+    font-size: 17px;
+    color: var(--ink);
+    min-height: 100vh;
+}
+
+/* ── 3. CABEÇALHO CINEMATOGRÁFICO ── */
+#header {
+    background: linear-gradient(180deg, var(--header-top) 0%, var(--header-mid) 50%, var(--header-bot) 100%);
+    border-bottom: 3px solid var(--gold);
+    border-top: 4px double var(--gold);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(160, 100, 0, 0.20);
+}
+
+/* Linhas ornamentais de fundo */
+#header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(160, 100, 10, 0.05) 60px, rgba(160, 100, 10, 0.05) 61px);
+    pointer-events: none;
+}
+
+#header-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 2rem 1rem;
+    gap: 1.5rem;
+    position: relative;
+}
+
+#header-ornament-left,
+#header-ornament-right {
+    font-size: 1.8rem;
+    color: var(--gold);
+    opacity: 0.7;
+    flex-shrink: 0;
+    letter-spacing: 8px;
+}
+
+#header-center {
+    text-align: center;
+}
+
+#nome-personagem {
+    font-family: var(--font-title);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--ink-mid);
+    letter-spacing: 5px;
+    outline: none;
+    cursor: text;
+    text-shadow: 0 1px 4px rgba(160, 100, 0, 0.18);
+    transition: text-shadow 0.3s, color 0.2s;
+    display: inline-block;
+    min-width: 180px;
+}
+
+#nome-personagem:focus {
+    color: var(--ink);
+    text-shadow: 0 2px 8px rgba(160, 100, 0, 0.28);
+}
+
+#header-sub {
+    font-family: var(--font-heading);
+    font-size: 0.62rem;
+    letter-spacing: 6px;
+    color: rgba(100, 60, 0, 0.55);
+    margin-top: 3px;
+    text-transform: uppercase;
+}
+
+/* Barra de campos do personagem */
+#header-fields {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid rgba(160, 100, 10, 0.3);
+    background: rgba(200, 150, 30, 0.08);
+    flex-wrap: wrap;
+}
+
+.hfield {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: center;
+    padding: 0.65rem 1.3rem;
+    border-right: 1px solid rgba(180, 120, 20, 0.25);
+    transition: background 0.2s;
+}
+
+.hfield:last-child {
+    border-right: none;
+}
+
+.hfield:hover {
+    background: rgba(160, 100, 10, 0.10);
+}
+
+.hfield label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+}
+
+.hfield input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(160, 100, 10, 0.35);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+    width: 100px;
+    padding: 2px 4px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.hfield input:focus {
+    border-bottom-color: var(--gold);
+    color: var(--ink);
+}
+
+/* ── 4. BARRA DE ABAS ── */
+#tabs {
+    background: linear-gradient(180deg, var(--tabs-top) 0%, var(--tabs-bot) 100%);
+    display: flex;
+    border-bottom: 2px solid var(--gold);
+    padding: 0 1.5rem;
+    justify-content: center;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 0.9rem 1.2rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    color: var(--tabs-txt-off);
+    transition: all 0.2s;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.tab-btn:hover {
+    color: var(--tabs-txt-hover);
+    background: rgba(220, 160, 30, 0.05);
+}
+
+.tab-btn.active {
+    color: var(--gold-pale);
+    border-bottom-color: var(--gold);
+    background: rgba(220, 160, 30, 0.08);
+}
+
+.tab-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* ── 5. CORPO ── */
+#sheet-body {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem 6rem;
+    background: transparent;
+}
+
+/* ── 6. SECTION TITLE ── */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    letter-spacing: 2px;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+}
+
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--parch-border), transparent);
+    opacity: 0.4;
+}
+
+/* ── 7. CARDS BASE ── */
+.panel {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s;
+}
+
+.panel:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* ── 8. GRID COMBATE ── */
+#combate-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr 270px;
+    gap: 1.5rem;
+}
+
+/* ── 9. ATRIBUTOS EM CARDS ── */
+.attr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 1rem;
+}
+
+.attr-card {
+    background: var(--parch);
+    border: 1.5px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 8px 6px 7px;
+    text-align: center;
+    cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.2s;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.attr-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Faixa colorida no topo do card */
+.attr-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.attr-for::before {
+    background: var(--for-color);
+}
+
+.attr-des::before {
+    background: var(--des-color);
+}
+
+.attr-con::before {
+    background: var(--con-color);
+}
+
+.attr-int::before {
+    background: var(--int-color);
+}
+
+.attr-sab::before {
+    background: var(--sab-color);
+}
+
+.attr-car::before {
+    background: var(--car-color);
+}
+
+/* Ícone gem */
+.attr-gem {
+    font-size: 0.75rem;
+    margin-bottom: 1px;
+}
+
+.attr-for .attr-gem {
+    color: var(--for-color);
+}
+
+.attr-des .attr-gem {
+    color: var(--des-color);
+}
+
+.attr-con .attr-gem {
+    color: var(--con-color);
+}
+
+.attr-int .attr-gem {
+    color: var(--int-color);
+}
+
+.attr-sab .attr-gem {
+    color: var(--sab-color);
+}
+
+.attr-car .attr-gem {
+    color: var(--car-color);
+}
+
+.attr-card label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 3px;
+    font-weight: 400;
+}
+
+.attr-card input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.7rem;
+    font-weight: 700;
+    font-family: var(--font-number);
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    outline: none;
+    -moz-appearance: textfield;
+    line-height: 1.1;
+}
+
+.attr-card input::-webkit-outer-spin-button,
+.attr-card input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.attr-mod {
+    display: block;
+    font-family: var(--font-number);
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.attr-for .attr-mod {
+    color: var(--for-color);
+}
+
+.attr-des .attr-mod {
+    color: var(--des-color);
+}
+
+.attr-con .attr-mod {
+    color: var(--con-color);
+}
+
+.attr-int .attr-mod {
+    color: var(--int-color);
+}
+
+.attr-sab .attr-mod {
+    color: var(--sab-color);
+}
+
+.attr-car .attr-mod {
+    color: var(--car-color);
+}
+
+/* ── 10. PROFICIÊNCIA + INSPIRAÇÃO ── */
+.prof-insp-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.prof-card {
+    flex: 1;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.prof-card label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 3px;
+}
+
+.prof-card input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.55rem;
+    font-weight: 700;
+    font-family: var(--font-number);
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.prof-card input::-webkit-outer-spin-button,
+.prof-card input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.insp-card {
+    flex: 1;
+    background: var(--parch-mid);
+    border: 2px solid rgba(160, 100, 20, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+}
+
+.insp-card:hover {
+    border-color: var(--gold);
+    background: var(--parch);
+}
+
+.insp-card.on {
+    background: var(--gold);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(220, 160, 30, 0.4);
+}
+
+.insp-icon {
+    font-size: 1.3rem;
+    color: var(--ink-light);
+    transition: color 0.2s, transform 0.2s;
+}
+
+.insp-card.on .insp-icon {
+    color: var(--parch);
+    transform: scale(1.2);
+}
+
+.insp-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-top: 2px;
+}
+
+.insp-card.on .insp-label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── 11. TESTES DE RESISTÊNCIA ── */
+#saves-list {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.save-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.1);
+    transition: background 0.15s;
+}
+
+.save-row:last-child {
+    border-bottom: none;
+}
+
+.save-row:hover {
+    background: var(--parch-mid);
+}
+
+.save-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-light);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.save-dot.on {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 6px rgba(220, 160, 30, 0.4);
+}
+
+.save-row span {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 500;
+}
+
+.save-bonus {
+    font-family: var(--font-number);
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-weight: 400;
+    color: var(--gold);
+    min-width: 28px;
+    text-align: right;
+}
+
+/* ── 12. TESTES CONTRA A MORTE ── */
+.death-section-title {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.75rem;
+}
+
+.death-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 12px;
+    background: var(--red);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.death-label-suc {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--green);
+    min-width: 64px;
+}
+
+.death-label-fail {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--red);
+    min-width: 64px;
+}
+
+.dcircle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-light);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dcircle.suc.on {
+    background: var(--green);
+    border-color: var(--green);
+    box-shadow: 0 0 6px rgba(30, 88, 40, 0.4);
+}
+
+.dcircle.fail.on {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 0 6px rgba(144, 24, 24, 0.4);
+}
+
+/* ── 13. BIG-NUM ── */
+.big-num {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 6px 5px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+}
+
+.big-num:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.big-num label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 3px;
+    font-weight: 400;
+}
+
+.big-num input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.55rem;
+    font-weight: 700;
+    font-family: var(--font-number);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.2);
+    color: var(--ink);
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border-color 0.2s;
+}
+
+.big-num input:focus {
+    border-bottom-color: var(--gold);
+}
+
+.big-num input::-webkit-outer-spin-button,
+.big-num input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* ── 14. BARRA DE VIDA ── */
+.pv-bar-wrap {
+    position: relative;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 6px 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pv-bar {
+    height: 100%;
+    border-radius: 15px;
+    transition: width 0.4s ease, background 0.6s;
+}
+
+.pv-bar-temp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 15px;
+    background: rgba(200, 170, 20, 0.45);
+    transition: width 0.4s ease;
+    border-right: 2px solid rgba(220, 190, 40, 0.8);
+    pointer-events: none;
+}
+
+.pv-bar-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-number);
+    font-size: 0.85rem;
+    color: white;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    z-index: 2;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.pv-bar.pv-high {
+    background: linear-gradient(90deg, #1a5c1a, #2e8a2e);
+}
+
+.pv-bar.pv-medium {
+    background: linear-gradient(90deg, #7a5400, #b07a00);
+}
+
+.pv-bar.pv-critical {
+    background: linear-gradient(90deg, #6b0f0f, #aa1a1a);
+    animation: pv-pulse 1s ease-in-out infinite;
+}
+
+.pv-bar.pv-dead {
+    background: #2a0a0a;
+    width: 0% !important;
+}
+
+@keyframes pv-pulse {
+
+    0%,
+    100% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: 0.65
+    }
+}
+
+.heart-critical {
+    display: inline-block;
+    animation: pulse-heart 0.65s ease-in-out infinite;
+    color: #c03030;
+    font-size: 0.9em;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+@keyframes pulse-heart {
+
+    0%,
+    100% {
+        transform: scale(1)
+    }
+
+    50% {
+        transform: scale(1.4)
+    }
+}
+
+/* ── 15. ARMADURA ── */
+.armadura-box {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.arm-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    flex-wrap: wrap;
+}
+
+.arm-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.arm-input-text {
+    flex: 1;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 10px;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.arm-input-text:focus {
+    border-color: var(--gold);
+}
+
+.arm-input-num {
+    width: 60px;
+    text-align: center;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 6px;
+    font-family: var(--font-number);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border-color 0.2s;
+}
+
+.arm-input-num:focus {
+    border-color: var(--gold);
+}
+
+.arm-input-num::-webkit-outer-spin-button,
+.arm-input-num::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.arm-select {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.arm-select:focus {
+    border-color: var(--gold);
+}
+
+.arm-check-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: var(--font-body);
+}
+
+/* ── 16. ATAQUES ── */
+.attacks-table,
+.mun-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.attacks-table thead tr,
+.mun-table thead tr {
+    background: var(--ink-mid);
+    color: var(--parch-mid);
+}
+
+.attacks-table th,
+.mun-table th {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 9px 8px;
+    text-align: left;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.attacks-table tbody tr,
+.mun-table tbody tr {
+    border-bottom: 1px solid rgba(160, 100, 20, 0.12);
+    background: var(--parch);
+    transition: background 0.15s;
+}
+
+.attacks-table tbody tr:nth-child(even),
+.mun-table tbody tr:nth-child(even) {
+    background: var(--parch-mid);
+}
+
+.attacks-table tbody tr:hover,
+.mun-table tbody tr:hover {
+    background: #f5e8c8;
+}
+
+.attacks-table td input,
+.mun-table td input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--ink);
+    padding: 6px 7px;
+}
+
+.attacks-table td.rm,
+.mun-table td.rm {
+    width: 28px;
+    text-align: center;
+}
+
+/* ── 17. PERÍCIAS ── */
+.pericias-panel {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.skill-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.08);
+    transition: background 0.15s;
+    font-size: 1.05rem;
+}
+
+.skill-row:last-child {
+    border-bottom: none;
+}
+
+.skill-row:hover {
+    background: var(--parch-mid);
+}
+
+.skill-check {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--gold);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.skill-name {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+/* Tag colorida do atributo */
+.skill-attr {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    padding: 1px 6px;
+    border-radius: 10px;
+    border: 1px solid;
+    min-width: 28px;
+    text-align: center;
+}
+
+.skill-attr.attr-for {
+    color: var(--for-color);
+    border-color: var(--for-color);
+    background: rgba(192, 57, 43, 0.08);
+}
+
+.skill-attr.attr-des {
+    color: var(--des-color);
+    border-color: var(--des-color);
+    background: rgba(39, 174, 96, 0.08);
+}
+
+.skill-attr.attr-con {
+    color: var(--con-color);
+    border-color: var(--con-color);
+    background: rgba(230, 126, 34, 0.08);
+}
+
+.skill-attr.attr-int {
+    color: var(--int-color);
+    border-color: var(--int-color);
+    background: rgba(41, 128, 185, 0.08);
+}
+
+.skill-attr.attr-sab {
+    color: var(--sab-color);
+    border-color: var(--sab-color);
+    background: rgba(142, 68, 173, 0.08);
+}
+
+.skill-attr.attr-car {
+    color: var(--car-color);
+    border-color: var(--car-color);
+    background: rgba(212, 172, 13, 0.10);
+}
+
+.skill-val {
+    font-family: var(--font-number);
+    font-size: 1rem;
+    font-weight: 600;
+    font-weight: 400;
+    color: var(--gold);
+    min-width: 28px;
+    text-align: right;
+}
+
+/* ── 18. BOTÕES ── */
+.btn-add {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--ink-mid);
+    background: none;
+    border: 1px solid rgba(160, 100, 20, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s;
+}
+
+.btn-add:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(220, 160, 30, 0.06);
+}
+
+.btn-remove {
+    font-size: 0.95rem;
+    color: var(--red);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 2px 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-remove:hover {
+    border-color: var(--red);
+    background: rgba(144, 24, 24, 0.06);
+}
+
+/* ── 19. TEXTAREA ── */
+textarea.note {
+    width: 100%;
+    min-height: 80px;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+    line-height: 1.65;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea.note:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(220, 160, 30, 0.1);
+}
+
+/* ── 20. CARDS EXPANSÍVEIS ── */
+.exp-card {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+}
+
+.exp-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.exp-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    background: var(--parch-mid);
+    transition: background 0.15s;
+    user-select: none;
+}
+
+.exp-header:hover {
+    background: #e8d4a0;
+}
+
+.exp-arrow {
+    font-size: 0.65rem;
+    color: var(--ink-light);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.exp-arrow.open {
+    transform: rotate(180deg);
+}
+
+.exp-body {
+    display: none;
+    padding: 10px 12px;
+    border-top: 1px solid rgba(160, 100, 20, 0.15);
+}
+
+.exp-body.open {
+    display: block;
+}
+
+.exp-title-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink-mid);
+    flex: 1;
+    cursor: pointer;
+    min-width: 0;
+}
+
+.exp-title-input:focus {
+    cursor: text;
+}
+
+.spell-level-badge {
+    background: var(--gold);
+    color: var(--parch);
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    border-radius: 4px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+}
+
+.card-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    flex-wrap: wrap;
+}
+
+.card-field label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    white-space: nowrap;
+}
+
+.card-field input[type=text],
+.card-field input[type=number] {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.card-field input:focus {
+    border-color: var(--gold);
+}
+
+.card-field input[type=number] {
+    width: 65px;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.card-field input[type=number]::-webkit-outer-spin-button,
+.card-field input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.card-field select {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+}
+
+.card-sublabel {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* ── 21. HABILIDADES ── */
+.habilidades-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.prof-tag-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+    min-height: 26px;
+}
+
+.prof-tag {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.4);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--ink-mid);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: border-color 0.2s;
+}
+
+.prof-tag:hover {
+    border-color: var(--gold);
+}
+
+.prof-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--red);
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.tag-input-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.prof-tag-input {
+    border: none;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.4);
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    flex: 1;
+    padding: 2px 0;
+    transition: border-color 0.2s;
+}
+
+.prof-tag-input:focus {
+    border-bottom-color: var(--gold);
+}
+
+/* ── 22. MAGIAS ── */
+.spell-slot-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.slot-pill {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    min-width: 68px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.slot-pill:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+}
+
+.slot-pill label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+}
+
+.slot-pill input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: var(--font-body);
+    -moz-appearance: textfield;
+}
+
+.slot-pill input::-webkit-outer-spin-button,
+.slot-pill input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.magias-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* ── 23. INVENTÁRIO ── */
+.inv-grid {
+    display: grid;
+    grid-template-columns: 1fr 270px;
+    gap: 1.5rem;
+}
+
+.moedas-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.moeda-box {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 8px 4px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.moeda-box:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+}
+
+.moeda-box label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 3px;
+}
+
+.moeda-box input {
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: var(--font-number);
+    -moz-appearance: textfield;
+}
+
+.moeda-box input::-webkit-outer-spin-button,
+.moeda-box input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* ── 24. DESCRIÇÃO ── */
+.desc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.desc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 0.75rem;
+}
+
+.desc-field label {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+}
+
+.desc-field input {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.desc-field input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(220, 160, 30, 0.1);
+}
+
+#char-img-wrap {
+    width: 100%;
+    aspect-ratio: 3/4;
+    max-height: 300px;
+    background: var(--parch-mid);
+    border: 2px dashed rgba(160, 100, 20, 0.4);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+#char-img-wrap:hover {
+    border-color: var(--gold);
+}
+
+#char-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+#char-img-input {
+    display: none;
+}
+
+.img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-light);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+}
+
+.img-placeholder span {
+    font-size: 2rem;
+}
+
+/* ── 25. NOTAS ── */
+.notas-top {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.notas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* ── 26. BARRA INFERIOR ── */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bar-bg);
+    border-top: 2px solid var(--gold);
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    backdrop-filter: blur(8px);
+    z-index: 200;
+}
+
+#save-status {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--green);
+}
+
+.bottom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ctrl-btn {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: rgba(220, 160, 30, 0.6);
+    background: transparent;
+    border: 1px solid rgba(220, 160, 30, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.ctrl-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold-pale);
+    background: rgba(220, 160, 30, 0.08);
+}
+
+.save-btn {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    letter-spacing: 2px;
+    color: var(--ink);
+    background: var(--gold);
+    border: 1px solid var(--gold-light);
+    border-radius: var(--radius-sm);
+    padding: 9px 26px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 400;
+}
+
+.save-btn:hover {
+    background: var(--gold-light);
+    box-shadow: 0 0 16px rgba(220, 160, 30, 0.35);
+}
+
+/* ── 27. IMPRESSÃO ── */
+@media print {
+
+    #tabs,
+    #bottom-bar {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        font-size: 11px;
+    }
+
+    #sheet-body {
+        max-width: 100% !important;
+        padding: 0.5rem !important;
+    }
+
+    .tab-panel {
+        display: block !important;
+        page-break-before: always;
+    }
+
+    .tab-panel:first-child {
+        page-break-before: auto;
+    }
+
+    .panel,
+    .attr-card,
+    .big-num {
+        break-inside: avoid;
+    }
+
+    .pv-bar {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .heart-critical {
+        animation: none !important;
+    }
+}
+
+/* ── PALETAS ALTERNATIVAS (copie para o :root acima) ──────────
+
+OPÇÃO A — Tinta de Sangue (bordô + pergaminho escuro):
+    --parch:#fdf5f5; --parch-mid:#f0e0e0; --parch-deep:#c87878; --parch-border:#882020;
+    --ink:#180505; --ink-mid:#300808; --ink-light:#7a2020;
+    --gold:#882020; --gold-light:#aa3030; --gold-pale:#d08080;
+    --red:#5a0a0a; --green:#285028; --page:#7a3030;
+
+OPÇÃO B — Arcano Profundo (índigo + prata):
+    --parch:#f0f0f8; --parch-mid:#e0e0f0; --parch-deep:#8080c0; --parch-border:#404090;
+    --ink:#080818; --ink-mid:#181840; --ink-light:#404080;
+    --gold:#9060d0; --gold-light:#a878e0; --gold-pale:#c8b0f0;
+    --red:#a02020; --green:#207040; --page:#282860;
+
+OPÇÃO C — Floresta Élfica (verde musgo + ouro âmbar):
+    --parch:#f2f7f0; --parch-mid:#e0eed8; --parch-deep:#90b870; --parch-border:#3a6820;
+    --ink:#080f04; --ink-mid:#142808; --ink-light:#2e5818;
+    --gold:#886010; --gold-light:#a88020; --gold-pale:#c8b060;
+    --red:#882020; --green:#1e6020; --page:#3a5820;
+*/
+
+/* ══ VISÃO NO ESCURO ══ */
+.visao-check-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.visao-escuro-icon {
+    font-size: 1rem;
+    animation: pulse-moon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-moon {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* ══ RESISTÊNCIAS & VULNERABILIDADES ══ */
+.resv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.resv-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.resv-col-title {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    font-weight: 400;
+    margin-bottom: 2px;
+}
+
+.res-title {
+    color: #1a5020;
+}
+
+.vul-title {
+    color: #8b1010;
+}
+
+.imn-title {
+    color: #6a4000;
+}
+
+.resv-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-height: 22px;
+}
+
+.resv-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+}
+
+.resv-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+/* ══ CARGAS no header da habilidade ══ */
+.cargas-badge {
+    font-family: var(--font-number);
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: var(--gold-pale);
+    color: var(--ink-mid);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 2px 10px;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cargas-badge.cargas-esgotadas {
+    background: #f0d0d0;
+    color: var(--red);
+    border-color: var(--red);
+}
+
+/* ══ SLOTS USADOS ══ */
+.spell-slots-usado-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+    margin-bottom: 0.75rem;
+    justify-content: center;
+}
+
+.slot-usado-pill {
+    text-align: center;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: 20px;
+    padding: 4px 10px;
+    min-width: 68px;
+    transition: border-color 0.2s;
+}
+
+.slot-usado-pill label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 2px;
+}
+
+.slot-usado-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: var(--font-number);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.slot-usado-btns button {
+    background: none;
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: 4px;
+    width: 18px;
+    height: 18px;
+    line-height: 1;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--ink-light);
+    transition: all 0.15s;
+    padding: 0;
+}
+
+.slot-usado-btns button:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.slot-usado-pill.slot-esgotado {
+    border-color: var(--red);
+    background: #f8e8e8;
+}
+
+.slot-usado-pill.slot-esgotado label,
+.slot-usado-pill.slot-esgotado .slot-usado-btns {
+    color: var(--red);
+}
+
+/* ══ SISTEMA DE PONTOS DE MAGIA ══ */
+
+#sp-mode-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.sp-toggle-btn {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 7px 18px;
+    border: 1.5px solid rgba(160, 100, 20, 0.4);
+    border-radius: var(--radius-sm);
+    background: var(--parch-mid);
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.sp-toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--parch);
+}
+.sp-toggle-btn.sp-toggle-ativo {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(200,140,20,0.28);
+}
+
+.sp-mode-hint {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    font-style: italic;
+}
+
+/* Config row */
+.sp-config-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+.sp-tipo-wrap select {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160,100,20,0.3);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    padding: 4px 8px;
+    cursor: pointer;
+    outline: none;
+    max-width: 360px;
+}
+.sp-nivel-conj-wrap {
+    display: flex;
+    gap: 0.6rem;
+}
+.sp-stat-box {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160,100,20,0.2);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    min-width: 80px;
+}
+.sp-stat-label {
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.sp-stat-val {
+    font-family: var(--font-number);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+/* Pool card */
+.sp-pool-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--parch);
+    border: 2px solid rgba(160,100,20,0.25);
+    border-radius: var(--radius);
+    padding: 0.75rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
+    transition: border-color 0.3s, background 0.3s;
+}
+.sp-pool-card.sp-pool-low      { border-color: #b86010; background: #fff8ec; }
+.sp-pool-card.sp-pool-critical { border-color: var(--red); background: #fff0f0; }
+.sp-pool-card.sp-pool-empty    { border-color: #888; background: #f5f5f5; }
+
+.sp-pool-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.sp-pool-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.sp-pool-nums {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+.sp-atual-val {
+    font-family: var(--font-number);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 48px;
+    text-align: right;
+}
+.sp-pool-sep {
+    font-family: var(--font-number);
+    font-size: 1.4rem;
+    color: var(--ink-muted);
+}
+.sp-max-val {
+    font-family: var(--font-number);
+    font-size: 1.4rem;
+    color: var(--ink-light);
+    min-width: 36px;
+}
+.sp-adj-btn {
+    width: 32px; height: 32px;
+    border: 1.5px solid rgba(160,100,20,0.35);
+    border-radius: 50%;
+    background: var(--parch-mid);
+    color: var(--ink-light);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1;
+    padding: 0;
+}
+.sp-adj-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--parch); }
+
+.sp-rest-btn {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 7px 16px;
+    border: 1.5px solid rgba(50,30,100,0.35);
+    border-radius: var(--radius-sm);
+    background: #e8e0f8;
+    color: #3c2870;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.sp-rest-btn:hover { background: #d4c8f0; border-color: #6040b0; }
+
+/* Botões de criar espaço */
+.sp-create-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.sp-create-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 14px;
+    background: var(--parch-mid);
+    border: 1.5px solid rgba(160,100,20,0.3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 70px;
+}
+.sp-create-btn:hover:not(.sp-btn-disabled) {
+    background: var(--parch-deep);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+.sp-create-btn.sp-btn-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+}
+.sp-create-btn.sp-btn-alto {
+    border-color: rgba(100,50,150,0.35);
+    background: #f0ecf8;
+}
+.sp-create-btn.sp-btn-alto:hover:not(.sp-btn-disabled) {
+    border-color: #7040c0;
+    background: #e4dcf4;
+}
+.sp-btn-level {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--ink);
+}
+.sp-btn-cost {
+    font-family: var(--font-number);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gold);
+}
+.sp-btn-used {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--red);
+}
+
+/* Restrição alto nível */
+.sp-alto-row {
+    background: #f8f0ff;
+    border: 1px solid rgba(120,60,180,0.25);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    margin-bottom: 0.75rem;
+}
+.sp-alto-title {
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    color: #5a3090;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+.sp-alto-checks {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.sp-alto-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 12px;
+    border: 1px solid rgba(120,60,180,0.3);
+    border-radius: var(--radius-sm);
+    background: #f0e8ff;
+    min-width: 60px;
+    transition: all 0.2s;
+}
+.sp-alto-item.sp-alto-usado {
+    background: #f8d8d8;
+    border-color: var(--red);
+}
+.sp-alto-nv {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+}
+.sp-alto-status {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: #5a3090;
+}
+.sp-alto-item.sp-alto-usado .sp-alto-status { color: var(--red); }
+
+/* Slot ativo (tem espaços criados) */
+.slot-usado-pill.sp-slot-ativo {
+    border-color: var(--gold);
+    background: #fdf5d8;
+}
+
+/* ══ SISTEMA DE PONTOS DE MAGIA — fim ══ */
+
+.attacks-table th:first-child {
+    width: 22%;
+}
+/* ============================================================
+   MOBILE RESPONSIVE — max-width: 768px
+   ── Layout adaptado para telas pequenas (celular).
+      As abas ficam deslizáveis, o grid vira uma coluna.
+============================================================ */
+@media (max-width: 768px) {
+
+    /* ── Cabeçalho compacto ── */
+    #header-fields {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.4rem !important;
+        padding: 0.6rem 0.75rem !important;
+    }
+    #nome-personagem { font-size: clamp(1.2rem, 5vw, 1.8rem) !important; }
+    #header-hero { padding: 0.75rem 1rem 0.5rem !important; }
+
+    /* ── Abas deslizáveis ── */
+    #tabs {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        gap: 0.2rem !important;
+        padding: 0.4rem 0.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+    #tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+        flex-shrink: 0 !important;
+        font-size: 0.72rem !important;
+        padding: 0.45rem 0.7rem !important;
+    }
+    .tab-label { display: none !important; }
+    .tab-icon { font-size: 1.1rem !important; margin: 0 !important; }
+
+    /* ── Sheet body sem padding excessivo ── */
+    #sheet-body { padding: 0.9rem 0.75rem 5rem !important; }
+
+    /* ── Grid combate em coluna única ── */
+    #combate-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── Atributos: 3 colunas mas menores ── */
+    .attr-card { padding: 6px 4px !important; }
+    .attr-card label { font-size: 0.65rem !important; }
+    .attr-card input { font-size: 1.2rem !important; }
+    .attr-mod { font-size: 1rem !important; }
+
+    /* ── Combate: linha de números menores ── */
+    .big-num input { font-size: 1rem !important; }
+    .big-num label { font-size: 0.6rem !important; }
+
+    /* ── Deslocamentos compactos no mobile ── */
+    .speed-multi { gap: 3px !important; }
+    .speed-item { min-width: 48px !important; padding: 2px 4px !important; }
+    .speed-input { font-size: 0.8rem !important; }
+
+    /* ── Saves/perícias em 2 colunas ── */
+    #pericias-lista { columns: 2 !important; column-gap: 0.5rem !important; }
+    .skill-row { break-inside: avoid !important; }
+
+    /* ── Notas e textareas ── */
+    .note { min-height: 80px !important; }
+
+    /* ── Barra inferior mais compacta ── */
+    #bottom-bar { padding: 0.6rem 0.75rem !important; gap: 0.5rem !important; }
+    .save-btn { font-size: 0.78rem !important; padding: 0.45rem 0.9rem !important; }
+
+    /* ── Botão de tema reposicionado ── */
+    #btn-tema { bottom: 4.5rem !important; right: 0.75rem !important; }
+    #tema-panel { right: 0.75rem !important; bottom: 7rem !important; }
+
+    /* ── PV bar compacta ── */
+    #pv-section { flex-direction: column !important; gap: 0.5rem !important; }
+
+    /* ── Inventário/magias em coluna ── */
+    .inv-grid, .magias-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+    /* Cabeçalho ainda mais compacto */
+    #header-fields { grid-template-columns: 1fr 1fr !important; }
+    .hfield label { font-size: 0.58rem !important; }
+    .hfield input { font-size: 0.82rem !important; }
+
+    /* Combate: campos em 2 por linha */
+    #combate-grid > div > div[style*="flex"] {
+        flex-wrap: wrap !important;
+    }
+
+    /* Atributos em 2 colunas */
+    .attr-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ============================================================
+   CORREÇÕES DE TEXTO CORTADO (todas as telas)
+============================================================ */
+/* Labels e campos com overflow */
+.hfield label,
+.big-num label,
+.arm-label,
+.section-title,
+.save-row span,
+.skill-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+/* Evita corte nos cards de ataque */
+#attacks-body td input { min-width: 0; }
+
+/* Garante que moedas não transbordam */
+.moeda-box { overflow: hidden; }
+.moeda-box label { white-space: nowrap; font-size: 0.7rem; }
+
+/* Bottom bar sem corte */
+#bottom-bar {
+    overflow: hidden;
+    flex-wrap: wrap;
+}
+#save-status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
