@@ -13,6 +13,260 @@
 
   <link rel="stylesheet" href="style.css">
   <style>
+    /* ════ ROLADOR DE DADOS ════ */
+    #btn-dados {
+      position: fixed;
+      bottom: 1.4rem; left: 1.4rem;
+      z-index: 200;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--parch);
+      border: 2px solid var(--gold);
+      box-shadow: 0 4px 18px rgba(120,70,0,0.28);
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #btn-dados:hover { transform: scale(1.1) rotate(-15deg); box-shadow: 0 6px 24px rgba(120,70,0,0.38); }
+    #btn-dados.rolando { animation: dadoSpin 0.5s ease-out; }
+    @keyframes dadoSpin { 0%{transform:rotate(0)} 50%{transform:rotate(-30deg) scale(1.15)} 100%{transform:rotate(0)} }
+
+    #dados-panel {
+      display: none;
+      position: fixed;
+      bottom: 4.5rem; left: 1.4rem;
+      z-index: 201;
+      background: var(--parch);
+      border: 1.5px solid var(--parch-border);
+      border-radius: 14px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+      width: 290px;
+      max-height: calc(100vh - 8rem);
+      overflow: hidden;
+      flex-direction: column;
+    }
+    #dados-panel.open { display: flex; animation: temaIn 0.22s ease-out; }
+
+    .dados-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 1rem 0.65rem;
+      border-bottom: 1px solid rgba(160,100,20,0.2);
+      flex-shrink: 0;
+    }
+    .dados-head-title {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+    }
+    .dados-head button {
+      background: none; border: none; color: var(--ink-muted);
+      font-size: 1rem; cursor: pointer; padding: 2px 5px;
+      border-radius: 4px; transition: all 0.15s;
+    }
+    .dados-head button:hover { background: var(--parch-mid); color: var(--ink); }
+
+    .dados-scroll { overflow-y: auto; flex: 1; padding: 0.8rem; scrollbar-width: thin; scrollbar-color: var(--parch-border) transparent; }
+    .dados-scroll::-webkit-scrollbar { width: 4px; }
+    .dados-scroll::-webkit-scrollbar-thumb { background: var(--parch-deep); border-radius: 2px; }
+
+    /* Botões de dado */
+    .dados-tipos {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 4px; margin-bottom: 0.75rem;
+    }
+    .dado-btn {
+      background: var(--parch-mid);
+      border: 1.5px solid rgba(160,100,20,0.2);
+      border-radius: 7px;
+      padding: 0.4rem 0;
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      color: var(--ink-mid);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .dado-btn:hover { border-color: var(--gold); color: var(--ink); background: var(--parch-deep); }
+    .dado-btn.ativo {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--parch);
+      font-weight: 700;
+    }
+
+    /* Quantidade + modificador */
+    .dados-config {
+      display: flex; gap: 0.5rem; align-items: center;
+      margin-bottom: 0.7rem;
+    }
+    .dados-qty-wrap {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--parch-mid);
+      border: 1px solid rgba(160,100,20,0.2);
+      border-radius: 8px;
+      padding: 0.3rem 0.5rem;
+      flex: 1;
+    }
+    .dados-qty-wrap span { font-family: var(--font-heading); font-size: 0.85rem; color: var(--ink-mid); }
+    .dados-qty-num { font-size: 1.1rem !important; font-weight: 700; color: var(--ink) !important; min-width: 1.2rem; text-align: center; }
+    .qty-btn {
+      background: none; border: 1px solid rgba(160,100,20,0.25);
+      border-radius: 5px; width: 20px; height: 20px;
+      font-size: 0.95rem; color: var(--ink-muted);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.12s; line-height: 1; padding: 0;
+    }
+    .qty-btn:hover { background: var(--parch-deep); border-color: var(--gold); color: var(--ink); }
+
+    .dados-mod-wrap {
+      display: flex; align-items: center; gap: 4px;
+      background: var(--parch-mid);
+      border: 1px solid rgba(160,100,20,0.2);
+      border-radius: 8px;
+      padding: 0.3rem 0.5rem;
+    }
+    .dados-mod-wrap label {
+      font-family: var(--font-heading); font-size: 0.65rem;
+      letter-spacing: 0.1em; color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+    #dados-mod-input {
+      width: 44px; background: transparent; border: none;
+      font-family: var(--font-heading); font-size: 1rem;
+      font-weight: 700; color: var(--ink); text-align: center;
+    }
+    #dados-mod-input:focus { outline: none; }
+
+    /* Vantagem/Desvantagem */
+    .dados-vant {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 4px; margin-bottom: 0.75rem;
+    }
+    .vant-btn {
+      background: var(--parch-mid);
+      border: 1.5px solid rgba(160,100,20,0.2);
+      border-radius: 7px; padding: 0.35rem 0.2rem;
+      font-family: var(--font-heading); font-size: 0.68rem;
+      letter-spacing: 0.04em; color: var(--ink-muted);
+      cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .vant-btn:hover { border-color: var(--gold); color: var(--ink); }
+    .vant-btn.ativo { border-color: var(--gold); font-weight: 700; color: var(--ink); }
+    .vant-btn[data-v="-1"].ativo { background: rgba(180,40,40,0.12); border-color: var(--red); color: var(--red); }
+    .vant-btn[data-v="0"].ativo  { background: rgba(160,100,20,0.12); }
+    .vant-btn[data-v="1"].ativo  { background: rgba(30,140,50,0.12); border-color: var(--green); color: var(--green); }
+
+    /* Botão rolar */
+    #btn-rolar-dado {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+      border: none; border-radius: 9px;
+      padding: 0.65rem;
+      font-family: var(--font-heading); font-size: 0.95rem;
+      font-weight: 700; letter-spacing: 0.15em;
+      color: var(--parch); cursor: pointer;
+      transition: all 0.18s;
+      box-shadow: 0 3px 12px rgba(160,100,0,0.25);
+      margin-bottom: 0.7rem;
+    }
+    #btn-rolar-dado:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 5px 18px rgba(160,100,0,0.35); }
+    #btn-rolar-dado:active { transform: scale(0.97); }
+
+    /* Resultado */
+    #dados-resultado {
+      text-align: center;
+      padding: 0.6rem 0.4rem;
+      background: var(--parch-mid);
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      min-height: 80px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      border: 1.5px solid rgba(160,100,20,0.15);
+      transition: border-color 0.3s;
+    }
+    #dados-resultado.critico    { border-color: var(--green) !important; background: rgba(30,140,50,0.08); }
+    #dados-resultado.falha-crit { border-color: var(--red)   !important; background: rgba(180,40,40,0.08); }
+
+    #dados-res-num {
+      font-family: var(--font-heading);
+      font-size: 2.8rem; font-weight: 700;
+      color: var(--ink);
+      line-height: 1;
+      transition: transform 0.1s;
+    }
+    #dados-res-num.animando { animation: resAppear 0.35s cubic-bezier(.17,.67,.35,1.3) both; }
+    @keyframes resAppear { from { transform: scale(0.4) rotate(-10deg); opacity:0; } to { transform: scale(1) rotate(0); opacity:1; } }
+    #dados-res-num.critico-num    { color: var(--green); }
+    #dados-res-num.falha-crit-num { color: var(--red); }
+
+    #dados-res-label {
+      font-family: var(--font-heading); font-size: 0.68rem;
+      letter-spacing: 0.15em; color: var(--ink-muted);
+      text-transform: uppercase; margin-bottom: 2px;
+    }
+    #dados-res-detalhe {
+      font-family: var(--font-body); font-size: 0.78rem;
+      color: var(--ink-muted); margin-top: 4px;
+    }
+
+    /* Atalhos rápidos */
+    .dados-atalhos-label {
+      font-family: var(--font-heading); font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-muted); margin-bottom: 0.35rem;
+    }
+    .dados-atalhos { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.75rem; }
+    .atalho-btn {
+      background: var(--parch-mid);
+      border: 1px solid rgba(160,100,20,0.2);
+      border-radius: 6px;
+      padding: 0.3rem 0.6rem;
+      font-family: var(--font-heading); font-size: 0.72rem;
+      color: var(--ink-mid); cursor: pointer;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .atalho-btn:hover { border-color: var(--gold); color: var(--ink); background: var(--parch-deep); }
+
+    /* Histórico */
+    .dados-hist-label {
+      font-family: var(--font-heading); font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-muted);
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.35rem;
+    }
+    .hist-clear {
+      background: none; border: none; color: var(--ink-muted);
+      font-size: 0.65rem; cursor: pointer; font-family: var(--font-heading);
+      letter-spacing: 0.05em;
+    }
+    .hist-clear:hover { color: var(--red); }
+    #dados-historico { display: flex; flex-direction: column; gap: 4px; }
+    .hist-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--parch-mid);
+      border-radius: 6px; padding: 0.3rem 0.55rem;
+      font-size: 0.78rem; gap: 0.5rem;
+      animation: histIn 0.2s ease-out;
+    }
+    @keyframes histIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+    .hist-expr { font-family: var(--font-heading); color: var(--ink-muted); font-size: 0.72rem; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hist-val  { font-family: var(--font-heading); font-weight: 700; color: var(--ink); font-size: 0.95rem; }
+    .hist-val.critico-num    { color: var(--green); }
+    .hist-val.falha-crit-num { color: var(--red); }
+    .hist-detail { font-size: 0.68rem; color: var(--ink-muted); white-space: nowrap; }
+    .hist-ts { font-size: 0.62rem; color: rgba(160,120,60,0.4); }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      #dados-panel { left: 0.5rem; right: 0.5rem; width: auto; bottom: 4.2rem; }
+      #btn-dados { bottom: 4.5rem; left: 0.75rem; }
+    }
+
     #btn-voltar-grupo {
       position: absolute;
       top: 10px;
@@ -28,31 +282,58 @@
     }
     #btn-voltar-grupo:hover { opacity: 1; }
 
-    /* ── DESLOCAMENTOS MÚLTIPLOS ── */
-    .speed-multi-wrap label { display: block; margin-bottom: 4px; }
-    .speed-multi {
-      display: flex; gap: 4px; flex-wrap: wrap;
-    }
-    .speed-item {
-      display: flex; align-items: center; gap: 3px;
+    /* ── DESLOCAMENTO — linha própria ── */
+    .deslocamento-row {
+      margin-bottom: 0.8rem;
       background: var(--parch-mid);
-      border: 1px solid rgba(160,100,20,0.2);
-      border-radius: 6px;
-      padding: 3px 5px;
-      flex: 1; min-width: 56px;
+      border: 1px solid rgba(160,100,20,0.18);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
     }
-    .speed-icon { font-size: 0.85rem; line-height: 1; flex-shrink: 0; }
-    .speed-input {
-      width: 100%; min-width: 0;
-      background: transparent; border: none;
+    .deslocamento-label {
+      font-family: var(--font-heading);
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .deslocamento-items {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .desl-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      background: var(--parch);
+      border: 1px solid rgba(160,100,20,0.15);
+      border-radius: 6px;
+      padding: 4px 4px 3px;
+    }
+    .desl-input {
+      width: 100%;
+      background: transparent;
+      border: none;
       font-family: var(--font-number);
-      font-size: 0.9rem;
+      font-size: 1.05rem;
+      font-weight: 600;
       color: var(--ink);
       text-align: center;
       padding: 0;
+      min-width: 0;
     }
-    .speed-input:focus { outline: none; }
-    .speed-input::placeholder { color: var(--ink-muted); font-size: 0.8rem; }
+    .desl-input:focus { outline: none; color: var(--gold); }
+    .desl-input::placeholder { color: var(--ink-muted); font-weight: 400; font-size: 0.9rem; }
+    .desl-label {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
 
     /* ── BOTÃO DE TEMA ── */
     #btn-tema {
@@ -311,24 +592,18 @@
 
   <!-- ════ BARRA DE ABAS ════ -->
   <div id="tabs">
-    <button class="tab-btn active" onclick="showTab('combate', this)"><span class="tab-icon">⚔</span><span
-        class="tab-label">Combate</span></button>
-    <button class="tab-btn" onclick="showTab('habilidades', this)"><span class="tab-icon">✦</span><span
-        class="tab-label">Habilidades</span></button>
-    <button class="tab-btn" onclick="showTab('magias', this)"><span class="tab-icon">✧</span><span
-        class="tab-label">Magias</span></button>
-    <button class="tab-btn" onclick="showTab('inventario', this)"><span class="tab-icon">◈</span><span
-        class="tab-label">Inventário</span></button>
-    <button class="tab-btn" onclick="showTab('descricao', this)"><span class="tab-icon">◉</span><span
-        class="tab-label">Descrição</span></button>
-    <button class="tab-btn" onclick="showTab('notas', this)"><span class="tab-icon">☰</span><span
-        class="tab-label">Notas</span></button>
+    <div id="tab-indicator"></div>
+    <button class="tab-btn active" onclick="showTab('combate', this)"><span class="tab-icon">⚔</span><span class="tab-label">Combate</span></button>
+    <button class="tab-btn" onclick="showTab('habilidades', this)"><span class="tab-icon">✦</span><span class="tab-label">Habilidades</span></button>
+    <button class="tab-btn" onclick="showTab('magias', this)"><span class="tab-icon">✧</span><span class="tab-label">Magias</span></button>
+    <button class="tab-btn" onclick="showTab('inventario', this)"><span class="tab-icon">◈</span><span class="tab-label">Inventário</span></button>
+    <button class="tab-btn" onclick="showTab('descricao', this)"><span class="tab-icon">❧</span><span class="tab-label">Descrição</span></button>
+    <button class="tab-btn" onclick="showTab('notas', this)"><span class="tab-icon">☰</span><span class="tab-label">Notas</span></button>
   </div>
 
   <!-- ════ CONTEÚDO DAS ABAS ════ -->
   <div id="sheet-body">
 
-    <!-- ══════════ COMBATE ══════════ -->
     <div id="tab-combate" class="tab-panel active">
       <div id="combate-grid">
 
@@ -336,41 +611,41 @@
         <div>
           <div class="section-title">Atributos</div>
           <div class="attr-grid">
-            <div class="attr-card attr-for">
+            <div class="attr-card attr-for" data-attr="for">
               <div class="attr-gem">⬟</div>
               <label>FOR</label>
               <input type="number" id="for" value="10" oninput="atualizarTudo()">
-              <span class="attr-mod" id="for-mod">+0</span>
+              <span class="attr-mod" id="for-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('for')" style="cursor:pointer">+0</span>
             </div>
-            <div class="attr-card attr-des">
+            <div class="attr-card attr-des" data-attr="des">
               <div class="attr-gem">⬟</div>
               <label>DES</label>
               <input type="number" id="des" value="10" oninput="atualizarTudo()">
-              <span class="attr-mod" id="des-mod">+0</span>
+              <span class="attr-mod" id="des-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('des')" style="cursor:pointer">+0</span>
             </div>
-            <div class="attr-card attr-con">
+            <div class="attr-card attr-con" data-attr="con">
               <div class="attr-gem">⬟</div>
               <label>CON</label>
               <input type="number" id="con" value="10" oninput="atualizarTudo()">
-              <span class="attr-mod" id="con-mod">+0</span>
+              <span class="attr-mod" id="con-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('con')" style="cursor:pointer">+0</span>
             </div>
-            <div class="attr-card attr-int">
+            <div class="attr-card attr-int" data-attr="int">
               <div class="attr-gem">⬟</div>
               <label>INT</label>
               <input type="number" id="int" value="10" oninput="atualizarTudo()">
-              <span class="attr-mod" id="int-mod">+0</span>
+              <span class="attr-mod" id="int-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('int')" style="cursor:pointer">+0</span>
             </div>
-            <div class="attr-card attr-sab">
+            <div class="attr-card attr-sab" data-attr="sab">
               <div class="attr-gem">⬟</div>
               <label>SAB</label>
               <input type="number" id="sab" value="10" oninput="atualizarTudo()">
-              <span class="attr-mod" id="sab-mod">+0</span>
+              <span class="attr-mod" id="sab-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('sab')" style="cursor:pointer">+0</span>
             </div>
-            <div class="attr-card attr-car">
+            <div class="attr-card attr-car" data-attr="car">
               <div class="attr-gem">⬟</div>
               <label>CAR</label>
               <input type="number" id="car" value="10" oninput="atualizarTudo()">
-              <span class="attr-mod" id="car-mod">+0</span>
+              <span class="attr-mod" id="car-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('car')" style="cursor:pointer">+0</span>
             </div>
           </div>
 
@@ -394,20 +669,27 @@
             <div style="display:flex;align-items:center;gap:8px;">
               <span class="death-label-suc">SUCESSOS</span>
               <div style="display:flex;gap:5px;">
-                <div class="dcircle suc" onclick="this.classList.toggle('on')"></div>
-                <div class="dcircle suc" onclick="this.classList.toggle('on')"></div>
-                <div class="dcircle suc" onclick="this.classList.toggle('on')"></div>
+                <div class="dcircle suc death-check" onclick="this.classList.toggle('on')"></div>
+                <div class="dcircle suc death-check" onclick="this.classList.toggle('on')"></div>
+                <div class="dcircle suc death-check" onclick="this.classList.toggle('on')"></div>
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <span class="death-label-fail">FALHAS</span>
               <div style="display:flex;gap:5px;">
-                <div class="dcircle fail" onclick="this.classList.toggle('on')"></div>
-                <div class="dcircle fail" onclick="this.classList.toggle('on')"></div>
-                <div class="dcircle fail" onclick="this.classList.toggle('on')"></div>
+                <div class="dcircle fail death-check" onclick="this.classList.toggle('on')"></div>
+                <div class="dcircle fail death-check" onclick="this.classList.toggle('on')"></div>
+                <div class="dcircle fail death-check" onclick="this.classList.toggle('on')"></div>
               </div>
             </div>
           </div>
+
+          <!-- CONDIÇÕES -->
+          <div class="section-title" style="margin-top:1rem;">Condições</div>
+          <div class="condicoes-grid" id="condicoes-grid">
+            <!-- injetado pelo script -->
+          </div>
+
         </div>
 
         <!-- COL CENTRAL -->
@@ -420,28 +702,31 @@
                 value="0" oninput="calcularCA()"></div>
             <div class="big-num" style="flex:1;"><label>INICIATIVA</label><input type="text" id="iniciativa" value="+0">
             </div>
-            <div class="big-num speed-multi-wrap" style="flex:1.4;">
-              <label>DESLOCAMENTO</label>
-              <div class="speed-multi">
-                <div class="speed-item" title="Terrestre">
-                  <span class="speed-icon">🚶</span>
-                  <input type="text" id="deslocamento" value="9m" class="speed-input">
-                </div>
-                <div class="speed-item" title="Voo">
-                  <span class="speed-icon">🦅</span>
-                  <input type="text" id="deslocamento-voo" placeholder="—" class="speed-input">
-                </div>
-                <div class="speed-item" title="Nado">
-                  <span class="speed-icon">🏊</span>
-                  <input type="text" id="deslocamento-nado" placeholder="—" class="speed-input">
-                </div>
-                <div class="speed-item" title="Escalar">
-                  <span class="speed-icon">🧗</span>
-                  <input type="text" id="deslocamento-escala" placeholder="—" class="speed-input">
-                </div>
+          </div>
+
+          <!-- DESLOCAMENTO — linha própria, espaço suficiente para os valores -->
+          <div class="deslocamento-row">
+            <div class="deslocamento-label">DESLOCAMENTO</div>
+            <div class="deslocamento-items">
+              <div class="desl-item">
+                <input type="text" id="deslocamento" value="9m" class="desl-input">
+                <span class="desl-label">⟶ Terra</span>
+              </div>
+              <div class="desl-item">
+                <input type="text" id="deslocamento-voo" placeholder="—" class="desl-input">
+                <span class="desl-label">↑ Voo</span>
+              </div>
+              <div class="desl-item">
+                <input type="text" id="deslocamento-nado" placeholder="—" class="desl-input">
+                <span class="desl-label">≋ Nado</span>
+              </div>
+              <div class="desl-item">
+                <input type="text" id="deslocamento-escala" placeholder="—" class="desl-input">
+                <span class="desl-label">↗ Escalar</span>
               </div>
             </div>
           </div>
+
           <div style="display:flex;gap:0.75rem;margin-bottom:1rem;">
             <div class="big-num" style="flex:1;">
               <label>VISÃO</label>
@@ -599,9 +884,18 @@
         </div>
 
       </div>
+
+      <!-- RECURSOS DE CLASSE — faixa abaixo do grid -->
+      <div class="recursos-faixa">
+        <div class="section-title" style="margin-bottom:0.75rem;">Recursos de Classe</div>
+        <div id="recursos-lista"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecursoPreset()">✦ Recurso da classe</button>
+          <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecurso()">+ Personalizado</button>
+        </div>
+      </div>
     </div>
 
-    <!-- ══════════ HABILIDADES ══════════ -->
     <div id="tab-habilidades" class="tab-panel">
       <div class="habilidades-grid">
         <div>
@@ -663,7 +957,6 @@
       </div>
     </div>
 
-    <!-- ══════════ MAGIAS ══════════ -->
     <div id="tab-magias" class="tab-panel">
       <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;align-items:flex-end;">
         <div class="big-num" style="min-width:140px;"><label>HAB. DE CONJURAÇÃO</label><input type="text" id="conj-hab">
@@ -756,7 +1049,6 @@
       </div>
     </div>
 
-    <!-- ══════════ INVENTÁRIO ══════════ -->
     <div id="tab-inventario" class="tab-panel">
       <div class="inv-grid">
         <div>
@@ -780,16 +1072,55 @@
       </div>
     </div>
 
-    <!-- ══════════ DESCRIÇÃO ══════════ -->
     <div id="tab-descricao" class="tab-panel">
       <div class="desc-grid">
         <div>
-          <div class="section-title">Imagem do Personagem</div>
-          <div id="char-img-wrap" onclick="document.getElementById('char-img-input').click()">
-            <div class="img-placeholder" id="img-placeholder">
-              <span>☀️</span>
-              <div>Clique para adicionar imagem</div>
+          <div class="section-title">
+            Imagem do Personagem
+            <div class="img-mode-toggle">
+              <button class="img-mode-btn active" id="btn-modo-retrato" onclick="setImgMode('retrato')" title="Retrato">▭ Retrato</button>
+              <button class="img-mode-btn"         id="btn-modo-token"  onclick="setImgMode('token')"  title="Token circular">◯ Token</button>
             </div>
+          </div>
+          <div id="char-img-outer" class="modo-retrato">
+            <div id="char-img-wrap" onclick="document.getElementById('char-img-input').click()">
+              <div class="img-placeholder" id="img-placeholder">
+                <span class="img-icon">✦</span>
+                <div>Clique para adicionar imagem</div>
+              </div>
+            </div>
+            <!-- Moldura ornamental do token (visível só no modo token) -->
+            <svg id="token-ring" class="token-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <!-- Anel externo principal -->
+              <circle cx="110" cy="110" r="105" fill="none" stroke="var(--gold)" stroke-width="2.5" opacity="0.95"/>
+              <!-- Anel interno sutil -->
+              <circle cx="110" cy="110" r="98"  fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.45"/>
+              <!-- Losangos cardinais N/S/L/O -->
+              <g fill="var(--gold)" opacity="0.9">
+                <path d="M110,3 L114,10 L110,7 L106,10 Z"/>
+                <path d="M110,217 L114,210 L110,213 L106,210 Z"/>
+                <path d="M3,110 L10,106 L7,110 L10,114 Z"/>
+                <path d="M217,110 L210,106 L213,110 L210,114 Z"/>
+              </g>
+              <!-- Pontos decorativos nas diagonais -->
+              <g fill="var(--gold)" opacity="0.55">
+                <circle cx="36"  cy="36"  r="2.2"/>
+                <circle cx="184" cy="36"  r="2.2"/>
+                <circle cx="36"  cy="184" r="2.2"/>
+                <circle cx="184" cy="184" r="2.2"/>
+              </g>
+              <!-- Pequenos arcos de ornamento nos quadrantes -->
+              <g fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.3">
+                <path d="M50,28 A90,90 0 0,1 80,16"/>
+                <path d="M140,16 A90,90 0 0,1 170,28"/>
+                <path d="M192,50 A90,90 0 0,1 204,80"/>
+                <path d="M204,140 A90,90 0 0,1 192,170"/>
+                <path d="M170,192 A90,90 0 0,1 140,204"/>
+                <path d="M80,204 A90,90 0 0,1 50,192"/>
+                <path d="M28,170 A90,90 0 0,1 16,140"/>
+                <path d="M16,80 A90,90 0 0,1 28,50"/>
+              </g>
+            </svg>
           </div>
           <input type="file" id="char-img-input" accept="image/*" onchange="carregarImagem(event)">
 
@@ -820,7 +1151,6 @@
       </div>
     </div>
 
-    <!-- ══════════ NOTAS DE SESSÃO ══════════ -->
     <div id="tab-notas" class="tab-panel">
       <div class="notas-top">
         <div class="big-num" style="min-width:90px;"><label>SESSÃO Nº</label><input type="number" id="sessao-num"
@@ -859,13 +1189,85 @@
   <div id="bottom-bar">
     <span id="save-status"></span>
     <div class="bottom-controls">
-      </label>
+      <button class="rest-btn" onclick="descanso('curto')" title="Recupera dados de vida gastos e recursos de descanso curto">☽ Desc. Curto</button>
+      <button class="rest-btn" onclick="descanso('longo')" title="Recupera PV total, slots de magia e recursos de descanso longo">☀ Desc. Longo</button>
       <button class="save-btn" onclick="salvar()">SALVAR FICHA</button>
     </div>
   </div>
 
+  <!-- ════ TOAST CONTAINER ════ -->
+  <div id="toast-container"></div>
+
+  <!-- ════ ROLADOR DE DADOS ════ -->
+  <button id="btn-dados" onclick="toggleDados()" title="Rolador de dados">⚄</button>
+  <div id="dados-panel">
+    <div class="dados-head">
+      <span class="dados-head-title">🎲 Rolador de Dados</span>
+      <button onclick="toggleDados()">✕</button>
+    </div>
+    <div class="dados-scroll">
+
+      <!-- Seleção do dado -->
+      <div class="dados-tipos" id="dados-tipos"></div>
+
+      <!-- Qtd + Modificador -->
+      <div class="dados-config">
+        <div class="dados-qty-wrap">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="dados-qty-num" id="dados-qty">1</span>
+          <span>d</span>
+          <span id="dados-die-label" style="font-weight:700;color:var(--ink)">20</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <div class="dados-mod-wrap">
+          <label>MOD</label>
+          <input type="number" id="dados-mod-input" value="0">
+        </div>
+      </div>
+
+      <!-- Vantagem / Normal / Desvantagem -->
+      <div class="dados-vant">
+        <button class="vant-btn" data-v="-1" onclick="setVantagem(-1)">▼ Desv.</button>
+        <button class="vant-btn ativo" data-v="0"  onclick="setVantagem(0)">Normal</button>
+        <button class="vant-btn" data-v="1"  onclick="setVantagem(1)">▲ Vant.</button>
+      </div>
+
+      <!-- Botão principal -->
+      <button id="btn-rolar-dado" onclick="rolarDado()">⚄ ROLAR</button>
+
+      <!-- Resultado -->
+      <div id="dados-resultado">
+        <div id="dados-res-label">—</div>
+        <div id="dados-res-num">—</div>
+        <div id="dados-res-detalhe"></div>
+      </div>
+
+      <!-- Atalhos rápidos -->
+      <div class="dados-atalhos-label">Atalhos rápidos</div>
+      <div class="dados-atalhos">
+        <button class="atalho-btn" onclick="atalho('iniciativa')">⚡ Iniciativa</button>
+        <button class="atalho-btn" onclick="atalho('ataque')">⚔ Ataque</button>
+        <button class="atalho-btn" onclick="atalho('4d6drop')">⊕ 4d6↓ Atrib.</button>
+        <button class="atalho-btn" onclick="atalho('percentual')">◌ Percentual</button>
+        <button class="atalho-btn" onclick="atalho('dano-furtivo')">✦ Dano Furtivo</button>
+      </div>
+
+      <!-- Histórico -->
+      <div class="dados-hist-label">
+        <span>Histórico</span>
+        <button class="hist-clear" onclick="limparHistorico()">limpar</button>
+      </div>
+      <div id="dados-historico">
+        <div style="font-size:0.75rem;color:var(--ink-muted);font-style:italic;text-align:center;padding:0.5rem 0;">
+          Nenhuma rolagem ainda.
+        </div>
+      </div>
+
+    </div><!-- fim dados-scroll -->
+  </div>
+
   <!-- ════ EDITOR DE TEMA ════ -->
-  <button id="btn-tema" onclick="toggleTemaPanel()" title="Personalizar tema da ficha">🎨</button>
+  <button id="btn-tema" onclick="toggleTemaPanel()" title="Personalizar tema da ficha">✦</button>
   <div id="tema-panel">
     <!-- Cabeçalho -->
     <div class="cp-header">

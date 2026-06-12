@@ -1651,6 +1651,64 @@ textarea.note:focus {
     box-shadow: 0 0 16px rgba(220, 160, 30, 0.35);
 }
 
+/* Botões de descanso */
+.rest-btn {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--ink-muted);
+    background: transparent;
+    border: 1px solid rgba(160,100,20,0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.rest-btn:hover {
+    background: rgba(160,100,20,0.1);
+    border-color: var(--gold);
+    color: var(--ink);
+}
+
+/* Modificador de atributo clicável — tooltip */
+.attr-mod[onclick]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%; left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--parch);
+    font-size: 0.65rem;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0.9;
+    margin-bottom: 4px;
+}
+.attr-card { position: relative; }
+
+/* Tabelas de Ataques e Munições — mobile */
+@media (max-width: 480px) {
+    #attacks-body tr {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid rgba(160,100,20,0.15);
+        padding: 0.4rem 0;
+        gap: 4px;
+    }
+    #attacks-body td {
+        display: block;
+        border: none;
+        padding: 2px 4px;
+    }
+    #attacks-body td:first-child { width: 100%; }
+    #attacks-body td input { width: 100%; min-width: 0; }
+
+    .ammo-row { flex-direction: column !important; }
+}
+
 /* ── 27. IMPRESSÃO ── */
 @media print {
 
@@ -2319,4 +2377,882 @@ OPÇÃO C — Floresta Élfica (verde musgo + ouro âmbar):
     text-overflow: ellipsis;
     white-space: nowrap;
     min-width: 0;
+}
+
+/* ── 1. BARRA DE PV COM COR DINÂMICA ── */
+.pv-bar-fill {
+    transition: width 0.6s cubic-bezier(.4,0,.2,1),
+                background-color 0.6s ease !important;
+}
+.pv-saude-boa    .pv-bar-fill { background: var(--green) !important; }
+.pv-saude-media  .pv-bar-fill { background: #c8a000 !important; }
+.pv-saude-baixa  .pv-bar-fill { background: #c84020 !important; }
+.pv-saude-critica .pv-bar-fill {
+    background: #c84020 !important;
+    animation: pvPulse 1.2s ease-in-out infinite !important;
+}
+@keyframes pvPulse {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50%       { opacity: 0.55; filter: brightness(1.3); }
+}
+
+/* ── 2. TRANSIÇÃO SUAVE ENTRE ABAS ── */
+.tab-panel.active {
+    display: block !important;
+    animation: tabFadeIn 0.2s ease-out forwards !important;
+}
+@keyframes tabFadeIn {
+    from { opacity: 0.2; transform: translateY(6px); }
+    to   { opacity: 1;   transform: translateY(0); }
+}
+
+/* ── 3. TOAST DE NOTIFICAÇÃO ── */
+#toast-container {
+    position: fixed;
+    top: 1rem; right: 1.2rem;
+    z-index: 500;
+    display: flex; flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+.toast {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: var(--parch);
+    border: 1.5px solid var(--parch-border);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-mid);
+    min-width: 200px; max-width: 320px;
+    pointer-events: auto;
+    animation: toastIn 0.28s cubic-bezier(.17,.67,.35,1.15) both;
+}
+.toast.saindo { animation: toastOut 0.25s ease-in forwards; }
+.toast.tipo-sucesso { border-left-color: var(--green); }
+.toast.tipo-aviso   { border-left-color: #c8a000; }
+.toast.tipo-erro    { border-left-color: var(--red); }
+.toast.tipo-descanso-curto { border-left-color: #6080c0; }
+.toast.tipo-descanso-longo { border-left-color: #c08020; }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-msg  { flex: 1; line-height: 1.3; }
+@keyframes toastIn  {
+    from { opacity: 0; transform: translateX(30px) scale(0.92); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); max-height: 80px; margin-bottom: 0; }
+    to   { opacity: 0; transform: translateX(30px); max-height: 0; margin-bottom: -8px; }
+}
+
+/* ── 4. FLASH DE ATRIBUTO ── */
+@keyframes attrFlash {
+    0%   { background: var(--parch-mid); }
+    30%  { background: color-mix(in srgb, var(--attr-color, var(--gold)) 22%, var(--parch-mid)); }
+    100% { background: var(--parch-mid); }
+}
+.attr-card.atualizando { animation: attrFlash 0.5s ease-out; }
+
+/* ── 5. SCROLLBAR CUSTOMIZADA ── */
+* { scrollbar-width: thin; scrollbar-color: var(--parch-border) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--parch-deep);
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--parch-border); }
+
+/* ── 6. SEPARADORES ORNAMENTAIS ── */
+.section-title {
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.section-title::before,
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--parch-border), transparent);
+    opacity: 0.6;
+}
+.section-title::before { max-width: 18px; }
+
+/* ── 7. CONDIÇÕES — badges nos cards e painel na ficha ── */
+.condicoes-grid {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    margin-top: 0.3rem;
+}
+.cond-btn {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--parch-mid);
+    border: 1.5px solid rgba(160,100,20,0.18);
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+}
+.cond-btn:hover { border-color: var(--gold); color: var(--ink); }
+.cond-btn.ativa {
+    background: rgba(180,40,40,0.12);
+    border-color: var(--red);
+    color: var(--red);
+    font-weight: 600;
+}
+.cond-btn.ativa.cond-positiva {
+    background: rgba(30,140,50,0.12);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+/* Badges de condição nos cards do grupo */
+.card-condicoes {
+    display: flex; flex-wrap: wrap; gap: 3px;
+    justify-content: center;
+    margin-bottom: 0.6rem; min-height: 0;
+}
+.cond-badge {
+    font-size: 0.9rem;
+    filter: grayscale(0.2);
+    animation: badgeIn 0.2s ease-out;
+    cursor: default;
+}
+@keyframes badgeIn {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ── 8. CARD COM FOTO DO PERSONAGEM ── */
+.card-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 0.6rem;
+    background: var(--parch-mid);
+    border: 2px solid var(--parch-border);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.card-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+.char-card:hover .card-avatar { border-color: var(--gold); }
+
+/* ── SISTEMA DE ESPAÇAMENTO (base 4px) ── */
+:root {
+    --sp-xs:  4px;
+    --sp-sm:  8px;
+    --sp-md:  12px;
+    --sp-lg:  16px;
+    --sp-xl:  24px;
+    --sp-xxl: 32px;
+}
+
+/* ── HIERARQUIA VISUAL ── */
+/* Nível 1 — elementos críticos (PV, atributos principais) */
+.card-lvl1 {
+    border: 2px solid var(--parch-border) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12) !important;
+}
+/* Nível 2 — cards comuns */
+.card-lvl2 {
+    border: 1px solid rgba(160,100,20,0.18) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+}
+/* Nível 3 — elementos neutros (rows, inner) */
+.card-lvl3 {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* ── REDUÇÃO DE DENSIDADE: skills e saves ── */
+/* Remove bordas entre linhas, usa background alternado + hover claro */
+.skill-row {
+    border-bottom: none !important;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.skill-row:nth-child(even) { background: rgba(160,100,20,0.04); }
+.skill-row:hover { background: var(--parch-mid) !important; }
+
+.save-row {
+    border-bottom: none !important;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.save-row:nth-child(even) { background: rgba(160,100,20,0.04); }
+.save-row:hover { background: var(--parch-mid) !important; }
+
+/* Ícone de dado — aparece no hover */
+.roll-hint {
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.15s, transform 0.15s;
+    transform: scale(0.7);
+    pointer-events: none;
+    margin-left: 2px;
+}
+.skill-row:hover .roll-hint,
+.save-row:hover  .roll-hint {
+    opacity: 0.7;
+    transform: scale(1);
+}
+
+/* ── INPUTS MELHORADOS ── */
+/* Estado de foco cinematográfico */
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(160,100,20,0.18), 0 1px 6px rgba(160,100,20,0.12) !important;
+    transition: box-shadow 0.2s, border-color 0.2s !important;
+}
+
+/* Inputs numéricos inline — underline em vez de caixa */
+.big-num input {
+    border: none !important;
+    border-bottom: 2px solid rgba(160,100,20,0.25) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    transition: border-color 0.2s !important;
+}
+.big-num input:focus {
+    border-bottom-color: var(--gold) !important;
+    box-shadow: none !important;
+}
+
+/* ── TABS IMERSIVAS ── */
+/* Ícones maiores, separadores ornamentais, indicador animado */
+.tab-btn {
+    padding: 1rem 1.3rem !important;
+    gap: 8px !important;
+    position: relative !important;
+    border-bottom: 3px solid transparent !important;
+    transition: color 0.2s, background 0.2s !important;
+}
+.tab-icon {
+    font-size: 1.25rem !important;
+    transition: transform 0.2s !important;
+}
+.tab-btn:hover .tab-icon { transform: scale(1.2) !important; }
+.tab-btn.active .tab-icon { transform: scale(1.15) !important; }
+
+/* Indicador deslizante animado */
+#tab-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 2px 2px 0 0;
+    transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    box-shadow: 0 0 8px rgba(200,150,10,0.5);
+}
+
+/* Separador ornamental entre tabs */
+.tab-btn + .tab-btn::before {
+    content: '✦';
+    position: absolute;
+    left: -4px;
+    font-size: 0.4rem;
+    color: rgba(200,150,10,0.25);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ── RECURSOS DE CLASSE ── */
+.recursos-empty {
+    font-size: 0.82rem; color: var(--ink-muted);
+    font-style: italic; text-align: center;
+    padding: 0.5rem 0;
+}
+
+.recurso-item {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160,100,20,0.18);
+    border-radius: 9px;
+    padding: var(--sp-md);
+    margin-bottom: var(--sp-sm);
+    transition: border-color 0.2s;
+}
+.recurso-item:hover { border-color: rgba(160,100,20,0.35); }
+
+.recurso-topo {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 8px;
+    margin-bottom: 8px;
+}
+.recurso-nome-input {
+    flex: 1; background: transparent;
+    border: none !important; border-bottom: 1px solid rgba(160,100,20,0.2) !important;
+    border-radius: 0 !important; box-shadow: none !important;
+    font-family: var(--font-heading); font-size: 0.88rem;
+    font-weight: 600; color: var(--ink);
+    padding: 2px 0;
+}
+.recurso-controles { display: flex; align-items: center; gap: 5px; }
+.recurso-recarga-tag {
+    font-size: 0.68rem; font-family: var(--font-heading);
+    color: var(--ink-muted); letter-spacing: 0.05em;
+    background: var(--parch); border-radius: 4px;
+    padding: 1px 5px; border: 1px solid rgba(160,100,20,0.15);
+}
+.recurso-dado-btn {
+    background: transparent; border: 1px solid rgba(160,100,20,0.2);
+    border-radius: 5px; padding: 2px 6px;
+    font-size: 0.72rem; color: var(--gold);
+    cursor: pointer; transition: all 0.15s;
+}
+.recurso-dado-btn:hover { background: rgba(160,100,20,0.1); }
+.recurso-del {
+    background: none; border: none;
+    color: rgba(180,40,40,0.4); cursor: pointer;
+    font-size: 0.85rem; padding: 2px 4px;
+    transition: color 0.15s; border-radius: 4px;
+}
+.recurso-del:hover { color: var(--red); background: rgba(180,40,40,0.08); }
+
+.recurso-usos {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+}
+.uso-btn {
+    width: 22px; height: 22px;
+    background: var(--parch); border: 1px solid rgba(160,100,20,0.25);
+    border-radius: 50%; font-size: 1rem; line-height: 1;
+    color: var(--ink-muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+}
+.uso-btn:hover { background: var(--parch-deep); border-color: var(--gold); color: var(--ink); }
+.uso-pips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+.uso-pip {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: transparent; border: 1.5px solid rgba(160,100,20,0.3);
+    cursor: pointer; transition: all 0.15s; padding: 0;
+}
+.uso-pip.cheio { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 4px rgba(200,150,10,0.35); }
+.uso-pip:hover { border-color: var(--gold); transform: scale(1.15); }
+.uso-label {
+    font-family: var(--font-heading); font-size: 0.78rem;
+    color: var(--ink-muted); white-space: nowrap;
+}
+.recurso-max-wrap {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; color: var(--ink-muted);
+    font-family: var(--font-heading);
+}
+.recurso-max-input {
+    width: 38px !important; text-align: center;
+    font-size: 0.78rem !important;
+    padding: 1px 3px !important;
+}
+
+.btn-add-recurso {
+    display: flex; align-items: center; gap: 5px;
+    width: 100%; margin-top: 6px;
+    background: transparent;
+    border: 1px dashed rgba(160,100,20,0.3);
+    border-radius: 7px; padding: 0.45rem;
+    font-family: var(--font-heading); font-size: 0.78rem;
+    color: var(--ink-muted); cursor: pointer;
+    transition: all 0.18s; justify-content: center;
+}
+.btn-add-recurso:hover { border-color: var(--gold); color: var(--ink); background: rgba(160,100,20,0.05); }
+
+/* ════ CORREÇÕES: RECURSOS, IMAGEM E SÍMBOLOS ════ */
+
+/* Faixa de recursos abaixo do grid de combate */
+.recursos-faixa {
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(160,100,20,0.15);
+}
+.recursos-faixa #recursos-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.75rem;
+}
+.recursos-faixa .recurso-item { margin-bottom: 0; }
+
+/* Imagem do personagem — dimensão contida e proporcional */
+#char-img-wrap {
+    width: 100% !important;
+    max-width: 300px !important;
+    max-height: 340px !important;
+    aspect-ratio: 3 / 4 !important;
+    margin: 0 auto 0.75rem !important;
+    display: block !important;
+}
+#char-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+}
+
+/* Símbolo no placeholder da imagem */
+.img-icon {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--parch-border);
+    line-height: 1;
+}
+
+/* Símbolos medievais — tamanho consistente */
+.tab-icon {
+    font-style: normal !important;
+    font-size: 1.15rem !important;
+    font-family: var(--font-heading), serif !important;
+    line-height: 1 !important;
+}
+
+/* Condições com símbolos — garantir legibilidade */
+.cond-btn {
+    font-family: var(--font-body), serif !important;
+    letter-spacing: 0.02em !important;
+}
+
+/* Speed icon com símbolos Unicode */
+.speed-icon {
+    font-family: var(--font-heading), serif;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    min-width: 14px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Botão do dado — símbolo ⚄ */
+#btn-rolar-dado { letter-spacing: 0.12em; }
+
+/* Botão de dados flutuante com símbolo */
+#btn-dados { font-family: var(--font-heading), serif; }
+
+/* Botão de rolar dentro da tabela de ataques */
+.btn-rolar-ataque {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    border: none;
+    border-radius: 6px;
+    color: var(--parch);
+    font-size: 0.85rem;
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 2px 6px rgba(160,100,0,0.2);
+    padding: 0;
+}
+.btn-rolar-ataque:hover {
+    transform: scale(1.15) rotate(-10deg);
+    box-shadow: 0 3px 12px rgba(160,100,0,0.38);
+}
+.btn-rolar-ataque:active { transform: scale(0.92); }
+
+/* Flash de linha ao rolar */
+.ataque-animado td {
+    animation: ataqueFlash 0.55s ease-out;
+}
+@keyframes ataqueFlash {
+    0%   { background: rgba(200,150,10,0); }
+    25%  { background: rgba(200,150,10,0.22); }
+    100% { background: rgba(200,150,10,0); }
+}
+
+/* ── HP DANO — shake + flash vermelho ── */
+.anim-dano {
+    animation: pvShake 0.55s ease-out, pvDanoFlash 0.55s ease-out !important;
+}
+@keyframes pvShake {
+    0%,100% { transform: translateX(0); }
+    15%     { transform: translateX(-7px); }
+    30%     { transform: translateX(7px); }
+    45%     { transform: translateX(-4px); }
+    60%     { transform: translateX(4px); }
+    75%     { transform: translateX(-2px); }
+    90%     { transform: translateX(2px); }
+}
+@keyframes pvDanoFlash {
+    0%   { box-shadow: inset 0 0 0 rgba(200,40,40,0); }
+    25%  { box-shadow: inset 0 0 28px rgba(200,40,40,0.55); }
+    100% { box-shadow: inset 0 0 0 rgba(200,40,40,0); }
+}
+
+/* ── HP CURA — glow verde ── */
+.anim-cura {
+    animation: pvCuraGlow 0.9s ease-out !important;
+}
+@keyframes pvCuraGlow {
+    0%   { box-shadow: inset 0 0 0 rgba(30,150,60,0); }
+    25%  { box-shadow: inset 0 0 30px rgba(30,150,60,0.50); }
+    100% { box-shadow: inset 0 0 0 rgba(30,150,60,0); }
+}
+
+/* ── FLASH GLOBAL (crítico / falha) ── */
+.anim-flash {
+    position: fixed; inset: 0;
+    z-index: 998; pointer-events: none;
+    opacity: 0;
+    border-radius: 0;
+}
+.anim-flash.ativo {
+    animation: globalFlash 0.75s ease-out forwards;
+}
+@keyframes globalFlash {
+    0%   { opacity: 0; transform: scale(0.6); }
+    20%  { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.6); }
+}
+
+/* ── 1. FIX DEFINITIVO DA COR DAS ABAS ── */
+/* Garante texto legível em qualquer tema */
+.tab-btn {
+    color: rgba(220,160,30,0.55) !important;
+}
+.tab-btn:hover {
+    color: rgba(220,160,30,0.88) !important;
+    background: rgba(220,160,30,0.06) !important;
+}
+.tab-btn.active {
+    color: #f0d070 !important;
+    text-shadow: 0 0 12px rgba(220,170,30,0.5), 0 1px 3px rgba(0,0,0,0.6) !important;
+    background: rgba(220,160,30,0.1) !important;
+    font-weight: 600 !important;
+}
+.tab-btn.active .tab-icon {
+    filter: drop-shadow(0 0 4px rgba(220,170,30,0.6)) !important;
+}
+
+/* ── 2. TOGGLE DE MODO DA IMAGEM ── */
+.section-title:has(.img-mode-toggle) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.img-mode-toggle {
+    display: flex;
+    gap: 4px;
+}
+.img-mode-btn {
+    background: transparent;
+    border: 1px solid rgba(160,100,20,0.2);
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.img-mode-btn:hover  { border-color: var(--gold); color: var(--ink); }
+.img-mode-btn.active { border-color: var(--gold); background: rgba(160,100,20,0.12); color: var(--ink); }
+
+/* ── 3. CONTAINER DE IMAGEM UNIFICADO ── */
+/* BASE — sempre position:relative para ser contexto de filhos absolutos */
+#char-img-outer {
+    position: relative !important;
+    margin: 0 auto 1rem !important;
+}
+
+/* ── MODO RETRATO ── */
+#char-img-outer.modo-retrato {
+    width: 100% !important;
+    max-width: 260px !important;
+    height: auto !important;
+    display: block !important;
+}
+#char-img-outer.modo-retrato #char-img-wrap {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 3 / 4 !important;
+    max-height: 280px !important;
+    border-radius: 8px !important;
+    border: 2px dashed rgba(160,100,20,0.35) !important;
+    overflow: hidden !important;
+    background: var(--parch-mid) !important;
+    cursor: pointer !important;
+    transition: border-color 0.2s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+#char-img-outer.modo-retrato #char-img-wrap:hover { border-color: var(--gold) !important; }
+#char-img-outer.modo-retrato #char-img-wrap img {
+    width: 100% !important; height: 100% !important;
+    object-fit: cover !important; object-position: top center !important;
+}
+#char-img-outer.modo-retrato .token-ring { display: none !important; }
+
+/* ── MODO TOKEN ── */
+#char-img-outer.modo-token {
+    width: 220px !important;
+    height: 220px !important;
+    max-width: 220px !important;
+    display: block !important; /* NÃO flex — filhos usam position:absolute */
+}
+#char-img-outer.modo-token #char-img-wrap {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    width: 200px !important;
+    height: 200px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    background: var(--parch-mid) !important;
+    cursor: pointer !important;
+    z-index: 1 !important;
+    display: block !important;
+}
+#char-img-outer.modo-token #char-img-wrap img {
+    width: 100% !important; height: 100% !important;
+    object-fit: cover !important; object-position: top center !important;
+    display: block !important;
+}
+#char-img-outer.modo-token .img-placeholder {
+    width: 100% !important; height: 100% !important;
+    display: flex; /* sem !important: JS pode sobrescrever com display:none */
+    align-items: center !important; justify-content: center !important;
+    flex-direction: column !important; gap: 6px !important;
+    text-align: center !important; padding: 1.5rem !important;
+    font-size: 0.72rem !important; line-height: 1.5 !important;
+    color: var(--gold) !important;
+    border: none !important;
+    background: radial-gradient(circle at center, rgba(160,100,20,0.08) 0%, transparent 70%) !important;
+}
+#char-img-outer.modo-token .token-ring {
+    position: absolute !important;
+    top: 0 !important; left: 0 !important;
+    width: 220px !important; height: 220px !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+    display: block !important;
+    filter: drop-shadow(0 2px 8px rgba(160,100,0,0.5)) !important;
+}
+
+/* ── 4. POLIMENTO VISUAL GERAL ── */
+
+/* Background do conteúdo principal — textura sutil */
+#sheet-body {
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 23px,
+            rgba(160,100,20,0.025) 24px
+        ) !important;
+}
+
+/* Section titles mais ornamentais */
+.section-title {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.22em !important;
+    color: var(--ink-light) !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 0.6rem !important;
+}
+.section-title::before { max-width: 24px !important; }
+
+/* Cards de atributo — hierarquia clara */
+.attr-card {
+    border: 1.5px solid rgba(160,100,20,0.22) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+    transition: transform 0.15s, border-color 0.18s, box-shadow 0.18s !important;
+}
+.attr-card:hover {
+    border-color: rgba(160,100,20,0.45) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Perícias e saves — área de respiração */
+.skill-row, .save-row { padding: 5px 6px !important; }
+
+/* Barra inferior mais refinada */
+#bottom-bar {
+    backdrop-filter: blur(12px) !important;
+    border-top: 1.5px solid var(--gold) !important;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.25) !important;
+}
+
+/* Cards de magias e habilidades — sombra reduzida */
+.exp-card {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* Header hero — gradiente mais suave */
+#header-hero {
+    border-bottom: 1px solid rgba(160,100,20,0.2) !important;
+}
+
+/* Inputs de texto geral — foco mais cinematográfico */
+.note:focus {
+    outline: none !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(160,100,20,0.15) !important;
+}
+
+/* Mobile: token centralizado */
+@media (max-width: 480px) {
+    #char-img-outer { max-width: 220px; }
+    #char-img-outer.modo-retrato #char-img-wrap { max-height: 240px; }
+}
+
+/* ── SISTEMA DE CORES POR ATRIBUTO ── */
+:root {
+    --for-color: #c84030;
+    --des-color: #38a858;
+    --con-color: #d07830;
+    --int-color: #3878c8;
+    --sab-color: #8838c8;
+    --car-color: #c8a020;
+}
+
+/* Acento colorido no topo de cada card de atributo */
+.attr-card[data-attr="for"] { border-top: 3px solid var(--for-color) !important; }
+.attr-card[data-attr="des"] { border-top: 3px solid var(--des-color) !important; }
+.attr-card[data-attr="con"] { border-top: 3px solid var(--con-color) !important; }
+.attr-card[data-attr="int"] { border-top: 3px solid var(--int-color) !important; }
+.attr-card[data-attr="sab"] { border-top: 3px solid var(--sab-color) !important; }
+.attr-card[data-attr="car"] { border-top: 3px solid var(--car-color) !important; }
+
+/* Dot colorido já existente — reforçar cor */
+.attr-dot.for { background: var(--for-color) !important; }
+.attr-dot.des { background: var(--des-color) !important; }
+.attr-dot.con { background: var(--con-color) !important; }
+.attr-dot.int { background: var(--int-color) !important; }
+.attr-dot.sab { background: var(--sab-color) !important; }
+.attr-dot.car { background: var(--car-color) !important; }
+
+/* Cor do modificador de atributo ao fazer hover no rolador */
+.attr-card[data-attr="for"]:hover .attr-mod { color: var(--for-color) !important; }
+.attr-card[data-attr="des"]:hover .attr-mod { color: var(--des-color) !important; }
+.attr-card[data-attr="con"]:hover .attr-mod { color: var(--con-color) !important; }
+.attr-card[data-attr="int"]:hover .attr-mod { color: var(--int-color) !important; }
+.attr-card[data-attr="sab"]:hover .attr-mod { color: var(--sab-color) !important; }
+.attr-card[data-attr="car"]:hover .attr-mod { color: var(--car-color) !important; }
+
+/* Pill colorida nos saves pela attr */
+.save-row .attr-for { color: var(--for-color) !important; }
+.save-row .attr-des { color: var(--des-color) !important; }
+.save-row .attr-con { color: var(--con-color) !important; }
+.save-row .attr-int { color: var(--int-color) !important; }
+.save-row .attr-sab { color: var(--sab-color) !important; }
+.save-row .attr-car { color: var(--car-color) !important; }
+
+/* ── SEÇÃO DE PV — mais proeminente ── */
+.pv-section, #pv-section {
+    background: linear-gradient(135deg, var(--parch) 0%, var(--parch-mid) 100%);
+    border-radius: var(--radius) !important;
+    border: 1.5px solid rgba(160,100,20,0.25) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.1) !important;
+    overflow: hidden;
+}
+
+/* ── HEADER HERO — borda superior colorida por classe ── */
+#header {
+    border-top: 3px solid var(--gold) !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 1px 0 rgba(200,150,10,0.2) !important;
+}
+
+/* ── SHEET BODY — separação clara entre painéis ── */
+.tab-panel > div:first-child {
+    gap: 1.4rem !important;
+}
+
+/* ── SECTION TITLES — tratamento de capítulo ── */
+.section-title {
+    position: relative !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 0.8rem !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.28em !important;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--parch-border), transparent);
+    opacity: 0.5;
+}
+
+/* ── COMBATE: fundo alternado nas colunas ── */
+#combate-grid > div:nth-child(2) {
+    background: transparent !important;
+}
+
+/* ── NOTAS — textarea mais elegante ── */
+.note {
+    background: var(--parch-mid) !important;
+    border: 1px solid rgba(160,100,20,0.15) !important;
+    border-left: 3px solid rgba(160,100,20,0.3) !important;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+    line-height: 1.6 !important;
+    font-size: 0.92rem !important;
+}
+.note:focus {
+    border-left-color: var(--gold) !important;
+}
+
+/* ── BARRA DE HP — altura maior e mais expressiva ── */
+#pv-bar {
+    height: 14px !important;
+    border-radius: 7px !important;
+    overflow: hidden !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.15) !important;
+}
+#pv-bar-fill, .pv-bar-fill {
+    border-radius: 7px !important;
+    background: var(--green) !important;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1), background 0.6s ease !important;
+    position: relative;
+}
+#pv-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: rgba(255,255,255,0.15);
+    border-radius: 7px 7px 0 0;
+}
+
+/* ── ANIMAÇÃO DE CARD APPEAR melhorada ── */
+.attr-card {
+    animation: attrCardIn 0.3s ease-out both;
+}
+@keyframes attrCardIn {
+    from { opacity:0; transform: scale(0.92) translateY(8px); }
+    to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+/* ── HABILIDADES / MAGIAS — cards mais elegantes ── */
+.exp-card {
+    border-left: 3px solid rgba(160,100,20,0.25) !important;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+    transition: border-left-color 0.2s, box-shadow 0.2s !important;
+}
+.exp-card:hover {
+    border-left-color: var(--gold) !important;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.1) !important;
+}
+.exp-card.expandido {
+    border-left-color: var(--gold) !important;
 }

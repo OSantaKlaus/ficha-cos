@@ -80,7 +80,6 @@ const PERICIAS = [
     { nome: 'Sobrevivência', attr: 'sab' },
 ]
 
-
 /* ============================================================
    2. FUNÇÕES DE MECÂNICA D&D
    ── calcMod: fórmula oficial — floor((valor - 10) / 2)
@@ -103,7 +102,6 @@ const gV = id => g(id)?.value || ''                             // valor como te
 const gN = id => parseInt(g(id)?.value) || 0                    // valor como número inteiro
 const gA = id => parseInt(g(id)?.value) || 10                   // valor de atributo (padrão 10)
 const gP = () => parseInt(g('proficiencia')?.value) || 2       // bônus de proficiência
-
 
 /* ============================================================
    3. ATUALIZAÇÃO CENTRAL
@@ -180,7 +178,6 @@ g('proficiencia').addEventListener('input', function () {
     this.dataset.manual = 'true'  // para de sincronizar com nível se editado manualmente
 })
 
-
 /* ============================================================
    4. CÁLCULO DE CA (DEFESA)
    ── Fórmula: CA Base + mod Des (com limite) + atributo extra
@@ -219,7 +216,6 @@ function calcularCA() {
     if (el) el.value = total
 }
 
-
 /* ============================================================
    5. BARRA DE PONTOS DE VIDA
    ── Atualiza visualmente a barra vermelha de PV.
@@ -232,7 +228,6 @@ function atualizarPVBar() {
     const pvTemp = parseInt(g('pv-temp')?.value) || 0   // declarado ANTES de usar
     const pct = Math.max(0, Math.min(100, (cur / max) * 100))
 
-    // ── Barra principal de vida ──
     const bar = g('pv-bar')
     if (bar) {
         bar.style.width = pct + '%'
@@ -243,7 +238,6 @@ function atualizarPVBar() {
         else bar.classList.add('pv-high')
     }
 
-    // ── Barra de PV temporário sobreposta (dourada) ──
     const tempBar = g('pv-bar-temp')
     if (tempBar) {
         if (pvTemp > 0) {
@@ -254,15 +248,12 @@ function atualizarPVBar() {
         }
     }
 
-    // ── Texto da barra ──
     const txt = g('pv-bar-text')
     if (txt) txt.textContent = pvTemp > 0 ? cur + ' (+' + pvTemp + ') / ' + max : cur + ' / ' + max
 
-    // ── Coração pulsante (HP crítico) ──
     const heart = g('pv-heart')
     if (heart) heart.style.display = (cur > 0 && pct <= 25) ? 'inline' : 'none'
 }
-
 
 /* ============================================================
    6. RENDER DE SAVES E PERÍCIAS
@@ -280,10 +271,11 @@ function renderSaves(ss) {
     ss = ss || {}
     g('saves-list').innerHTML = ATTRS.map(id => {
         const on = ss[id] || false
-        return `<div class="save-row">
-      <div class="save-dot ${on ? 'on' : ''}" id="save-dot-${id}" onclick="toggleSave('${id}')"></div>
+        return `<div class="save-row" onclick="rolarSave('${id}')" title="Clique para rolar teste de ${ATTR_NOMES[id]}">
+      <div class="save-dot ${on ? 'on' : ''}" id="save-dot-${id}" onclick="event.stopPropagation();toggleSave('${id}')"></div>
       <span>${ATTR_NOMES[id]}</span>
       <span class="save-bonus" id="save-bonus-${id}">+0</span>
+      <span class="roll-hint">🎲</span>
     </div>`
     }).join('')
 }
@@ -298,15 +290,15 @@ function renderPericias(sp) {
     g('pericias-lista').innerHTML = PERICIAS.map(p => {
         const sid = skillId(p.nome)
         const attrCls = 'attr-' + p.attr.toLowerCase()
-        return `<div class="skill-row">
-      <input type="checkbox" class="skill-check" id="${sid}" ${sp[sid] ? 'checked' : ''} onchange="atualizarTudo()">
+        return `<div class="skill-row" onclick="rolarPericia('${p.nome}','${sid}')" title="Clique para rolar ${p.nome}">
+      <input type="checkbox" class="skill-check" id="${sid}" ${sp[sid] ? 'checked' : ''} onchange="atualizarTudo()" onclick="event.stopPropagation()">
       <span class="skill-name">${p.nome}</span>
       <span class="skill-attr ${attrCls}">${p.attr.toUpperCase()}</span>
       <span class="skill-val" id="${sid}-bonus">+0</span>
+      <span class="roll-hint">🎲</span>
     </div>`
     }).join('')
 }
-
 
 /* ============================================================
    7. ESPAÇOS DE MAGIA (Slots por nível)
@@ -324,7 +316,6 @@ function renderSpellSlots(slots) {
     ).join('')
 }
 
-
 /* ============================================================
    8. ATAQUES E MUNIÇÕES (linhas dinâmicas)
    ── addAtaqueRow: adiciona uma linha na tabela de ataques.
@@ -335,10 +326,13 @@ function renderSpellSlots(slots) {
 function addAtaqueRow(nome = '', atk = '', dano = '', tipo = '', notas = '') {
     const tr = document.createElement('tr')
     tr.innerHTML = `
-    <td style="width:22%"><input type="text" value="${nome}"></td>
-    <td style="width:14%"><input type="text" value="${atk}"></td>
-    <td style="width:22%"><input type="text" value="${dano}"></td>
-    <td style="width:22%"><input type="text" value="${tipo}"></td>
+    <td style="width:22%"><input type="text" value="${nome}" placeholder="Espada Longa"></td>
+    <td style="width:13%"><input type="text" value="${atk}" placeholder="+5" style="text-align:center;"></td>
+    <td style="width:20%"><input type="text" value="${dano}" placeholder="1d8+3"></td>
+    <td style="width:16%"><input type="text" value="${tipo}" placeholder="Cortante"></td>
+    <td style="width:8%;text-align:center;">
+        <button class="btn-rolar-ataque" onclick="rolarAtaque(this)" title="Rolar ataque e dano">⚔</button>
+    </td>
     <td class="rm"><button class="btn-remove" onclick="this.closest('tr').remove()" title="Remover ataque">✕</button></td>`
     g('attacks-body').appendChild(tr)
 }
@@ -351,7 +345,6 @@ function addMunicaoRow(tipo = '', qtd = '') {
     <td class="rm"><button class="btn-remove" onclick="this.closest('tr').remove()" title="Remover munição">✕</button></td>`
     g('mun-body').appendChild(tr)
 }
-
 
 /* ============================================================
    9. CARDS EXPANSÍVEIS
@@ -505,7 +498,6 @@ function toggleCard(id) {
     g('arr-' + id).classList.toggle('open')
 }
 
-
 /* ============================================================
    10. TAGS (LÍNGUAS E TALENTOS)
    ── addTag: adiciona uma nova tag ao container.
@@ -532,7 +524,6 @@ function coletarTags(cid) {
     return Array.from(document.querySelectorAll('#' + cid + ' .prof-tag span')).map(s => s.textContent)
 }
 
-
 /* ============================================================
    11. IMAGEM DO PERSONAGEM
    ── Carrega uma imagem do computador e salva em base64
@@ -545,23 +536,54 @@ function carregarImagem(event) {
     const reader = new FileReader()
     reader.onload = e => {
         mostrarImagem(e.target.result)
-        ls.set('ficha-dnd-img', e.target.result) // salva a imagem separada
+        ls.set('ficha-dnd-img', e.target.result)
     }
     reader.readAsDataURL(file)
 }
 
 function mostrarImagem(src) {
     const wrap = g('char-img-wrap')
-    const ph = g('img-placeholder')
+    const ph   = g('img-placeholder')
     let img = wrap.querySelector('img')
     if (!img) {
         img = document.createElement('img')
         wrap.appendChild(img)
     }
     img.src = src
-    if (ph) ph.style.display = 'none' // oculta o placeholder
+    if (ph) ph.style.display = 'none'
 }
 
+/* ── Toggle de modo da imagem: retrato / token ── */
+function setImgMode(modo) {
+    const outer = g('char-img-outer')
+    if (!outer) return
+    outer.classList.remove('modo-retrato', 'modo-token')
+    outer.classList.add('modo-' + modo)
+
+    document.querySelectorAll('.img-mode-btn').forEach(b => b.classList.remove('active'))
+    const btn = g('btn-modo-' + modo)
+    if (btn) btn.classList.add('active')
+
+    // Se há imagem carregada, garante que o placeholder fica oculto
+    const wrap = g('char-img-wrap')
+    if (wrap && wrap.querySelector('img')) {
+        const ph = g('img-placeholder')
+        if (ph) ph.style.display = 'none'
+    }
+
+    ls.set('img-modo', modo)
+}
+
+function restaurarModoImagem() {
+    const imgData   = ls.get('ficha-dnd-img')
+    const modoSalvo = ls.get('img-modo')
+    // Só usa token se há um data URL de imagem válido E o modo foi salvo como token
+    const temImagem = !!(imgData && imgData.startsWith('data:image'))
+    const modo = (temImagem && modoSalvo === 'token') ? 'token' : 'retrato'
+    // Limpa modo inválido do localStorage para não persistir
+    if (!temImagem && modoSalvo === 'token') ls.del('img-modo')
+    setImgMode(modo)
+}
 
 /* ============================================================
    12. CONTROLE DE ABAS
@@ -574,8 +596,26 @@ function showTab(name, btn) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
     g('tab-' + name).classList.add('active')
     btn.classList.add('active')
+    moverIndicadorTab(btn)
 }
 
+function moverIndicadorTab(btn) {
+    const indicator = document.getElementById('tab-indicator')
+    if (!indicator || !btn) return
+    const tabs = document.getElementById('tabs')
+    const tabsRect = tabs.getBoundingClientRect()
+    const btnRect  = btn.getBoundingClientRect()
+    indicator.style.left  = (btnRect.left - tabsRect.left) + 'px'
+    indicator.style.width = btnRect.width + 'px'
+}
+
+// Inicializa o indicador na aba ativa
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const activeBtn = document.querySelector('.tab-btn.active')
+        if (activeBtn) moverIndicadorTab(activeBtn)
+    }, 100)
+})
 
 /* ============================================================
    13. SALVAR FICHA (localStorage)
@@ -632,7 +672,6 @@ function salvar() {
 
     // Objeto principal com todos os dados da ficha
     const dados = {
-        // ── Cabeçalho ──
         nome: g('nome-personagem').textContent,
         classe: gV('classe'),
         nivel: gV('nivel'),
@@ -641,7 +680,6 @@ function salvar() {
         alinhamento: gV('alinhamento'),
         jogador: gV('jogador'),
 
-        // ── Combate: linha 1 ──
         proficiencia: gV('proficiencia'),
         iniciativa: gV('iniciativa'),
         deslocamento: gV('deslocamento'),
@@ -650,12 +688,10 @@ function salvar() {
         deslocamentoEscala: gV('deslocamento-escala'),
         caTemp: gV('ca-temp'),
 
-        // ── Combate: linha 2 ──
         visao: gV('visao'),
         visaoEscuro: g('visao-escuro')?.checked || false,
         exaustao: gV('exaustao'),
 
-        // ── Armadura ──
         armNome: gV('arm-nome'),
         armCA: gV('arm-ca'),
         armDesLimite: gV('arm-des-limite'),
@@ -664,25 +700,21 @@ function salvar() {
         armBonus: gV('arm-bonus'),
         armDesv: g('arm-desv')?.checked || false,
 
-        // ── Pontos de Vida ──
         pvMax: gV('pv-max'),
         pvAtual: gV('pv-atual'),
         pvTemp: gV('pv-temp'),
         dadoVida: gV('dado-vida'),
         dadoVida2: gV('dado-vida-2'),
 
-        // ── Magias ──
         conjHab: gV('conj-hab'),
         conjCD: gV('conj-cd'),
         conjAtk: gV('conj-atk'),
 
-        // ── Inventário ──
         equipamento: gV('equipamento'),
         itensMagicos: gV('itens-magicos'),
         consumiveis: gV('consumiveis'),
         pc: gV('pc'), pp: gV('pp'), pe: gV('pe'), po: gV('po'), pl: gV('pl'),
 
-        // ── Habilidades ──
         outrasPorf: gV('outras-prof'),
         tracoAntecedente: gV('traco-antecedente'),
         profLeve: g('prof-leve')?.checked || false,
@@ -692,7 +724,6 @@ function salvar() {
         profSimples: g('prof-simples')?.checked || false,
         profMarciais: g('prof-marciais')?.checked || false,
 
-        // ── Descrição ──
         idade: gV('idade'),
         altura: gV('altura'),
         peso: gV('peso'),
@@ -707,7 +738,6 @@ function salvar() {
         falhas: gV('falhas'),
         historia: gV('historia'),
 
-        // ── Dados estruturados ──
         atributos: {
             for: gV('for'), des: gV('des'), con: gV('con'),
             int: gV('int'), sab: gV('sab'), car: gV('car')
@@ -716,12 +746,10 @@ function salvar() {
         pericias,
         spellSlots,
 
-        // ── Pontos de Magia ──
         spMode:  ls.get('sp-mode')  || '0',
         spTipo:  gV('sp-tipo'),
         spAtual: ls.get('sp-atual'),
 
-        // ── Listas dinâmicas ──
         ataques: Array.from(document.querySelectorAll('#attacks-body tr')).map(tr => {
             const ins = tr.querySelectorAll('input[type=text]')
             return { nome: ins[0]?.value, atk: ins[1]?.value, dano: ins[2]?.value, tipo: ins[3]?.value, notas: ins[4]?.value }
@@ -739,7 +767,6 @@ function salvar() {
         linguas: coletarTags('linguas-tags'),
         talentos: coletarTags('talentos-tags'),
 
-        // ── Notas de Sessão ──
         sessaoNum: gV('sessao-num'),
         sessaoData: gV('sessao-data'),
         sessaoTitulo: gV('sessao-titulo'),
@@ -761,7 +788,6 @@ function salvar() {
         setTimeout(() => st.textContent = '', 3000)
     }
 }
-
 
 /* ============================================================
    14. CARREGAR FICHA (localStorage)
@@ -865,11 +891,6 @@ function carregar() {
     if (img) mostrarImagem(img)
 
 }
-
-
-
-
-
 
 /* ============================================================
    VISÃO NO ESCURO
@@ -1176,7 +1197,6 @@ function mudarSlotUsado(n, delta) {
     if (totEl) totEl.textContent = total
 }
 
-
 /* ============================================================
    EXPORTAR / IMPORTAR FICHA
 ============================================================ */
@@ -1232,39 +1252,47 @@ function importarFicha(event) {
 
 window.onload = function () {
     // 1. Renderiza as listas geradas dinamicamente
-    renderSaves()
-    renderPericias()
-    renderSpellSlots()
+    try { renderSaves() }     catch(e) { console.warn('renderSaves:', e) }
+    try { renderPericias() }  catch(e) { console.warn('renderPericias:', e) }
+    try { renderSpellSlots() } catch(e) { console.warn('renderSpellSlots:', e) }
 
-    // 2. Carrega dados do Firebase (ou localStorage)
-    carregar()
+    // 2. Carrega dados salvos
+    try { carregar() }        catch(e) { console.warn('carregar:', e) }
 
-    // 3. Recalcula todos os valores
-    atualizarTudo()
+    // 3. Recalcula tudo
+    try { atualizarTudo() }   catch(e) { console.warn('atualizarTudo:', e) }
 
-    // 4. Adiciona linhas padrão se as tabelas estiverem vazias
-    if (!document.querySelector('#attacks-body tr')) {
-        addAtaqueRow(); addAtaqueRow(); addAtaqueRow()
-    }
-    if (!document.querySelector('#mun-body tr')) {
-        addMunicaoRow()
-    }
-    if (!document.querySelector('#habilidades-lista .exp-card')) {
-        addHabilidade()
-    }
-    renderSpellSlotsUsados()
-    // Inicializa pontos de magia se o modo estiver ativo
-    if (ls.get('sp-mode') === '1') atualizarSpellPoints()
+    // 4. Garante conteúdo padrão mesmo que carregar não tenha preenchido
+    try {
+        if (!document.querySelector('#attacks-body tr')) {
+            addAtaqueRow(); addAtaqueRow(); addAtaqueRow()
+        }
+    } catch(e) {}
+    try {
+        if (!document.querySelector('#mun-body tr')) { addMunicaoRow() }
+    } catch(e) {}
+    try {
+        if (!document.querySelector('#habilidades-lista .exp-card')) { addHabilidade() }
+    } catch(e) { console.warn('addHabilidade:', e) }
 
-    if (!document.querySelector('#truques-lista .exp-card')) {
-        addSpellCard('truques-lista', false)
-    }
-    if (!document.querySelector('#spells-lista .exp-card')) {
-        addSpellCard('spells-lista', true)
-    }
+    try { renderSpellSlotsUsados() } catch(e) {}
+    try { if (ls.get('sp-mode') === '1') atualizarSpellPoints() } catch(e) {}
 
-    // Inicializa o sistema de temas
-    inicializarTemas()
+    try {
+        if (!document.querySelector('#truques-lista .exp-card')) {
+            addSpellCard('truques-lista', false)
+        }
+    } catch(e) {}
+    try {
+        if (!document.querySelector('#spells-lista .exp-card')) {
+            addSpellCard('spells-lista', true)
+        }
+    } catch(e) { console.warn('addSpellCard:', e) }
+
+    // 5. Inicializações visuais
+    try { inicializarTemas() }   catch(e) { console.warn('temas:', e) }
+    try { inicializarDados() }   catch(e) { console.warn('dados:', e) }
+    try { restaurarModoImagem() } catch(e) {}
 }
 
 /* ============================================================
@@ -1275,7 +1303,6 @@ window.onload = function () {
    ── Export/import via JSON para compartilhar entre jogadores.
 ============================================================ */
 
-// ── Definição das variáveis editáveis por grupo ──
 const CP_GROUPS = {
     header: [
         { var: '--header-top',     label: 'Cabeçalho superior', hint: 'topo do gradiente do header'        },
@@ -1304,7 +1331,6 @@ const CP_GROUPS = {
     ],
 }
 
-// ── Paletas de preset completas ──
 const TEMAS = {
     'Pergaminho': {
         swatch: '#e8b830',
@@ -1356,7 +1382,6 @@ const TEMAS = {
     },
 }
 
-// ── Lê o valor atual de uma variável CSS como hex ──
 function lerVarCSS(cssVar) {
     const raw = getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim()
     if (/^#[0-9a-fA-F]{6}$/.test(raw)) return raw
@@ -1369,13 +1394,11 @@ function lerVarCSS(cssVar) {
     return '#888888'
 }
 
-// ── Aplica um conjunto de vars no :root ──
 function aplicarVars(vars) {
     const root = document.documentElement
     Object.entries(vars).forEach(([prop, val]) => root.style.setProperty(prop, val))
 }
 
-// ── Aplica um preset inteiro ──
 function aplicarTema(nome) {
     const tema = TEMAS[nome]
     if (!tema) return
@@ -1391,7 +1414,6 @@ function marcarPresetAtivo(nome) {
     document.querySelectorAll('.cp-preset').forEach(b => b.classList.toggle('ativo', b.dataset.preset === nome))
 }
 
-// ── Aplica uma cor individual via picker ──
 function onColorChange(input) {
     const cssVar = input.dataset.var
     let val = input.value
@@ -1407,7 +1429,6 @@ function onColorChange(input) {
     marcarPresetAtivo(null)
 }
 
-// ── Coleta todos os valores atuais editáveis ──
 function coletarVarsAtuais() {
     const allFields = [...CP_GROUPS.header, ...CP_GROUPS.fundo, ...CP_GROUPS.acento, ...CP_GROUPS.texto]
     const vars = {}
@@ -1415,13 +1436,11 @@ function coletarVarsAtuais() {
     return vars
 }
 
-// ── Salva o estado custom no localStorage ──
 function salvarCustom() {
     ls.set('tema-custom', JSON.stringify(coletarVarsAtuais()))
     ls.del('tema-preset') // custom sobrescreve preset
 }
 
-// ── Sincroniza os pickers com os valores CSS atuais ──
 function sincronizarPickers() {
     document.querySelectorAll('.cp-color-input').forEach(input => {
         const val = lerVarCSS(input.dataset.var)
@@ -1429,7 +1448,6 @@ function sincronizarPickers() {
     })
 }
 
-// ── Exporta o tema atual como JSON para clipboard ──
 function exportarTema() {
     const vars = coletarVarsAtuais()
     const json = JSON.stringify(vars, null, 2)
@@ -1443,7 +1461,6 @@ function exportarTema() {
     })
 }
 
-// ── Importa um tema colado no textarea ──
 function importarTema() {
     const raw = document.getElementById('cp-import-ta').value.trim()
     try {
@@ -1465,14 +1482,12 @@ function toggleImportArea() {
     document.getElementById('cp-import-wrap').classList.toggle('open')
 }
 
-// ── Reseta para o tema Pergaminho (padrão) ──
 function resetarTema() {
     aplicarTema('Pergaminho')
     ls.del('tema-custom')
     mostrarFeedback('Tema resetado para Pergaminho.')
 }
 
-// ── Feedback temporário ──
 function mostrarFeedback(msg) {
     const el = document.getElementById('cp-feedback')
     if (!el) return
@@ -1482,14 +1497,12 @@ function mostrarFeedback(msg) {
     el._t = setTimeout(() => el.classList.remove('show'), 3000)
 }
 
-// ── Abre/fecha o painel ──
 function toggleTemaPanel() {
     const panel = document.getElementById('tema-panel')
     panel.classList.toggle('open')
     if (panel.classList.contains('open')) sincronizarPickers()
 }
 
-// ── Constrói o HTML de um grupo de color pickers ──
 function renderCPGroup(groupId, fields) {
     const el = document.getElementById('cp-group-' + groupId)
     if (!el) return
@@ -1507,7 +1520,6 @@ function renderCPGroup(groupId, fields) {
         </div>`).join('')
 }
 
-// ── Constrói os presets rápidos ──
 function renderPresets() {
     const el = document.getElementById('cp-presets')
     if (!el) return
@@ -1518,7 +1530,6 @@ function renderPresets() {
         </button>`).join('')
 }
 
-// ── Inicializa todo o editor de tema ──
 function inicializarTemas() {
     renderPresets()
     renderCPGroup('header', CP_GROUPS.header)
@@ -1549,4 +1560,762 @@ function inicializarTemas() {
             panel.classList.remove('open')
         }
     })
+}
+
+/* ============================================================
+   ROLADOR DE DADOS
+   ── Suporte a todos os dados padrão de D&D 5e.
+   ── Vantagem/Desvantagem no d20.
+   ── Modificador livre (+/-).
+   ── Atalhos rápidos contextuais.
+   ── Histórico das últimas 20 rolagens.
+   ── Animação e indicadores de crítico/falha crítica.
+============================================================ */
+
+const DADOS_CONFIG = {
+    die: 20,
+    qty: 1,
+    vantagem: 0,  // -1 desvantagem · 0 normal · 1 vantagem
+    historico: [],
+}
+
+const DADOS_TIPOS = [4, 6, 8, 10, 12, 20, 100]
+
+function inicializarDados() {
+    const container = document.getElementById('dados-tipos')
+    if (!container) return
+
+    DADOS_TIPOS.forEach(d => {
+        const btn = document.createElement('button')
+        btn.className = 'dado-btn' + (d === 20 ? ' ativo' : '')
+        btn.textContent = d === 100 ? 'd%' : 'd' + d
+        btn.dataset.die = d
+        btn.onclick = () => selecionarDado(d)
+        container.appendChild(btn)
+    })
+
+    // Fecha ao clicar fora
+    document.addEventListener('click', e => {
+        const panel = document.getElementById('dados-panel')
+        const btn   = document.getElementById('btn-dados')
+        if (panel && btn && panel.classList.contains('open')
+            && !panel.contains(e.target) && !btn.contains(e.target)) {
+            panel.classList.remove('open')
+        }
+    })
+
+    // Restaura histórico da última sessão
+    carregarHistoricoDados()
+}
+
+function toggleDados() {
+    document.getElementById('dados-panel').classList.toggle('open')
+}
+
+function selecionarDado(die) {
+    DADOS_CONFIG.die = die
+    document.getElementById('dados-die-label').textContent = die === 100 ? '%' : die
+    document.querySelectorAll('.dado-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.die) === die))
+    // Vantagem só faz sentido no d20
+    document.querySelectorAll('.vant-btn').forEach(b => {
+        b.style.opacity = (die === 20) ? '1' : '0.35'
+        b.style.pointerEvents = (die === 20) ? '' : 'none'
+    })
+    if (die !== 20) setVantagem(0)
+}
+
+function changeQty(delta) {
+    DADOS_CONFIG.qty = Math.max(1, Math.min(20, DADOS_CONFIG.qty + delta))
+    document.getElementById('dados-qty').textContent = DADOS_CONFIG.qty
+}
+
+function setVantagem(v) {
+    DADOS_CONFIG.vantagem = v
+    document.querySelectorAll('.vant-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.v) === v))
+}
+
+function rolarDado() {
+    const { die, qty, vantagem } = DADOS_CONFIG
+    const mod = parseInt(document.getElementById('dados-mod-input').value) || 0
+    let rolls = [], resultado, detalhes, expressao, isCritico = false, isFalhaCrit = false
+
+    if (vantagem !== 0 && die === 20 && qty === 1) {
+        // Rola 2d20, pega o maior ou menor
+        const r1 = rolarUm(20), r2 = rolarUm(20)
+        const escolhido = vantagem === 1 ? Math.max(r1, r2) : Math.min(r1, r2)
+        resultado = escolhido + mod
+        detalhes  = `[${r1}, ${r2}] ${vantagem === 1 ? '↑' : '↓'}${mod !== 0 ? (mod > 0 ? ' +' : ' ') + mod : ''}`
+        expressao = `d20${vantagem === 1 ? ' vantagem' : ' desvantagem'}${mod !== 0 ? (mod > 0 ? '+' : '') + mod : ''}`
+        isCritico    = escolhido === 20
+        isFalhaCrit  = escolhido === 1
+    } else {
+        // Rolagem normal
+        for (let i = 0; i < qty; i++) rolls.push(rolarUm(die))
+        const soma = rolls.reduce((a, b) => a + b, 0)
+        resultado = soma + mod
+        detalhes  = `[${rolls.join(', ')}]${mod !== 0 ? (mod > 0 ? ' +' : ' ') + mod : ''}`
+        expressao = `${qty}d${die === 100 ? '%' : die}${mod !== 0 ? (mod > 0 ? '+' : '') + mod : ''}`
+        if (die === 20 && qty === 1) {
+            isCritico   = rolls[0] === 20
+            isFalhaCrit = rolls[0] === 1
+        }
+    }
+
+    // Animação no botão
+    const btnDados = document.getElementById('btn-dados')
+    btnDados.classList.add('rolando')
+    setTimeout(() => btnDados.classList.remove('rolando'), 500)
+
+    // Atualiza resultado com animação
+    mostrarResultadoDado(resultado, detalhes, expressao, isCritico, isFalhaCrit)
+
+    // Registra no histórico
+    adicionarHistorico(expressao, resultado, detalhes, isCritico, isFalhaCrit)
+}
+
+function rolarUm(lados) {
+    return Math.floor(Math.random() * lados) + 1
+}
+
+function mostrarResultadoDado(valor, detalhes, expressao, critico, falhaCrit) {
+    const box    = document.getElementById('dados-resultado')
+    const numEl  = document.getElementById('dados-res-num')
+    const label  = document.getElementById('dados-res-label')
+    const detEl  = document.getElementById('dados-res-detalhe')
+
+    box.className = critico ? 'critico' : falhaCrit ? 'falha-crit' : ''
+
+    label.textContent = expressao
+    detEl.textContent = detalhes
+
+    // Animação: mostra números aleatórios por 300ms, depois o resultado
+    numEl.className = ''
+    let ticks = 0
+    const intervalo = setInterval(() => {
+        numEl.textContent = Math.floor(Math.random() * (DADOS_CONFIG.die || 20)) + 1
+        if (++ticks >= 6) {
+            clearInterval(intervalo)
+            numEl.textContent = valor
+            numEl.className = 'animando' + (critico ? ' critico-num' : falhaCrit ? ' falha-crit-num' : '')
+            if (critico)   label.textContent = '✦ CRÍTICO! — ' + expressao
+            if (falhaCrit) label.textContent = '💀 FALHA CRÍTICA — ' + expressao
+        }
+    }, 50)
+}
+
+function adicionarHistorico(expressao, valor, detalhes, critico, falhaCrit) {
+    const ts = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    DADOS_CONFIG.historico.unshift({ expressao, valor, detalhes, critico, falhaCrit, ts })
+    if (DADOS_CONFIG.historico.length > 20) DADOS_CONFIG.historico.pop()
+    renderHistorico()
+    salvarHistoricoDados()
+}
+
+function renderHistorico() {
+    const el = document.getElementById('dados-historico')
+    if (!el) return
+    if (!DADOS_CONFIG.historico.length) {
+        el.innerHTML = '<div style="font-size:0.75rem;color:var(--ink-muted);font-style:italic;text-align:center;padding:0.5rem 0;">Nenhuma rolagem ainda.</div>'
+        return
+    }
+    el.innerHTML = DADOS_CONFIG.historico.map(h => `
+        <div class="hist-row">
+            <span class="hist-expr">${h.critico ? '✦ ' : h.falhaCrit ? '💀 ' : ''}${h.expressao}</span>
+            <span class="hist-val ${h.critico ? 'critico-num' : h.falhaCrit ? 'falha-crit-num' : ''}">${h.valor}</span>
+            <span class="hist-detail">${h.detalhes}</span>
+            <span class="hist-ts">${h.ts}</span>
+        </div>`).join('')
+}
+
+function limparHistorico() {
+    DADOS_CONFIG.historico = []
+    renderHistorico()
+}
+
+function atalho(tipo) {
+    const mod = parseInt(document.getElementById('dados-mod-input').value) || 0
+
+    const atalhos = {
+        'iniciativa': () => {
+            // Usa o modificador de DES da ficha
+            const desMod = parseInt(document.querySelector('#des .attr-mod')?.textContent) || 0
+            document.getElementById('dados-mod-input').value = desMod
+            selecionarDado(20); setVantagem(0)
+            DADOS_CONFIG.qty = 1
+            document.getElementById('dados-qty').textContent = 1
+        },
+        'ataque': () => {
+            // d20 com mod atual
+            selecionarDado(20); setVantagem(0)
+            DADOS_CONFIG.qty = 1
+            document.getElementById('dados-qty').textContent = 1
+        },
+        '4d6drop': () => {
+            // 4d6 descartando o menor
+            const rolls = [rolarUm(6), rolarUm(6), rolarUm(6), rolarUm(6)]
+            const min = Math.min(...rolls)
+            const total = rolls.reduce((a, b) => a + b, 0) - min
+            const descartado = rolls.indexOf(min)
+            const detalhe = rolls.map((r, i) => i === descartado ? `~~${r}~~` : r).join(', ')
+            mostrarResultadoDado(total, `[${detalhe}] −menor`, '4d6↓', false, false)
+            adicionarHistorico('4d6↓ atributo', total, `[${rolls.join(',')}] desc.${min}`, false, false)
+            return // não chama rolarDado padrão
+        },
+        'percentual': () => {
+            selecionarDado(100); setVantagem(0)
+            DADOS_CONFIG.qty = 1
+            document.getElementById('dados-qty').textContent = 1
+        },
+        'dano-furtivo': () => {
+            // Dano furtivo padrão d6, quantidade baseada no nível (nivel/2 arredondado)
+            const nivel = parseInt(document.getElementById('nivel')?.value) || 1
+            const qtyFurtivo = Math.max(1, Math.ceil(nivel / 2))
+            selecionarDado(6); setVantagem(0)
+            DADOS_CONFIG.qty = qtyFurtivo
+            document.getElementById('dados-qty').textContent = qtyFurtivo
+            document.getElementById('dados-mod-input').value = 0
+        },
+    }
+
+    if (atalhos[tipo]) {
+        const retorno = atalhos[tipo]()
+        if (retorno !== undefined || tipo === '4d6drop') return // 4d6drop já exibiu
+    }
+
+    rolarDado()
+}
+
+function usarModNoRolador(attr) {
+    const modEl = document.getElementById(attr + '-mod')
+    if (!modEl) return
+    const val = parseInt(modEl.textContent) || 0
+    const input = document.getElementById('dados-mod-input')
+    if (input) input.value = val
+    const panel = document.getElementById('dados-panel')
+    if (panel && !panel.classList.contains('open')) panel.classList.add('open')
+    if (input) {
+        input.style.color = 'var(--gold)'
+        setTimeout(() => input.style.color = '', 600)
+    }
+}
+
+/* ============================================================
+   DESCANSOS — Curto e Longo
+============================================================ */
+function descanso(tipo) {
+    const nome = document.getElementById('nome-personagem')?.textContent?.trim() || 'o personagem'
+
+    if (tipo === 'curto') {
+        if (!confirm(`Descanso Curto para ${nome}?\n\n• Dados de Vida gastos restaurados\n• Recursos de "descanso curto" restaurados`)) return
+
+        // Restaura dados de vida restantes ao total
+        const dadoTotal = document.getElementById('dado-vida-total')
+        const dadoRest  = document.getElementById('dado-vida-rest')
+        if (dadoTotal && dadoRest) dadoRest.value = dadoTotal.value
+
+        // Restaura características com recarga dc ou dl
+        document.querySelectorAll('.caract-row').forEach(row => {
+            const recarga = row.querySelector('.caract-recarga')?.value || ''
+            if (recarga === 'dc' || recarga === 'dl') {
+                const rest  = row.querySelector('.caract-rest')
+                const total = row.querySelector('.caract-total')
+                if (rest && total) rest.value = total.value
+            }
+        })
+
+        mostrarStatusSalvo('☽ Descanso Curto realizado!')
+        salvar()
+
+    } else {
+        if (!confirm(`Descanso Longo para ${nome}?\n\n• PV restaurado ao máximo\n• Todos os Dados de Vida restaurados\n• Slots de magia restaurados\n• Testes contra a morte limpos\n• Todos os recursos restaurados`)) return
+
+        // Restaura PV
+        const pvMax = document.getElementById('pv-max')
+        const pvAtual = document.getElementById('pv-atual')
+        if (pvMax && pvAtual) pvAtual.value = pvMax.value
+        const pvTemp = document.getElementById('pv-temp')
+        if (pvTemp) pvTemp.value = 0
+        atualizarPVBar()
+
+        // Restaura dados de vida
+        const dadoTotal = document.getElementById('dado-vida-total')
+        const dadoRest  = document.getElementById('dado-vida-rest')
+        if (dadoTotal && dadoRest) dadoRest.value = dadoTotal.value
+
+        // Limpa testes contra a morte
+        document.querySelectorAll('.death-check').forEach(cb => cb.checked = false)
+
+        // Restaura slots de magia
+        for (let n = 1; n <= 9; n++) ls.del('slot-usado-' + n)
+        renderSpellSlotsUsados()
+        descansarLongoSP()
+
+        // Restaura todos os recursos
+        document.querySelectorAll('.caract-row').forEach(row => {
+            const rest  = row.querySelector('.caract-rest')
+            const total = row.querySelector('.caract-total')
+            if (rest && total) rest.value = total.value
+        })
+
+        mostrarStatusSalvo('☀ Descanso Longo realizado!')
+        salvar()
+    }
+}
+
+/* ============================================================
+   PERSISTÊNCIA DO HISTÓRICO DE DADOS
+   ── Salva/carrega o histórico no localStorage para
+      que os jogadores vejam as rolagens da última sessão.
+============================================================ */
+function salvarHistoricoDados() {
+    ls.set('dados-historico', JSON.stringify(DADOS_CONFIG.historico.slice(0, 20)))
+}
+
+function carregarHistoricoDados() {
+    try {
+        const raw = ls.get('dados-historico')
+        if (raw) {
+            DADOS_CONFIG.historico = JSON.parse(raw)
+            renderHistorico()
+        }
+    } catch(e) {}
+}
+
+function mostrarToast(msg, tipo = 'sucesso', duracao = 3000) {
+    const icons = {
+        sucesso: '✦', erro: '✕', aviso: '⚠', info: 'ℹ',
+        'descanso-curto': '🌙', 'descanso-longo': '☀️'
+    }
+    const container = document.getElementById('toast-container')
+    if (!container) return
+
+    const el = document.createElement('div')
+    el.className = `toast tipo-${tipo}`
+    el.innerHTML = `<span class="toast-icon">${icons[tipo] || '✦'}</span><span class="toast-msg">${msg}</span>`
+    container.appendChild(el)
+
+    setTimeout(() => {
+        el.classList.add('saindo')
+        setTimeout(() => el.remove(), 260)
+    }, duracao)
+}
+
+const _atualizarPVBarOriginal = window.atualizarPVBar
+window.atualizarPVBar = function() {
+    if (_atualizarPVBarOriginal) _atualizarPVBarOriginal()
+    const pvAtual = parseInt(document.getElementById('pv-atual')?.value) || 0
+    const pvMax   = parseInt(document.getElementById('pv-max')?.value)   || 1
+    const pct = Math.max(0, pvAtual / pvMax)
+    const section = document.getElementById('pv-section') || document.querySelector('.pv-section')
+    if (!section) return
+    section.classList.remove('pv-saude-boa','pv-saude-media','pv-saude-baixa','pv-saude-critica')
+    if (pct > 0.5)       section.classList.add('pv-saude-boa')
+    else if (pct > 0.25) section.classList.add('pv-saude-media')
+    else if (pct > 0)    section.classList.add('pv-saude-baixa')
+    else                 section.classList.add('pv-saude-critica')
+}
+
+const _modAnterior = {}
+function flashAtributoSeAtualizado(id) {
+    const el = document.getElementById(id + '-mod')
+    if (!el) return
+    const val = el.textContent
+    if (_modAnterior[id] !== undefined && _modAnterior[id] !== val) {
+        const card = el.closest('.attr-card')
+        if (card) {
+            card.classList.remove('atualizando')
+            void card.offsetWidth // reflow para reiniciar animação
+            card.classList.add('atualizando')
+            setTimeout(() => card.classList.remove('atualizando'), 500)
+        }
+    }
+    _modAnterior[id] = val
+}
+
+// Observa modificadores após cada atualizarTudo
+const _atualizarTudoOriginal = window.atualizarTudo
+window.atualizarTudo = function() {
+    if (_atualizarTudoOriginal) _atualizarTudoOriginal()
+    ;['for','des','con','int','sab','car'].forEach(flashAtributoSeAtualizado)
+}
+
+const CONDICOES = [
+    { id:'amedrontado', emoji:'⚡', label:'Amedrontado', positiva: false },
+    { id:'cego',        emoji:'◎', label:'Cego',        positiva: false },
+    { id:'encantado',   emoji:'✦', label:'Encantado',   positiva: false },
+    { id:'ensurdecido', emoji:'⌀', label:'Ensurdecido', positiva: false },
+    { id:'envenenado',  emoji:'☠', label:'Envenenado',  positiva: false },
+    { id:'exausto',     emoji:'↯', label:'Exausto',     positiva: false },
+    { id:'incapacitado',emoji:'✖', label:'Incapacitado',positiva: false },
+    { id:'invisivel',   emoji:'◌', label:'Invisível',   positiva: true  },
+    { id:'paralisado',  emoji:'⊗', label:'Paralisado',  positiva: false },
+    { id:'petrificado', emoji:'◼', label:'Petrificado', positiva: false },
+    { id:'prostrado',   emoji:'⊥', label:'Prostrado',   positiva: false },
+    { id:'preso',       emoji:'⛞', label:'Preso',       positiva: false },
+]
+
+let condicoesAtivas = new Set()
+
+function renderCondicoes() {
+    const grid = document.getElementById('condicoes-grid')
+    if (!grid) return
+    grid.innerHTML = CONDICOES.map(c => `
+        <button class="cond-btn ${condicoesAtivas.has(c.id) ? 'ativa' + (c.positiva ? ' cond-positiva' : '') : ''}"
+            onclick="toggleCondicao('${c.id}')" title="${c.label}">
+            ${c.emoji} ${c.label}
+        </button>`).join('')
+}
+
+function toggleCondicao(id) {
+    if (condicoesAtivas.has(id)) condicoesAtivas.delete(id)
+    else condicoesAtivas.add(id)
+    renderCondicoes()
+    salvar()
+}
+
+// Integrar condições no salvar/carregar — sobrescreve parcialmente
+const _salvarOriginal = window.salvar
+window.salvar = function() {
+    if (_salvarOriginal) _salvarOriginal()
+    ls.set('condicoes', JSON.stringify([...condicoesAtivas]))
+}
+
+const _carregarOriginal = window.carregar
+window.carregar = function() {
+    try { if (_carregarOriginal) _carregarOriginal() }
+    catch(e) { console.warn('[carregar] erro na cadeia original:', e) }
+    try {
+        const raw = ls.get('condicoes')
+        if (raw) condicoesAtivas = new Set(JSON.parse(raw))
+        renderCondicoes()   // ← DENTRO do try-catch
+    } catch(e) { condicoesAtivas = new Set(); try { renderCondicoes() } catch(_){} }
+}
+
+// Sobrescrever mostrarStatusSalvo por toast
+window.mostrarStatusSalvo = function(msg) {
+    const tipo = msg.includes('Longo') ? 'descanso-longo'
+               : msg.includes('Curto') ? 'descanso-curto'
+               : msg.includes('❌') || msg.includes('Erro') ? 'erro'
+               : 'sucesso'
+    mostrarToast(msg || '✦ Ficha salva!', tipo)
+}
+
+function rolarContextual(label, bonus, tipo = 'info') {
+    const roll = Math.floor(Math.random() * 20) + 1
+    const total = roll + bonus
+    const critico   = roll === 20
+    const falhaCrit = roll === 1
+    const sinal = bonus >= 0 ? '+' : ''
+    const toastTipo = critico ? 'sucesso' : falhaCrit ? 'erro' : tipo
+
+    const msg = critico   ? `✦ CRÍTICO! ${label}: <strong>${total}</strong> [20 ${sinal}${bonus}]`
+              : falhaCrit ? `✕ Falha! ${label}: <strong>${total}</strong> [1 ${sinal}${bonus}]`
+              :             `${label}: <strong>${total}</strong> [d20(${roll}) ${sinal}${bonus}]`
+
+    mostrarToast(msg, toastTipo, 4000)
+
+    // Registra no histórico do rolador
+    adicionarHistorico(label, total, `[d20(${roll}) ${sinal}${bonus}]`, critico, falhaCrit)
+}
+
+function rolarPericia(nome, sid) {
+    const bonusEl = document.getElementById(sid + '-bonus')
+    const bonus = parseInt(bonusEl?.textContent) || 0
+    rolarContextual(nome, bonus, 'info')
+}
+
+function rolarSave(attrId) {
+    const bonusEl = document.getElementById('save-bonus-' + attrId)
+    const bonus = parseInt(bonusEl?.textContent) || 0
+    const label = 'Save ' + (ATTR_NOMES[attrId] || attrId.toUpperCase())
+    rolarContextual(label, bonus, 'info')
+}
+
+let _recursos = []   // array de { id, nome, atual, max, recarga, dado }
+
+function _recursoId() { return 'rec-' + Date.now().toString(36) }
+
+// Presets para classes comuns
+const RECURSOS_PRESETS = {
+    'Bárbaro':    [{ nome:'Rages',               max:2,  recarga:'dl', dado:null }],
+    'Bardo':      [{ nome:'Inspiração Bárdica',  max:3,  recarga:'dl', dado:'d6' }],
+    'Clérigo':    [{ nome:'Conjurar Divindade',  max:1,  recarga:'dl', dado:null }],
+    'Druida':     [{ nome:'Forma Selvagem',       max:2,  recarga:'dc', dado:null }],
+    'Guerreiro':  [{ nome:'Surge de Ação',        max:1,  recarga:'dc', dado:null },
+                   { nome:'Dados de Super.',      max:4,  recarga:'dc', dado:'d8' }],
+    'Monge':      [{ nome:'Ki',                  max:4,  recarga:'dc', dado:null }],
+    'Paladino':   [{ nome:'Imposição de Mãos',   max:5,  recarga:'dl', dado:null },
+                   { nome:'Sentido Divino',       max:3,  recarga:'dl', dado:null }],
+    'Patrulheiro':[{ nome:'Marca do Caçador',    max:3,  recarga:'dl', dado:null }],
+    'Ladino':     [{ nome:'Usar Magia Arcana',   max:2,  recarga:'dc', dado:null }],
+    'Feiticeiro': [{ nome:'Pts. de Feitiçaria',  max:4,  recarga:'dl', dado:null }],
+    'Bruxo':      [{ nome:'Patrono (slots)',      max:1,  recarga:'dc', dado:null }],
+    'Mago':       [{ nome:'Recuperação Arcana',  max:1,  recarga:'dc', dado:null }],
+}
+
+function renderRecursos() {
+    const el = document.getElementById('recursos-lista')
+    if (!el) return
+    if (!_recursos.length) {
+        el.innerHTML = '<p class="recursos-empty">Nenhum recurso adicionado. Use os atalhos ou crie um personalizado.</p>'
+        return
+    }
+    el.innerHTML = _recursos.map(r => `
+        <div class="recurso-item" id="ri-${r.id}">
+            <div class="recurso-topo">
+                <input class="recurso-nome-input" value="${r.nome}"
+                    onchange="_recursos.find(x=>x.id==='${r.id}').nome=this.value;salvar()">
+                <div class="recurso-controles">
+                    <span class="recurso-recarga-tag">${r.recarga === 'dc' ? '☽ DC' : r.recarga === 'dl' ? '☀ DL' : '✦ AM'}</span>
+                    ${r.dado ? `<button class="recurso-dado-btn" onclick="rolarRecurso('${r.id}')" title="Rolar ${r.dado}">🎲 ${r.dado}</button>` : ''}
+                    <button class="recurso-del" onclick="removerRecurso('${r.id}')" title="Remover">✕</button>
+                </div>
+            </div>
+            <div class="recurso-usos">
+                <button class="uso-btn" onclick="mudarRecurso('${r.id}',-1)">−</button>
+                <div class="uso-pips">
+                    ${Array.from({length: Math.min(r.max,20)}, (_,i) => `
+                        <button class="uso-pip ${i < r.atual ? 'cheio' : ''}"
+                            onclick="setRecurso('${r.id}',${i < r.atual ? i : i+1})"></button>`
+                    ).join('')}
+                </div>
+                <button class="uso-btn" onclick="mudarRecurso('${r.id}',1)">+</button>
+                <span class="uso-label">${r.atual}/${r.max}</span>
+            </div>
+            <div class="recurso-max-wrap">
+                <label>Máx:</label>
+                <input type="number" class="recurso-max-input" value="${r.max}" min="1" max="99"
+                    onchange="setMaxRecurso('${r.id}',this.value)">
+            </div>
+        </div>`).join('')
+}
+
+function addRecurso(preset = null) {
+    const base = preset || { nome: 'Novo Recurso', max: 3, recarga: 'dl', dado: null }
+    _recursos.push({ id: _recursoId(), atual: base.max, ...base })
+    renderRecursos()
+    salvar()
+}
+
+function removerRecurso(id) {
+    _recursos = _recursos.filter(r => r.id !== id)
+    renderRecursos()
+    salvar()
+}
+
+function mudarRecurso(id, delta) {
+    const r = _recursos.find(x => x.id === id)
+    if (!r) return
+    r.atual = Math.max(0, Math.min(r.max, r.atual + delta))
+    renderRecursos()
+    salvar()
+}
+
+function setRecurso(id, val) {
+    const r = _recursos.find(x => x.id === id)
+    if (!r) return
+    r.atual = Math.max(0, Math.min(r.max, val))
+    renderRecursos()
+    salvar()
+}
+
+function setMaxRecurso(id, val) {
+    const r = _recursos.find(x => x.id === id)
+    if (!r) return
+    r.max = Math.max(1, parseInt(val) || 1)
+    r.atual = Math.min(r.atual, r.max)
+    renderRecursos()
+    salvar()
+}
+
+function rolarRecurso(id) {
+    const r = _recursos.find(x => x.id === id)
+    if (!r || !r.dado) return
+    const lados = parseInt(r.dado.replace('d','')) || 6
+    const roll = Math.floor(Math.random() * lados) + 1
+    mostrarToast(`${r.nome}: <strong>${roll}</strong> [${r.dado}]`, 'info', 3500)
+    adicionarHistorico(r.nome, roll, `[${r.dado}]`, false, false)
+}
+
+function addRecursoPreset() {
+    const classe = document.getElementById('classe')?.value || ''
+    const presets = RECURSOS_PRESETS[classe]
+    if (presets?.length) {
+        presets.forEach(p => addRecurso(p))
+        mostrarToast(`Recursos de ${classe} adicionados!`, 'sucesso')
+    } else {
+        addRecurso()
+    }
+}
+
+// Integração com descansos — restaurar recursos por tipo de recarga
+const _descansoOriginal = window.descanso
+window.descanso = function(tipo) {
+    if (_descansoOriginal) _descansoOriginal(tipo)
+    _recursos.forEach(r => {
+        if (tipo === 'longo' || (tipo === 'curto' && r.recarga === 'dc')) {
+            r.atual = r.max
+        }
+    })
+    renderRecursos()
+}
+
+// Integração com salvar/carregar
+const _salvarRecOriginal = window.salvar
+window.salvar = function() {
+    if (_salvarRecOriginal) _salvarRecOriginal()
+    ls.set('recursos', JSON.stringify(_recursos))
+}
+
+const _carregarRecOriginal = window.carregar
+window.carregar = function() {
+    if (_carregarRecOriginal) _carregarRecOriginal()
+    try {
+        const raw = ls.get('recursos')
+        if (raw) { _recursos = JSON.parse(raw); renderRecursos() }
+    } catch(e) {}
+}
+
+function parseDiceExpr(expr) {
+    if (!expr || !expr.trim()) return null
+    const m = expr.trim().match(/(\d+)[dD](\d+)\s*([+-]\s*\d+)?/)
+    if (!m) {
+        const n = parseInt(expr)
+        return isNaN(n) ? null : { count: 0, sides: 0, bonus: n, fixo: true }
+    }
+    return {
+        count: parseInt(m[1]),
+        sides: parseInt(m[2]),
+        bonus: m[3] ? parseInt(m[3].replace(/\s/g,'')) : 0,
+        fixo: false,
+    }
+}
+
+function rolarExpressao(expr, crit = false) {
+    const d = parseDiceExpr(expr)
+    if (!d) return null
+    if (d.fixo) return { total: d.bonus, detalhe: `[${d.bonus}]` }
+    const numDados = crit ? d.count * 2 : d.count
+    const rolls = Array.from({ length: numDados }, () => Math.floor(Math.random() * d.sides) + 1)
+    const soma  = rolls.reduce((a, b) => a + b, 0) + d.bonus
+    const sinal = d.bonus > 0 ? '+' + d.bonus : d.bonus < 0 ? d.bonus : ''
+    const detalhe = `[${rolls.join('+')}${sinal}]${crit ? ' ✦×2' : ''}`
+    return { total: soma, detalhe }
+}
+
+function rolarAtaque(btn) {
+    const tr    = btn.closest('tr')
+    const ins   = tr.querySelectorAll('input')
+    const nome  = ins[0]?.value?.trim() || 'Ataque'
+    const atkStr = ins[1]?.value?.trim() || '0'
+    const danoExpr = ins[2]?.value?.trim() || ''
+    const tipo  = ins[3]?.value?.trim() || ''
+
+    const atkBonus = parseInt(atkStr.replace(/[^0-9+-]/g, '')) || 0
+
+    // Rola d20 para acerto
+    const d20     = Math.floor(Math.random() * 20) + 1
+    const atkTotal = d20 + atkBonus
+    const critico  = d20 === 20
+    const falha    = d20 === 1
+
+    // Rola dano
+    const danoRoll = danoExpr ? rolarExpressao(danoExpr, critico) : null
+    const sinalAtk = atkBonus >= 0 ? '+' : ''
+
+    // Monta mensagem
+    let msg, toastTipo
+    if (critico) {
+        const danoTxt = danoRoll ? ` — Dano ×2: <strong>${danoRoll.total}</strong> ${danoRoll.detalhe}${tipo ? ' ' + tipo : ''}` : ''
+        msg      = `⚔ ${nome}: <strong>✦ CRÍTICO!</strong> [d20(20)${sinalAtk}${atkBonus}]${danoTxt}`
+        toastTipo = 'sucesso'
+        dispararCritico()
+    } else if (falha) {
+        msg      = `⚔ ${nome}: <strong>✕ Falha Crítica</strong> [d20(1)${sinalAtk}${atkBonus}]`
+        toastTipo = 'erro'
+        dispararFalha()
+    } else {
+        const danoTxt = danoRoll ? ` — Dano: <strong>${danoRoll.total}</strong> ${danoRoll.detalhe}${tipo ? ' ' + tipo : ''}` : ''
+        msg      = `⚔ ${nome}: <strong>${atkTotal}</strong> [d20(${d20})${sinalAtk}${atkBonus}]${danoTxt}`
+        toastTipo = 'info'
+    }
+
+    mostrarToast(msg, toastTipo, 5000)
+    adicionarHistorico(nome, atkTotal, `[d20(${d20})${sinalAtk}${atkBonus}]`, critico, falha)
+
+    // Anima a linha do ataque
+    tr.classList.remove('ataque-animado')
+    void tr.offsetWidth
+    tr.classList.add('ataque-animado')
+    setTimeout(() => tr.classList.remove('ataque-animado'), 600)
+}
+
+let _pvAnterior = null
+
+// Sobrescreve atualizarPVBar para detectar direção da mudança
+;(function() {
+    const _orig = window.atualizarPVBar
+    window.atualizarPVBar = function() {
+        const pvNovo = parseInt(document.getElementById('pv-atual')?.value) || 0
+        if (_orig) _orig()
+        if (_pvAnterior !== null && pvNovo !== _pvAnterior) {
+            if (pvNovo < _pvAnterior) dispararDano()
+            else                      dispararCura()
+        }
+        _pvAnterior = pvNovo
+    }
+})()
+
+function _getPvSection() {
+    return document.getElementById('pv-section')
+        || document.querySelector('.pv-section')
+        || document.getElementById('pv-bar')?.parentElement
+}
+
+function dispararDano() {
+    const el = _getPvSection()
+    if (!el) return
+    el.classList.remove('anim-dano', 'anim-cura')
+    void el.offsetWidth
+    el.classList.add('anim-dano')
+    setTimeout(() => el.classList.remove('anim-dano'), 700)
+}
+
+function dispararCura() {
+    const el = _getPvSection()
+    if (!el) return
+    el.classList.remove('anim-dano', 'anim-cura')
+    void el.offsetWidth
+    el.classList.add('anim-cura')
+    setTimeout(() => el.classList.remove('anim-cura'), 900)
+}
+
+function dispararCritico() {
+    let flash = document.getElementById('anim-crit-flash')
+    if (!flash) {
+        flash = document.createElement('div')
+        flash.id = 'anim-crit-flash'
+        flash.className = 'anim-flash'
+        document.body.appendChild(flash)
+    }
+    flash.style.background = 'radial-gradient(ellipse at center, rgba(220,170,10,0.45) 0%, transparent 70%)'
+    flash.classList.remove('ativo')
+    void flash.offsetWidth
+    flash.classList.add('ativo')
+    setTimeout(() => flash.classList.remove('ativo'), 800)
+}
+
+function dispararFalha() {
+    let flash = document.getElementById('anim-crit-flash')
+    if (!flash) {
+        flash = document.createElement('div')
+        flash.id = 'anim-crit-flash'
+        flash.className = 'anim-flash'
+        document.body.appendChild(flash)
+    }
+    flash.style.background = 'radial-gradient(ellipse at center, rgba(180,20,20,0.40) 0%, transparent 70%)'
+    flash.classList.remove('ativo')
+    void flash.offsetWidth
+    flash.classList.add('ativo')
+    setTimeout(() => flash.classList.remove('ativo'), 700)
 }

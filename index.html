@@ -98,12 +98,12 @@
     .site-header .ornament { font-size: 1.4rem; color: var(--blood-bright); letter-spacing: 0.3em; }
     .site-title {
       font-family: var(--font-title);
-      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-size: clamp(1.7rem, 4vw, 3rem);
       color: var(--gold-pale);
-      text-shadow: 0 0 40px rgba(200,150,10,0.4), 0 2px 4px rgba(0,0,0,0.8);
-      letter-spacing: 0.04em;
-      margin: 0.4rem 0;
-      line-height: 1.2;
+      text-shadow: 0 0 60px rgba(200,150,10,0.5), 0 2px 8px rgba(0,0,0,0.9), 0 0 120px rgba(200,150,10,0.2);
+      letter-spacing: 0.06em;
+      margin: 0.5rem 0;
+      line-height: 1.15;
     }
     .site-subtitle {
       font-family: var(--font-head);
@@ -153,65 +153,133 @@
     /* ── GRID DE PERSONAGENS ── */
     .characters-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.4rem;
     }
 
     /* ── CARD DE PERSONAGEM ── */
     .char-card {
-      background: linear-gradient(145deg, var(--dark-card) 0%, #0e0616 100%);
-      border: 1px solid rgba(200,150,10,0.18);
-      border-radius: var(--radius);
-      padding: 1.4rem;
+      background: linear-gradient(160deg, var(--dark-card) 0%, rgba(12,6,20,0.97) 100%);
+      border: 1px solid rgba(200,150,10,0.14);
+      border-radius: 12px;
+      padding: 0;
       position: relative;
       overflow: hidden;
-      transition: all 0.25s;
-      animation: cardAppear 0.4s ease-out both;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      animation: cardAppear 0.45s cubic-bezier(.17,.67,.35,1.1) both;
+      display: flex; flex-direction: column;
     }
-    @keyframes cardAppear {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* Topo do card com acento dourado */
     .char-card::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0.6;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+      opacity: 0.5;
+    }
+    /* Ornamento de canto */
+    .char-card::after {
+      content: '✦';
+      position: absolute; top: 10px; right: 12px;
+      font-size: 0.5rem; color: var(--gold); opacity: 0.25;
+      line-height: 1;
+    }
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     .char-card:hover {
-      border-color: rgba(200,150,10,0.45);
-      box-shadow: 0 8px 40px rgba(180,0,30,0.22), 0 0 0 1px rgba(200,150,10,0.12);
-      transform: translateY(-3px);
+      border-color: rgba(200,150,10,0.4);
+      box-shadow: 0 10px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,150,10,0.1), inset 0 1px 0 rgba(200,150,10,0.06);
+      transform: translateY(-4px);
+    }
+    /* Área do avatar com fundo diferenciado */
+    .card-avatar-wrap {
+      padding: 1.4rem 1.4rem 0.8rem;
+      display: flex; flex-direction: column; align-items: center;
+      background: linear-gradient(180deg, rgba(200,150,10,0.04) 0%, transparent 100%);
+      border-bottom: 1px solid rgba(200,150,10,0.08);
     }
     .card-symbol {
-      font-size: 2.2rem;
-      text-align: center;
-      margin-bottom: 0.8rem;
+      font-size: 2rem;
       filter: drop-shadow(0 0 8px rgba(200,150,10,0.4));
+      line-height: 1;
     }
     .card-name {
       font-family: var(--font-title);
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--gold-pale);
       text-align: center;
-      margin-bottom: 0.5rem;
-      line-height: 1.25;
+      margin-top: 0.5rem;
+      line-height: 1.2;
+      text-shadow: 0 0 20px rgba(200,150,10,0.2);
+    }
+    /* Área de info do card */
+    .card-info-area {
+      padding: 0.8rem 1.2rem;
+      flex: 1;
     }
     .card-details {
       text-align: center;
-      font-size: 0.9rem;
-      color: var(--ink-muted);
+      font-size: 0.82rem;
+      color: rgba(200,170,110,0.6);
       font-family: var(--font-head);
-      letter-spacing: 0.08em;
-      margin-bottom: 0.35rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.25rem;
     }
-    .card-details strong { color: var(--parch-mid); }
+    .card-details strong { color: var(--parch-mid); font-weight: 600; }
+    .card-class-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(200,150,10,0.08);
+      border: 1px solid rgba(200,150,10,0.18);
+      border-radius: 20px;
+      padding: 2px 8px;
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      margin: 0.25rem auto 0;
+      display: block;
+      width: fit-content;
+      text-align: center;
+    }
     .card-player {
       text-align: center;
       font-size: 0.82rem;
       color: rgba(200,170,120,0.5);
       font-style: italic;
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    /* Barra de PV no card */
+    .card-pv-wrap {
+      position: relative;
+      height: 5px;
+      background: rgba(160,100,20,0.12);
+      border-radius: 3px;
+      margin-bottom: 2px;
+      overflow: hidden;
+    }
+    .card-pv-bar { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+    .card-pv-label {
+      display: block; text-align: center;
+      font-family: var(--font-head); font-size: 0.68rem;
+      color: var(--ink-muted); margin-bottom: 0.4rem;
+    }
+    /* Avatar */
+    .card-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      margin: 0 auto 0.6rem;
+      background: linear-gradient(135deg, var(--dark-mid), rgba(30,10,45,1));
+      border: 2px solid rgba(200,150,10,0.3);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; transition: border-color 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 0 4px rgba(200,150,10,0.05);
+      position: relative;
+    }
+    .card-avatar img { width:100%; height:100%; object-fit:cover; object-position: top center; }
+    .char-card:hover .card-avatar {
+      border-color: rgba(200,150,10,0.65);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 5px rgba(200,150,10,0.1), 0 0 16px rgba(200,150,10,0.2);
     }
     .card-actions { display: flex; gap: 0.6rem; }
     .btn-abrir {
@@ -632,7 +700,6 @@
     </div>
   </div>
 
-
   <!-- ════════════════════════════════════════
        WIZARD DE CRIAÇÃO DE PERSONAGEM
   ════════════════════════════════════════ -->
@@ -806,7 +873,6 @@
     </div><!-- fim wizard-box -->
   </div><!-- fim wizard-overlay -->
 
-
   <script>
   /* ════════════════════════════════════════════
      DADOS D&D 5e
@@ -847,9 +913,9 @@
   }
 
   const CLASS_SYMBOLS = {
-    'Bárbaro':'⚔','Bardo':'🎭','Clérigo':'✝','Druida':'🌿','Guerreiro':'🛡',
-    'Monge':'👊','Paladino':'⚜','Patrulheiro':'🏹','Ladino':'🗡',
-    'Feiticeiro':'✨','Bruxo':'🌑','Mago':'📜'
+    'Bárbaro':'⚔','Bardo':'♪','Clérigo':'✝','Druida':'✾','Guerreiro':'◈',
+    'Monge':'⊕','Paladino':'⚜','Patrulheiro':'↗','Ladino':'✦',
+    'Feiticeiro':'✧','Bruxo':'☽','Mago':'✦'
   }
 
   /* ════════════════════════════════════════════
@@ -869,7 +935,16 @@
       try {
         const d = JSON.parse(localStorage.getItem(key))
         const id = key.slice(0, -':ficha-dnd'.length)
-        lista.push({ id, nome: d.nome || id, classe: d.classe || '—', nivel: d.nivel || '1', raca: d.raca || '—', jogador: d.jogador || '' })
+        const img = localStorage.getItem(id + ':ficha-dnd-img') || null
+        let condicoes = []
+        try { condicoes = JSON.parse(localStorage.getItem(id + ':condicoes') || '[]') } catch(e) {}
+        lista.push({
+          id, img, condicoes,
+          nome: d.nome || id, classe: d.classe || '—',
+          nivel: d.nivel || '1', raca: d.raca || '—',
+          jogador: d.jogador || '',
+          pvAtual: d.pvAtual || '—', pvMax: d.pvMax || '—',
+        })
       } catch(e) {}
     }
     return lista
@@ -881,7 +956,7 @@
     if (!lista.length) {
       grid.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">🏰</div>
+          <div class="empty-icon">⚔</div>
           <p>Nenhum aventureiro ainda.</p>
           <small>Clique em "Criar Personagem" para começar.</small>
         </div>`
@@ -895,7 +970,8 @@
         <div class="card-details"><strong>${p.classe}</strong> · Nível ${p.nivel}</div>
         <div class="card-details">${p.raca}</div>
         <div class="card-player">${p.jogador ? 'jogador: ' + p.jogador : ''}</div>
-        <div class="card-actions">
+        </div><!-- fim card-info-area -->
+        <div class="card-actions" style="padding:0 1.2rem 1.2rem; margin-top:auto;">
           <a class="btn-abrir" href="ficha.html?id=${p.id}">Abrir Ficha →</a>
           <button class="btn-excluir" onclick="excluirPersonagem('${p.id}', '${p.nome.replace(/'/g,"\\'")}')">🗑</button>
         </div>
@@ -1037,6 +1113,17 @@
     const cd = CLASSES_DATA[classe]
     if (!cd) return
 
+    // Prévia visual: muda a cor de destaque do wizard pela classe
+    const CLASS_ACCENT = {
+        'Bárbaro':'#c84020','Bardo':'#c07820','Clérigo':'#c8901a',
+        'Druida':'#4a8a1a','Guerreiro':'#6060a0','Monge':'#c07820',
+        'Paladino':'#1878c8','Patrulheiro':'#4a8a1a','Ladino':'#2a2a2a',
+        'Feiticeiro':'#c84020','Bruxo':'#7030c8','Mago':'#5020a0',
+    }
+    const accent = CLASS_ACCENT[classe] || 'var(--blood)'
+    document.querySelector('.wizard-head')?.style.setProperty('border-bottom-color', accent + '55')
+    document.querySelector('.wizard-box')?.style.setProperty('border-color', accent + '44')
+
     // Salves
     const savesEl = document.getElementById('w-saves-preview')
     savesEl.innerHTML = cd.saves.map(s => `<span class="save-pill">${s}</span>`).join('')
@@ -1138,13 +1225,24 @@
       falhas:        document.getElementById('w-falhas').value,
     }
 
-    // Salva e redireciona
-    const id = slugify(nome) || 'personagem'
+    // ID único: slug do nome + timestamp (evita colisão entre personagens com nomes iguais)
+    const base = slugify(nome) || 'personagem'
+    const id   = base + '-' + Date.now().toString(36)
     const key = id + ':ficha-dnd'
 
     if (localStorage.getItem(key)) {
       if (!confirm(`Já existe um personagem com o slug "${id}". Deseja substituí-lo?`)) return
     }
+
+    // Tema padrão baseado na classe do personagem
+    const CLASS_THEME = {
+        'Bárbaro':'Inferno', 'Bardo':'Outono', 'Clérigo':'Pergaminho',
+        'Druida':'Floresta', 'Guerreiro':'Pergaminho', 'Monge':'Outono',
+        'Paladino':'Glacial', 'Patrulheiro':'Floresta', 'Ladino':'Trevas',
+        'Feiticeiro':'Inferno', 'Bruxo':'Arcano', 'Mago':'Arcano',
+    }
+    const temaPadrao = CLASS_THEME[classe] || 'Pergaminho'
+    localStorage.setItem(id + ':tema-preset', temaPadrao)
 
     localStorage.setItem(key, JSON.stringify(ficha))
     window.location.href = 'ficha.html?id=' + id
@@ -1157,6 +1255,16 @@
 
   // Inicializa
   renderPersonagens()
+
+  // Índice de condições (espelhado do script.js da ficha)
+  const CONDICOES_IDX = {
+    amedrontado:{emoji:'😨',label:'Amedrontado'}, cego:{emoji:'🙈',label:'Cego'},
+    encantado:{emoji:'💫',label:'Encantado'},     ensurdecido:{emoji:'🔇',label:'Ensurdecido'},
+    envenenado:{emoji:'🤢',label:'Envenenado'},   exausto:{emoji:'😩',label:'Exausto'},
+    incapacitado:{emoji:'💀',label:'Incapacitado'},invisivel:{emoji:'👻',label:'Invisível'},
+    paralisado:{emoji:'😵',label:'Paralisado'},   petrificado:{emoji:'🗿',label:'Petrificado'},
+    prostrado:{emoji:'🤸',label:'Prostrado'},     preso:{emoji:'⛓',label:'Preso'},
+  }
   </script>
 
 </body>
