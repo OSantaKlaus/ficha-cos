@@ -2706,18 +2706,18 @@ input:focus, select:focus, textarea:focus {
 
 .recurso-topo {
     display: flex; align-items: center;
-    justify-content: space-between; gap: 8px;
-    margin-bottom: 8px;
+    justify-content: space-between; gap: 6px;
+    margin-bottom: 8px; min-width: 0;
 }
 .recurso-nome-input {
-    flex: 1; background: transparent;
+    flex: 1; min-width: 0; background: transparent;
     border: none !important; border-bottom: 1px solid rgba(160,100,20,0.2) !important;
     border-radius: 0 !important; box-shadow: none !important;
     font-family: var(--font-heading); font-size: 0.88rem;
     font-weight: 600; color: var(--ink);
-    padding: 2px 0;
+    padding: 2px 0; overflow: hidden; text-overflow: ellipsis;
 }
-.recurso-controles { display: flex; align-items: center; gap: 5px; }
+.recurso-controles { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
 .recurso-recarga-tag {
     font-size: 0.68rem; font-family: var(--font-heading);
     color: var(--ink-muted); letter-spacing: 0.05em;
@@ -2778,15 +2778,25 @@ input:focus, select:focus, textarea:focus {
     font-size: 0.78rem !important;
     padding: 1px 3px !important;
 }
-/* Linha com Máx + Dado */
+/* Linha com Máx + Dado + Recarga */
 .recurso-mid-wrap {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px; flex-wrap: wrap;
 }
 .recurso-dado-wrap {
     display: flex; align-items: center; gap: 4px;
     font-size: 0.7rem; color: var(--ink-muted);
     font-family: var(--font-heading);
+}
+.recurso-recarga-wrap {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; color: var(--ink-muted);
+    font-family: var(--font-heading);
+}
+.recurso-recarga-wrap label,
+.recurso-dado-wrap label,
+.recurso-max-wrap label {
+    font-size: 0.68rem; white-space: nowrap;
 }
 .recurso-dado-input {
     width: 50px !important; text-align: center;

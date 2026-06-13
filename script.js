@@ -2126,17 +2126,7 @@ function renderRecursos() {
             <div class="recurso-topo">
                 <input class="recurso-nome-input" value="${r.nome}"
                     onchange="_recursos.find(x=>x.id==='${r.id}').nome=this.value;salvar()">
-                <div class="recurso-controles">
-                    <select class="recurso-recarga-select" title="Tipo de recuperação"
-                        onchange="_recursos.find(x=>x.id==='${r.id}').recarga=this.value;salvar()">
-                        <option value="dc" ${r.recarga === 'dc' ? 'selected' : ''}>☽ DC</option>
-                        <option value="dl" ${r.recarga === 'dl' ? 'selected' : ''}>☀ DL</option>
-                        <option value="am" ${r.recarga === 'am' ? 'selected' : ''}>✦ AM</option>
-                        <option value="manual" ${(!r.recarga || r.recarga === 'manual') ? 'selected' : ''}>— Manual</option>
-                    </select>
-                    ${r.dado ? `<button class="recurso-dado-btn" onclick="rolarRecurso('${r.id}')" title="Rolar ${r.dado}">🎲 ${r.dado}</button>` : ''}
-                    <button class="recurso-del" onclick="removerRecurso('${r.id}')" title="Remover">✕</button>
-                </div>
+                <button class="recurso-del" onclick="removerRecurso('${r.id}')" title="Remover">✕</button>
             </div>
             <div class="recurso-usos">
                 <button class="uso-btn" onclick="mudarRecurso('${r.id}',-1)">−</button>
@@ -2158,9 +2148,20 @@ function renderRecursos() {
                 </div>
                 <div class="recurso-dado-wrap">
                     <label>Dado:</label>
-                    <input type="text" class="recurso-dado-input" placeholder="d6, d8…" value="${r.dado || ''}"
+                    <input type="text" class="recurso-dado-input" placeholder="d6…" value="${r.dado || ''}"
                         onchange="setDadoRecurso('${r.id}',this.value)">
                 </div>
+                <div class="recurso-recarga-wrap">
+                    <label>Recarga:</label>
+                    <select class="recurso-recarga-select" title="Tipo de recuperação"
+                        onchange="_recursos.find(x=>x.id==='${r.id}').recarga=this.value;salvar()">
+                        <option value="dc" ${r.recarga === 'dc' ? 'selected' : ''}>☽ DC</option>
+                        <option value="dl" ${r.recarga === 'dl' ? 'selected' : ''}>☀ DL</option>
+                        <option value="am" ${r.recarga === 'am' ? 'selected' : ''}>✦ AM</option>
+                        <option value="manual" ${(!r.recarga || r.recarga === 'manual') ? 'selected' : ''}>— Manual</option>
+                    </select>
+                </div>
+                ${r.dado ? `<button class="recurso-dado-btn" onclick="rolarRecurso('${r.id}')" title="Rolar ${r.dado}">🎲</button>` : ''}
             </div>
             <div class="recurso-desc-wrap">
                 <textarea class="recurso-desc" placeholder="Descrição do recurso…"
