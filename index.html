@@ -550,6 +550,27 @@
     .skill-option.checked { background: rgba(200,150,10,0.12); border-color: rgba(200,150,10,0.35); color: var(--gold-pale); }
     .skill-option.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
+    /* ── Hint label dentro do wfield ── */
+    .wfield-hint {
+      font-size: 0.68rem;
+      font-style: italic;
+      opacity: 0.55;
+      font-family: var(--font-body, serif);
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    /* ── Input com datalist — visual idêntico ao antigo select ── */
+    .wfield input[list] {
+      cursor: text;
+    }
+    .wfield input[list]::placeholder {
+      opacity: 0.45;
+      font-style: italic;
+      font-size: 0.88rem;
+    }
+
     /* ── SAVES AUTOMÁTICOS ── */
     .saves-preview {
       display: flex; gap: 0.5rem; flex-wrap: wrap;
@@ -731,48 +752,78 @@
               <input type="text" id="w-jogador" placeholder="seu nome" autocomplete="off">
             </div>
           </div>
+          <!-- datalists de sugestão — o jogador pode digitar qualquer coisa -->
+          <datalist id="dl-classe">
+            <option>Bárbaro</option><option>Bardo</option><option>Clérigo</option>
+            <option>Druida</option><option>Guerreiro</option><option>Monge</option>
+            <option>Paladino</option><option>Patrulheiro</option><option>Ladino</option>
+            <option>Feiticeiro</option><option>Bruxo</option><option>Mago</option>
+            <option>Artificer</option><option>Sangue-Hunter</option><option>Cavaleiro Arcano</option>
+            <option>Trapaceiro Arcano</option><option>Paladino do Juramente Quebrado</option>
+          </datalist>
+          <datalist id="dl-raca">
+            <option>Humano</option>
+            <option>Elfo (Alto)</option><option>Elfo da Floresta</option><option>Elfo Negro (Drow)</option>
+            <option>Anão das Colinas</option><option>Anão das Montanhas</option>
+            <option>Halfling (Pés-Leves)</option><option>Halfling (Robusto)</option>
+            <option>Draconato</option><option>Gnomo (da Floresta)</option><option>Gnomo (das Rochas)</option>
+            <option>Meio-Elfo</option><option>Meio-Orc</option><option>Tiefling</option>
+            <!-- Homebrew / Expansões -->
+            <option>Aasimar</option><option>Ardido</option><option>Genasi do Ar</option>
+            <option>Genasi da Terra</option><option>Genasi do Fogo</option><option>Genasi da Água</option>
+            <option>Tabaxi</option><option>Kenku</option><option>Tortle</option>
+            <option>Firbolg</option><option>Goliath</option><option>Lizardfolk</option>
+            <option>Triton</option><option>Yuan-ti Pureblood</option><option>Bugbear</option>
+            <option>Goblin</option><option>Hobgoblin</option><option>Kobold</option>
+            <option>Orc</option><option>Harengon</option><option>Owlin</option>
+            <option>Fairy</option><option>Hexblood</option><option>Reborn</option>
+            <option>Changeling</option><option>Kalashtar</option><option>Shifter</option>
+            <option>Warforged</option><option>Vedalken</option><option>Loxodon</option>
+          </datalist>
+          <datalist id="dl-antecedente">
+            <option>Acólito</option><option>Charlatão</option><option>Criminal / Espião</option>
+            <option>Herói do Povo</option><option>Nobre</option><option>Forasteiro</option>
+            <option>Sábio</option><option>Soldado</option><option>Artesão de Guilda</option>
+            <option>Marinheiro</option><option>Eremita</option><option>Artista</option>
+            <!-- Expansões / Homebrew -->
+            <option>Gladiador</option><option>Pirata</option><option>Irmandade das Guildas</option>
+            <option>Haunted One</option><option>Investigador</option><option>Mercenário</option>
+            <option>Outlander</option><option>Urchin</option><option>Far Traveler</option>
+            <option>Faction Agent</option><option>Custom (Homebrew)</option>
+          </datalist>
+          <datalist id="dl-alinhamento">
+            <option>Leal Bom</option><option>Neutro Bom</option><option>Caótico Bom</option>
+            <option>Leal Neutro</option><option>Neutro Verdadeiro</option><option>Caótico Neutro</option>
+            <option>Leal Mau</option><option>Neutro Mau</option><option>Caótico Mau</option>
+            <option>Sem Alinhamento</option>
+          </datalist>
+
           <div class="wrow">
             <div class="wfield">
-              <label>Classe</label>
-              <select id="w-classe" onchange="onClasseChange()">
-                <option value="">— Escolha —</option>
-                <option>Bárbaro</option><option>Bardo</option><option>Clérigo</option>
-                <option>Druida</option><option>Guerreiro</option><option>Monge</option>
-                <option>Paladino</option><option>Patrulheiro</option><option>Ladino</option>
-                <option>Feiticeiro</option><option>Bruxo</option><option>Mago</option>
-              </select>
+              <label>Classe <span class="wfield-hint">— digite ou escolha uma sugestão</span></label>
+              <input type="text" id="w-classe" list="dl-classe"
+                placeholder="ex: Mago, Ardido, Homebrew..."
+                autocomplete="off" oninput="onClasseChange()">
             </div>
             <div class="wfield">
-              <label>Raça</label>
-              <select id="w-raca">
-                <option value="">— Escolha —</option>
-                <option>Humano</option>
-                <option>Elfo (Alto)</option><option>Elfo da Floresta</option><option>Elfo Negro (Drow)</option>
-                <option>Anão das Colinas</option><option>Anão das Montanhas</option>
-                <option>Halfling</option><option>Draconato</option><option>Gnomo</option>
-                <option>Meio-Elfo</option><option>Meio-Orc</option><option>Tiefling</option>
-              </select>
+              <label>Raça <span class="wfield-hint">— pode ser homebrew!</span></label>
+              <input type="text" id="w-raca" list="dl-raca"
+                placeholder="ex: Aasimar, Genasi, Tabaxi..."
+                autocomplete="off">
             </div>
           </div>
           <div class="wrow">
             <div class="wfield">
-              <label>Antecedente</label>
-              <select id="w-antecedente">
-                <option value="">— Escolha —</option>
-                <option>Acólito</option><option>Charlatão</option><option>Criminal / Espião</option>
-                <option>Herói do Povo</option><option>Nobre</option><option>Forasteiro</option>
-                <option>Sábio</option><option>Soldado</option><option>Artesão de Guilda</option>
-                <option>Marinheiro</option><option>Eremita</option><option>Artista</option>
-              </select>
+              <label>Antecedente <span class="wfield-hint">— livre ou sugerido</span></label>
+              <input type="text" id="w-antecedente" list="dl-antecedente"
+                placeholder="ex: Nobre, Haunted One..."
+                autocomplete="off">
             </div>
             <div class="wfield">
               <label>Alinhamento</label>
-              <select id="w-alinhamento">
-                <option value="">— Escolha —</option>
-                <option>Leal Bom</option><option>Neutro Bom</option><option>Caótico Bom</option>
-                <option>Leal Neutro</option><option>Neutro</option><option>Caótico Neutro</option>
-                <option>Leal Mau</option><option>Neutro Mau</option><option>Caótico Mau</option>
-              </select>
+              <input type="text" id="w-alinhamento" list="dl-alinhamento"
+                placeholder="ex: Caótico Bom..."
+                autocomplete="off">
             </div>
           </div>
         </div>
@@ -1052,8 +1103,8 @@
     if (wizardStep === 1) {
       if (!document.getElementById('w-nome').value.trim()) { err.textContent = 'Digite o nome do personagem.'; return false }
       if (!document.getElementById('w-jogador').value.trim()) { err.textContent = 'Digite o nome do jogador.'; return false }
-      if (!document.getElementById('w-classe').value) { err.textContent = 'Escolha uma classe.'; return false }
-      if (!document.getElementById('w-raca').value) { err.textContent = 'Escolha uma raça.'; return false }
+      if (!document.getElementById('w-classe').value.trim()) { err.textContent = 'Digite ou escolha uma classe.'; return false }
+      if (!document.getElementById('w-raca').value.trim()) { err.textContent = 'Digite ou escolha uma raça.'; return false }
     }
     if (wizardStep === 3) {
       const classe = document.getElementById('w-classe').value
@@ -1109,7 +1160,9 @@
 
   /* ── Quando classe muda ── */
   function onClasseChange() {
-    const classe = document.getElementById('w-classe').value
+    const rawClasse = document.getElementById('w-classe').value.trim()
+    // Match case-insensitively against known classes
+    const classe = Object.keys(CLASSES_DATA).find(k => k.toLowerCase() === rawClasse.toLowerCase()) || rawClasse
     const cd = CLASSES_DATA[classe]
     if (!cd) return
 
@@ -1169,7 +1222,8 @@
 
     const nome     = document.getElementById('w-nome').value.trim()
     const jogador  = document.getElementById('w-jogador').value.trim()
-    const classe   = document.getElementById('w-classe').value
+    const rawClasse = document.getElementById('w-classe').value.trim()
+    const classe   = Object.keys(CLASSES_DATA).find(k => k.toLowerCase() === rawClasse.toLowerCase()) || rawClasse
     const raca     = document.getElementById('w-raca').value
     const ante     = document.getElementById('w-antecedente').value
     const ali      = document.getElementById('w-alinhamento').value

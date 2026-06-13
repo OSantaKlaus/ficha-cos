@@ -1362,12 +1362,7 @@ const TEMAS = {
                 '--parch-border':'#1878c8','--gold':'#0858a8','--gold-light':'#1878c8','--gold-pale':'#38a0e8',
                 '--ink':'#001028','--ink-mid':'#002040','--ink-light':'#004080','--ink-muted':'#2060a0' ,'--header-top':'#d0eeff','--header-mid':'#b0d8f8','--header-bot':'#88c0f0','--tabs-top':'#041828','--tabs-bot':'#020e18','--bar-bg':'rgba(2,10,20,0.97)'}
     },
-    'Trevas': {
-        swatch: '#700820',
-        vars: { '--page':'#140810','--parch':'#1e1018','--parch-mid':'#2a1820','--parch-deep':'#3a2030',
-                '--parch-border':'#700820','--gold':'#c01830','--gold-light':'#e03050','--gold-pale':'#ff5070',
-                '--ink':'#f0d8e0','--ink-mid':'#d8c0c8','--ink-light':'#c0a0a8','--ink-muted':'#907080' ,'--header-top':'#2e1020','--header-mid':'#200a18','--header-bot':'#140610','--tabs-top':'#0a0008','--tabs-bot':'#040004','--bar-bg':'rgba(6,0,4,0.97)'}
-    },
+
     'Oceano': {
         swatch: '#0878a0',
         vars: { '--page':'#c0e0f0','--parch':'#f0faff','--parch-mid':'#c8eaf8','--parch-deep':'#90d0f0',
@@ -1379,6 +1374,72 @@ const TEMAS = {
         vars: { '--page':'#f0dcc0','--parch':'#fff8f0','--parch-mid':'#f8e8d0','--parch-deep':'#e8c898',
                 '--parch-border':'#b86010','--gold':'#986010','--gold-light':'#c07820','--gold-pale':'#d89030',
                 '--ink':'#1a0c00','--ink-mid':'#2e1800','--ink-light':'#502800','--ink-muted':'#804010' ,'--header-top':'#ffe8c8','--header-mid':'#f8d4a0','--header-bot':'#e8b878','--tabs-top':'#2e1004','--tabs-bot':'#1e0802','--bar-bg':'rgba(20,8,2,0.97)'}
+    },
+    'Strahd': {
+        swatch: '#8b0000',
+        vars: {
+            /* Fundo — negro de câmara mortuária com toque bordô */
+            '--page':         '#0d0508',
+            /* Cards — bordô profundo escuro */
+            '--parch':        '#1a0810',
+            /* Inputs — um tom acima, mais vinho */
+            '--parch-mid':    '#261018',
+            /* Hover / seleções */
+            '--parch-deep':   '#381520',
+            /* Bordas — vermelho sangue envelhecido */
+            '--parch-border': '#8b1a28',
+            /* Acento principal — vermelho carmesim */
+            '--gold':         '#c8203a',
+            '--gold-light':   '#e0304e',
+            '--gold-pale':    '#f07080',
+            /* Texto — branco envelhecido levemente rosado */
+            '--ink':          '#f0e0e4',
+            '--ink-mid':      '#d4b8be',
+            '--ink-light':    '#b09098',
+            '--ink-muted':    '#705860',
+            /* Header — camadas negras com véu vermelho */
+            '--header-top':   '#220810',
+            '--header-mid':   '#180608',
+            '--header-bot':   '#0d0508',
+            /* Barra de abas — quase negro */
+            '--tabs-top':     '#080204',
+            '--tabs-bot':     '#040102',
+            /* Barra inferior */
+            '--bar-bg':       'rgba(4,1,2,0.97)'
+        }
+    },
+    'Noturno': {
+        swatch: '#d4af37',
+        vars: {
+            /* Fundo da página — cinza muito escuro com leve tom azulado */
+            '--page':         '#0f1117',
+            /* Cards — dark com leve calor */
+            '--parch':        '#1a1d26',
+            /* Inputs, campos — um tom mais claro */
+            '--parch-mid':    '#252836',
+            /* Hover / seleções */
+            '--parch-deep':   '#303448',
+            /* Bordas — dourado escuro luminoso */
+            '--parch-border': '#b8922a',
+            /* Dourado principal — mais brilhante para contraste */
+            '--gold':         '#d4af37',
+            '--gold-light':   '#e8c94a',
+            '--gold-pale':    '#f5e08a',
+            /* Texto — quase branco levemente quente */
+            '--ink':          '#f0ead8',
+            '--ink-mid':      '#d8ccb0',
+            '--ink-light':    '#b8a880',
+            '--ink-muted':    '#7a6a4a',
+            /* Header — camadas escuras com tom noturno */
+            '--header-top':   '#1e2130',
+            '--header-mid':   '#161922',
+            '--header-bot':   '#0f1117',
+            /* Barra de abas */
+            '--tabs-top':     '#0a0c12',
+            '--tabs-bot':     '#060709',
+            /* Barra inferior */
+            '--bar-bg':       'rgba(6,7,9,0.97)'
+        }
     },
 }
 
@@ -2319,3 +2380,617 @@ function dispararFalha() {
     flash.classList.add('ativo')
     setTimeout(() => flash.classList.remove('ativo'), 700)
 }
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS v2 — Quick Stats, Fonte, Campo Custom, Attr Colors
+═══════════════════════════════════════════════════════════ */
+
+/* ── BARRA DE STATS RÁPIDOS ──────────────────────────────── */
+function atualizarQuickStats() {
+    const pvAtual = parseInt(document.getElementById('pv-atual')?.value) || 0
+    const pvMax   = parseInt(document.getElementById('pv-max')?.value)   || 0
+    const ca      = document.getElementById('ca-total')?.value || '—'
+    const init    = document.getElementById('iniciativa')?.value || '—'
+    const sabPass = document.getElementById('sab-passiva')?.value || '—'
+
+    const qsPv   = document.getElementById('qs-pv')
+    const qsCa   = document.getElementById('qs-ca')
+    const qsInit = document.getElementById('qs-init')
+    const qsSab  = document.getElementById('qs-sab')
+
+    if (qsPv) {
+        qsPv.textContent = pvMax > 0 ? pvAtual + '/' + pvMax : '—'
+        qsPv.className = 'qs-val'
+        const pct = pvMax > 0 ? pvAtual / pvMax : 1
+        if (pct <= 0.25) qsPv.classList.add('pv-crit')
+        else if (pct <= 0.5) qsPv.classList.add('pv-low')
+    }
+    if (qsCa)   qsCa.textContent   = ca
+    if (qsInit) qsInit.textContent = init
+    if (qsSab)  qsSab.textContent  = sabPass
+}
+
+// Hook atualizarQuickStats into atualizarTudo
+const _atualizarTudoOrig = window.atualizarTudo
+window.atualizarTudo = function() {
+    if (_atualizarTudoOrig) _atualizarTudoOrig()
+    try { atualizarQuickStats() } catch(e) {}
+}
+
+// Also hook into PV bar updates
+const _pvBarOrig = window.atualizarPVBar
+window.atualizarPVBar = function() {
+    if (_pvBarOrig) _pvBarOrig()
+    try { atualizarQuickStats() } catch(e) {}
+}
+
+/* ── FONT SELECTOR ───────────────────────────────────────── */
+const FONT_GOOGLE_URLS = {
+    classic:  'https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap',
+    readable: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
+    fantasy:  'https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap',
+    ink:      'https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Philosopher:wght@400;700&family=Crimson+Pro:wght@400;600&display=swap',
+}
+
+function onFontChange(preset) {
+    document.body.className = document.body.className.replace(/\bfont-\w+/g, '').trim()
+    if (preset !== 'medieval') {
+        document.body.classList.add('font-' + preset)
+        // Load Google Font if needed
+        if (FONT_GOOGLE_URLS[preset]) {
+            const id = 'gfont-' + preset
+            if (!document.getElementById(id)) {
+                const link = document.createElement('link')
+                link.id = id
+                link.rel = 'stylesheet'
+                link.href = FONT_GOOGLE_URLS[preset]
+                document.head.appendChild(link)
+            }
+        }
+    }
+    ls.set('font-preset', preset)
+    sincronizarFontSelect()
+}
+
+function onSizeChange(px) {
+    document.documentElement.style.setProperty('--font-size-base', px + 'px')
+    document.body.style.fontSize = px + 'px'
+    ls.set('font-size', px)
+    sincronizarFontSelect()
+}
+
+function sincronizarFontSelect() {
+    const sel = document.getElementById('cp-font-select')
+    if (sel) sel.value = ls.get('font-preset') || 'medieval'
+    const szSel = document.getElementById('cp-size-select')
+    if (szSel) szSel.value = ls.get('font-size') || '17'
+}
+
+function restaurarFontes() {
+    const fp = ls.get('font-preset')
+    if (fp && fp !== 'medieval') onFontChange(fp)
+    const fz = ls.get('font-size')
+    if (fz) onSizeChange(fz)
+    sincronizarFontSelect()
+}
+
+/* ── CAMPO DE IDENTIDADE PERSONALIZADA ───────────────────── */
+function toggleCampoCustom(ativo) {
+    const wrap = document.getElementById('hfield-custom-wrap')
+    const config = document.getElementById('cp-custom-field-config')
+    const cb = document.getElementById('cp-custom-field-on')
+
+    if (wrap) wrap.style.display = ativo ? '' : 'none'
+    if (config) config.style.display = ativo ? '' : 'none'
+    if (cb) cb.checked = ativo
+    ls.set('campo-custom-on', ativo ? '1' : '0')
+}
+
+function onCustomLabelChange(val) {
+    const lbl = document.getElementById('hfield-custom-label')
+    if (lbl) lbl.textContent = val || 'Personalizado'
+    ls.set('campo-custom-label', val)
+}
+
+function restaurarCampoCustom() {
+    const on = ls.get('campo-custom-on') === '1'
+    const label = ls.get('campo-custom-label') || ''
+    const valor = ls.get('campo-custom-valor') || ''
+
+    const cb = document.getElementById('cp-custom-field-on')
+    if (cb) cb.checked = on
+
+    if (on) {
+        toggleCampoCustom(true)
+        const lbl = document.getElementById('hfield-custom-label')
+        const inp = document.getElementById('cp-custom-label-input')
+        const campo = document.getElementById('campo-custom')
+        if (lbl && label) lbl.textContent = label
+        if (inp && label) inp.value = label
+        if (campo && valor) campo.value = valor
+    }
+}
+
+// Save campo-custom value when changed
+document.addEventListener('input', function(e) {
+    if (e.target && e.target.id === 'campo-custom') {
+        ls.set('campo-custom-valor', e.target.value)
+    }
+})
+
+/* ── ATTR COLORS NO PAINEL DE TEMA ──────────────────────── */
+const CP_ATTRS = [
+    { var: '--for-color', label: 'Força',        hint: 'cor do mod. de FOR e barra' },
+    { var: '--des-color', label: 'Destreza',      hint: 'cor do mod. de DES'         },
+    { var: '--con-color', label: 'Constituição',  hint: 'cor do mod. de CON'         },
+    { var: '--int-color', label: 'Inteligência',  hint: 'cor do mod. de INT'         },
+    { var: '--sab-color', label: 'Sabedoria',     hint: 'cor do mod. de SAB'         },
+    { var: '--car-color', label: 'Carisma',       hint: 'cor do mod. de CAR'         },
+    { var: '--pv-bar-color', label: 'Barra de PV (alta)', hint: 'cor quando HP > 50%' },
+    { var: '--pv-bar-low',   label: 'Barra de PV (média)', hint: 'cor quando HP 25–50%' },
+    { var: '--pv-bar-crit',  label: 'Barra de PV (crítico)', hint: 'cor quando HP ≤ 25%' },
+]
+
+function renderCPAttrs() {
+    const el = document.getElementById('cp-group-attrs')
+    if (!el) return
+    el.innerHTML = CP_ATTRS.map(f => `
+        <div class="cp-row">
+            <div class="cp-row-info">
+                <div class="cp-row-label">${f.label}</div>
+                <div class="cp-row-hint">${f.hint}</div>
+            </div>
+            <div class="cp-color-wrap" title="Clique para mudar">
+                <input type="color" class="cp-color-input"
+                    data-var="${f.var}" value="#888888"
+                    oninput="onAttrColorChange(this)">
+            </div>
+        </div>`).join('')
+    sincronizarAttrPickers()
+}
+
+function onAttrColorChange(input) {
+    document.documentElement.style.setProperty(input.dataset.var, input.value)
+    // save in custom tema
+    const allCustom = {}
+    ;[...CP_ATTRS].forEach(f => {
+        allCustom[f.var] = getComputedStyle(document.documentElement).getPropertyValue(f.var).trim()
+    })
+    const existing = ls.get('tema-attrs')
+    const merged = Object.assign(existing ? JSON.parse(existing) : {}, allCustom)
+    ls.set('tema-attrs', JSON.stringify(merged))
+}
+
+function sincronizarAttrPickers() {
+    document.querySelectorAll('#cp-group-attrs .cp-color-input').forEach(inp => {
+        const raw = getComputedStyle(document.documentElement).getPropertyValue(inp.dataset.var).trim()
+        // Convert to hex if needed
+        const m = raw.match(/#[0-9a-fA-F]{6}/)
+        if (m) inp.value = m[0]
+    })
+}
+
+function restaurarAttrColors() {
+    const raw = ls.get('tema-attrs')
+    if (!raw) return
+    try {
+        const vars = JSON.parse(raw)
+        Object.entries(vars).forEach(([k,v]) => document.documentElement.style.setProperty(k,v))
+    } catch(e) {}
+}
+
+/* ── OVERRIDE inicializarTemas para incluir attrs e fontes ── */
+const _inicializarTemasOrig = window.inicializarTemas
+window.inicializarTemas = function() {
+    if (_inicializarTemasOrig) _inicializarTemasOrig()
+    try { renderCPAttrs() }          catch(e) { console.warn('renderCPAttrs:', e) }
+    try { restaurarFontes() }        catch(e) { console.warn('restaurarFontes:', e) }
+    try { restaurarCampoCustom() }   catch(e) { console.warn('restaurarCampoCustom:', e) }
+    try { restaurarAttrColors() }    catch(e) { console.warn('restaurarAttrColors:', e) }
+    try { sincronizarAttrPickers() } catch(e) {}
+    // Initial quick stats render
+    setTimeout(() => { try { atualizarQuickStats() } catch(e) {} }, 200)
+}
+
+/* ── SAVE/LOAD HOOKS para campo custom ───────────────────── */
+const _salvarCustomFieldOrig = window.salvar
+window.salvar = function() {
+    if (_salvarCustomFieldOrig) _salvarCustomFieldOrig()
+    // Also persist custom field valor
+    const campo = document.getElementById('campo-custom')
+    if (campo) ls.set('campo-custom-valor', campo.value)
+}
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS v3
+   1. Efeito Ripple nos botões
+   2. Badges de magia alto nível com estrela (⭐)
+   3. Seções colapsáveis na aba Combate
+   4. Toast com undo ao remover itens
+═══════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════
+   1. EFEITO RIPPLE
+   ── Adiciona um círculo de onda no ponto de clique de
+      qualquer botão marcado com position:relative + overflow:hidden.
+══════════════════════════════════════════════════════════ */
+;(function initRipple() {
+    const SELETORES = [
+        '.btn-add', '.save-btn', '.rest-btn',
+        '.btn-rolar-ataque', '.btn-remove', '.tab-btn',
+        '.cond-btn', '.img-mode-btn',
+    ]
+
+    function criarRipple(e) {
+        const btn = e.currentTarget
+        // remove ripples anteriores para não acumular
+        btn.querySelectorAll('.ripple-circle').forEach(r => r.remove())
+
+        const rect = btn.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+
+        const span = document.createElement('span')
+        span.className = 'ripple-circle'
+        span.style.left = x + 'px'
+        span.style.top  = y + 'px'
+        btn.appendChild(span)
+
+        // remove após animação
+        span.addEventListener('animationend', () => span.remove(), { once: true })
+    }
+
+    function bindRipple() {
+        SELETORES.forEach(sel => {
+            document.querySelectorAll(sel).forEach(btn => {
+                if (!btn.dataset.rippleBound) {
+                    btn.addEventListener('click', criarRipple)
+                    btn.dataset.rippleBound = '1'
+                }
+            })
+        })
+    }
+
+    // Bind imediato + re-bind via MutationObserver (para botões adicionados dinamicamente)
+    document.addEventListener('DOMContentLoaded', bindRipple)
+
+    const rippleObserver = new MutationObserver(() => bindRipple())
+    document.addEventListener('DOMContentLoaded', () => {
+        rippleObserver.observe(document.body, { childList: true, subtree: true })
+        bindRipple()
+    })
+})()
+
+/* ══════════════════════════════════════════════════════════
+   2. BADGES DE MAGIA ALTO NÍVEL COM ESTRELA
+   ── Sobrescreve atualizarBadge para injetar ⭐ nos níveis 6-9
+   ── Também corrige addSpellCard para já renderizar a estrela
+══════════════════════════════════════════════════════════ */
+;(function patchBadges() {
+
+    const ALTO_NIVEL = new Set([6,7,8,9])
+
+    // Helper: gera o innerHTML do badge
+    function badgeHTML(nivel, cor) {
+        const estrela = ALTO_NIVEL.has(nivel)
+            ? '<span class="spell-star" aria-hidden="true">⭐</span>'
+            : ''
+        return `${estrela}NV ${nivel}`
+    }
+
+    // Patch atualizarBadge
+    const _origAtualizarBadge = window.atualizarBadge
+    window.atualizarBadge = function(id, withLevel) {
+        if (!withLevel) return
+        const nivel = parseInt(document.getElementById('nivel-' + id)?.value) || 1
+        const badge = document.getElementById('badge-' + id)
+        if (!badge) return
+
+        badge.setAttribute('data-level', nivel)
+        badge.style.background = '' // limpa inline; CSS cuida dos 6-9
+        if (!ALTO_NIVEL.has(nivel)) {
+            // Níveis 1-5: usa a cor da tabela do script original
+            badge.style.background = SPELL_LEVEL_COLORS[nivel] || SPELL_LEVEL_COLORS[1]
+        }
+        badge.innerHTML = badgeHTML(nivel, badge.style.background)
+    }
+
+    // Patch addSpellCard para já criar o badge correto
+    const _origAddSpellCard = window.addSpellCard
+    window.addSpellCard = function(listaId, withLevel, data = {}) {
+        _origAddSpellCard(listaId, withLevel, data)
+
+        if (!withLevel) return
+        // Encontra o último card adicionado
+        const lista = document.getElementById(listaId)
+        if (!lista) return
+        const cards = lista.querySelectorAll('.exp-card')
+        const card = cards[cards.length - 1]
+        if (!card) return
+
+        const badge = card.querySelector('.spell-level-badge')
+        if (!badge) return
+        const nivel = parseInt(data.nivel) || 1
+        badge.setAttribute('data-level', nivel)
+        if (!ALTO_NIVEL.has(nivel)) {
+            badge.style.background = SPELL_LEVEL_COLORS[nivel] || SPELL_LEVEL_COLORS[1]
+        } else {
+            badge.style.background = '' // deixa CSS cuidar
+        }
+        badge.innerHTML = badgeHTML(nivel, badge.style.background)
+    }
+
+})()
+
+/* ══════════════════════════════════════════════════════════
+   3. SEÇÕES COLAPSÁVEIS NA ABA COMBATE
+   ── Varre todos .section-title dentro de #tab-combate e
+      insere um botão [▼] que colapsa o conteúdo seguinte.
+   ── Estado salvo no localStorage (chave: secoes-colapsadas).
+══════════════════════════════════════════════════════════ */
+;(function initColapsaveis() {
+
+    const LS_KEY = 'secoes-colapsadas'
+
+    function salvarEstado(colapsadas) {
+        ls.set(LS_KEY, JSON.stringify([...colapsadas]))
+    }
+
+    function carregarEstado() {
+        try {
+            const raw = ls.get(LS_KEY)
+            return raw ? new Set(JSON.parse(raw)) : new Set()
+        } catch(_) { return new Set() }
+    }
+
+    // Agrupa elementos entre dois .section-title num div.collapsible-section
+    function agruparSecao(titulo) {
+        const elementos = []
+        let el = titulo.nextElementSibling
+        while (el && !el.classList.contains('section-title') && !el.classList.contains('prof-insp-row')) {
+            elementos.push(el)
+            el = el.nextElementSibling
+        }
+        if (!elementos.length) return null
+
+        const wrap = document.createElement('div')
+        wrap.className = 'collapsible-section'
+
+        titulo.parentNode.insertBefore(wrap, elementos[0])
+        elementos.forEach(e => wrap.appendChild(e))
+        return wrap
+    }
+
+    function toggleSecao(id, wrap, btn, colapsadas) {
+        const estaColapsado = colapsadas.has(id)
+        if (estaColapsado) {
+            colapsadas.delete(id)
+            wrap.classList.remove('collapsed')
+            btn.classList.remove('collapsed')
+            btn.title = 'Recolher seção'
+        } else {
+            colapsadas.add(id)
+            wrap.classList.add('collapsed')
+            btn.classList.add('collapsed')
+            btn.title = 'Expandir seção'
+        }
+        salvarEstado(colapsadas)
+    }
+
+    function setup() {
+        const painel = document.getElementById('tab-combate')
+        if (!painel) return
+
+        const colapsadas = carregarEstado()
+        let idx = 0
+
+        painel.querySelectorAll('.section-title').forEach(titulo => {
+            // evita duplicar o botão
+            if (titulo.querySelector('.section-collapse-btn')) return
+
+            const id = 'secao-' + (titulo.textContent.trim().replace(/\s+/g,'_').toLowerCase() || idx++)
+            titulo.classList.add('has-collapse')
+
+            const wrap = agruparSecao(titulo)
+            if (!wrap) return
+
+            // Cria botão [▼]
+            const btn = document.createElement('button')
+            btn.className = 'section-collapse-btn'
+            btn.innerHTML = '▼'
+            btn.setAttribute('aria-label', 'Recolher / expandir seção')
+            btn.title = 'Recolher seção'
+            btn.type = 'button'
+
+            // Insere ANTES do ::after do section-title (ao final dos filhos)
+            titulo.appendChild(btn)
+
+            // Aplica estado salvo
+            if (colapsadas.has(id)) {
+                wrap.classList.add('collapsed')
+                btn.classList.add('collapsed')
+                btn.title = 'Expandir seção'
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation()
+                toggleSecao(id, wrap, btn, colapsadas)
+            })
+        })
+    }
+
+    // Espera o DOM estar pronto (o script roda após o HTML)
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setup)
+    } else {
+        // DOM já pronto: aguarda um tick para garantir que o render de saves/perícias ocorreu
+        setTimeout(setup, 350)
+    }
+
+})()
+
+/* ══════════════════════════════════════════════════════════
+   4. TOAST COM UNDO AO REMOVER ITENS
+   ── Intercepta os botões .btn-remove de ataques, munições
+      e cards (habilidades/magias) para exibir um toast de
+      "Item removido" com botão Desfazer por 3 segundos.
+══════════════════════════════════════════════════════════ */
+;(function initUndoRemove() {
+
+    // Guarda o estado do último item removido para o undo
+    let pendingUndo = null
+    let undoTimer   = null
+
+    function mostrarToastUndo(msg, onUndo) {
+        const container = document.getElementById('toast-container')
+        if (!container) return
+
+        // Cancela qualquer undo pendente anterior
+        if (pendingUndo) {
+            pendingUndo.el?.remove()
+            clearTimeout(undoTimer)
+            pendingUndo = null
+        }
+
+        const el = document.createElement('div')
+        el.className = 'toast tipo-aviso'
+        el.style.setProperty('--toast-dur', '3s')
+        el.style.position = 'relative'
+        el.style.overflow = 'hidden'
+
+        const undoBtn = document.createElement('button')
+        undoBtn.className = 'toast-undo-btn'
+        undoBtn.textContent = 'DESFAZER'
+        undoBtn.type = 'button'
+
+        el.innerHTML = `<span class="toast-icon">✕</span><span class="toast-msg">${msg}</span>`
+        el.appendChild(undoBtn)
+        container.appendChild(el)
+
+        pendingUndo = { el, restored: false }
+
+        undoBtn.addEventListener('click', () => {
+            clearTimeout(undoTimer)
+            el.classList.add('saindo')
+            setTimeout(() => el.remove(), 260)
+            if (!pendingUndo?.restored) {
+                pendingUndo.restored = true
+                onUndo()
+            }
+            pendingUndo = null
+        })
+
+        undoTimer = setTimeout(() => {
+            el.classList.add('saindo')
+            setTimeout(() => el.remove(), 260)
+            pendingUndo = null
+        }, 3000)
+    }
+
+    // ── Intercepta cliques em .btn-remove dentro do documento ──
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.btn-remove')
+        if (!btn) return
+
+        // Determina o alvo de remoção (tr para ataques/munições, .exp-card para cards)
+        const tr   = btn.closest('tr')
+        const card = btn.closest('.exp-card')
+        const tag  = btn.closest('.prof-tag')
+
+        if (tr) {
+            e.stopImmediatePropagation()
+            e.preventDefault()
+
+            const tbody  = tr.parentNode
+            const index  = Array.from(tbody.children).indexOf(tr)
+            const clone  = tr.cloneNode(true)
+            const isAtk  = !!tr.closest('#attacks-body')
+            const msg    = isAtk ? 'Ataque removido' : 'Munição removida'
+
+            tr.remove()
+
+            mostrarToastUndo(msg, () => {
+                // Restaura na mesma posição
+                if (index >= tbody.children.length) {
+                    tbody.appendChild(clone)
+                } else {
+                    tbody.insertBefore(clone, tbody.children[index])
+                }
+            })
+            return
+        }
+
+        if (card) {
+            e.stopImmediatePropagation()
+            e.preventDefault()
+
+            const lista   = card.parentNode
+            const index   = Array.from(lista.children).indexOf(card)
+            const clone   = card.cloneNode(true)
+            const isHab   = !!card.closest('#habilidades-lista')
+            const isTruq  = !!card.closest('#truques-lista')
+            const msg     = isHab ? 'Habilidade removida' : isTruq ? 'Truque removido' : 'Magia removida'
+
+            card.remove()
+
+            mostrarToastUndo(msg, () => {
+                if (index >= lista.children.length) {
+                    lista.appendChild(clone)
+                } else {
+                    lista.insertBefore(clone, lista.children[index])
+                }
+            })
+            return
+        }
+
+        // Tags (.prof-tag): não têm undo, mas mostra toast informativo simples
+        if (tag) {
+            const tagContent = tag.querySelector('span')?.textContent || 'Tag'
+            // Deixa o comportamento padrão acontecer (remoção inline)
+            // mas poderia adicionar undo aqui também se desejado
+        }
+    }, true) // capture: true para interceptar antes dos onclick inline
+
+})()
+
+/* ═══════════════════════════════════════════════════════════
+   TEMA NOTURNO + STRAHD — classes auxiliares no body
+   ── Intercepta aplicarTema para adicionar/remover
+      body.tema-noturno e body.tema-strahd automaticamente.
+═══════════════════════════════════════════════════════════ */
+;(function patchAplicarTemaDark() {
+
+    const DARK_TEMAS = {
+        'Noturno': 'tema-noturno',
+        'Strahd':  'tema-strahd',
+    }
+
+    const _orig = window.aplicarTema
+    window.aplicarTema = function(nome) {
+        _orig(nome)
+        // Remove todas as classes de tema escuro antes de aplicar
+        Object.values(DARK_TEMAS).forEach(cls => document.body.classList.remove(cls))
+        if (DARK_TEMAS[nome]) {
+            document.body.classList.add(DARK_TEMAS[nome])
+        }
+    }
+
+    // Restaura a classe ao carregar
+    const _origInicializar = window.inicializarTemas
+    window.inicializarTemas = function() {
+        _origInicializar()
+        setTimeout(() => {
+            const preset = ls.get('tema-preset')
+            Object.values(DARK_TEMAS).forEach(cls => document.body.classList.remove(cls))
+            if (preset && DARK_TEMAS[preset]) {
+                document.body.classList.add(DARK_TEMAS[preset])
+            }
+            // Fallback: detecta Noturno pela cor --page
+            if (!preset) {
+                const page = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--page').trim().toLowerCase()
+                if (page === '#0f1117') document.body.classList.add('tema-noturno')
+                if (page === '#0d0508') document.body.classList.add('tema-strahd')
+            }
+        }, 100)
+    }
+
+})()

@@ -587,6 +587,37 @@
       <div class="hfield"><label>Antecedente</label><input id="antecedente" type="text"></div>
       <div class="hfield"><label>Alinhamento</label><input id="alinhamento" type="text"></div>
       <div class="hfield"><label>Jogador(a)</label><input id="jogador" type="text"></div>
+      <div class="hfield hfield-custom" id="hfield-custom-wrap" style="display:none;">
+        <label id="hfield-custom-label">Personalizado</label>
+        <input id="campo-custom" type="text" placeholder="—">
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ BARRA DE STATS RÁPIDOS (sticky) ════ -->
+  <div id="quick-stats">
+    <div class="qs-item" title="Pontos de Vida">
+      <span class="qs-icon">❤</span>
+      <span class="qs-label">PV</span>
+      <span id="qs-pv" class="qs-val">—</span>
+    </div>
+    <div class="qs-sep">|</div>
+    <div class="qs-item" title="Classe de Armadura">
+      <span class="qs-icon">🛡</span>
+      <span class="qs-label">CA</span>
+      <span id="qs-ca" class="qs-val">—</span>
+    </div>
+    <div class="qs-sep">|</div>
+    <div class="qs-item" title="Iniciativa">
+      <span class="qs-icon">⚡</span>
+      <span class="qs-label">INIT</span>
+      <span id="qs-init" class="qs-val">—</span>
+    </div>
+    <div class="qs-sep">|</div>
+    <div class="qs-item" title="Sabedoria Passiva">
+      <span class="qs-icon">👁</span>
+      <span class="qs-label">SAB.PASS</span>
+      <span id="qs-sab" class="qs-val">—</span>
     </div>
   </div>
 
@@ -1306,6 +1337,58 @@
       <div class="cp-section">
         <div class="cp-section-label">Texto</div>
         <div id="cp-group-texto"></div>
+      </div>
+
+      <!-- Fontes -->
+      <div class="cp-section">
+        <div class="cp-section-label">Tipografia</div>
+        <div class="cp-row">
+          <div class="cp-row-info">
+            <div class="cp-row-label">Fonte da ficha</div>
+            <div class="cp-row-hint">Cabeçalhos e títulos</div>
+          </div>
+          <select id="cp-font-select" class="cp-font-select" onchange="onFontChange(this.value)">
+            <option value="medieval">Medieval (padrão)</option>
+            <option value="classic">Clássica (Cinzel)</option>
+            <option value="readable">Legível (Inter)</option>
+            <option value="fantasy">Fantasia (MedievalSharp)</option>
+            <option value="ink">Tinta (Uncial)</option>
+          </select>
+        </div>
+        <div class="cp-row">
+          <div class="cp-row-info">
+            <div class="cp-row-label">Tamanho de texto</div>
+            <div class="cp-row-hint">Base para toda a ficha</div>
+          </div>
+          <select id="cp-size-select" class="cp-font-select" onchange="onSizeChange(this.value)">
+            <option value="15">Pequeno (15px)</option>
+            <option value="17" selected>Normal (17px)</option>
+            <option value="19">Grande (19px)</option>
+            <option value="21">Muito Grande (21px)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Campo de Identidade Personalizado -->
+      <div class="cp-section">
+        <div class="cp-section-label">Identidade (Homebrew)</div>
+        <div class="cp-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;width:100%;">
+            <label class="cp-toggle-label">
+              <input type="checkbox" id="cp-custom-field-on" onchange="toggleCampoCustom(this.checked)">
+              Ativar campo personalizado
+            </label>
+          </div>
+          <div id="cp-custom-field-config" style="display:none;width:100%;">
+            <input type="text" class="cp-custom-input" id="cp-custom-label-input" placeholder="Nome do campo (ex: Subclasse, Clã...)" maxlength="30" oninput="onCustomLabelChange(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Cores de Atributos -->
+      <div class="cp-section">
+        <div class="cp-section-label">Cores dos Atributos</div>
+        <div id="cp-group-attrs"></div>
       </div>
 
       <!-- Import/Export -->

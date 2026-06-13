@@ -3256,3 +3256,1265 @@ input:focus, select:focus, textarea:focus {
 .exp-card.expandido {
     border-left-color: var(--gold) !important;
 }
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS — v2 (identidade, quick-stats, fonte, paleta)
+═══════════════════════════════════════════════════════════ */
+
+/* ── FONTE VARIÁVEIS EXTRAS ── */
+:root {
+  --font-size-base: 17px;
+
+  /* Cores de atributos (personalizáveis) */
+  --pv-bar-color:   #185818;
+  --pv-bar-low:     #c87800;
+  --pv-bar-crit:    #881010;
+
+  /* Tabs text colors */
+  --tabs-txt-off:   rgba(220,190,100,0.65);
+  --tabs-txt-hover: rgba(240,210,130,0.9);
+}
+
+body {
+  font-size: var(--font-size-base);
+}
+
+/* ── BARRA DE STATS RÁPIDOS ── */
+#quick-stats {
+  position: sticky;
+  top: 52px;
+  background: var(--parch);
+  background: rgba(254,250,240,0.97);
+  border-bottom: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 5px 16px;
+  z-index: 99;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 3px 12px rgba(120,70,0,0.12);
+  flex-wrap: wrap;
+}
+
+.qs-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  cursor: default;
+  transition: background 0.15s;
+  border-radius: 6px;
+}
+
+.qs-item:hover {
+  background: rgba(160,100,20,0.06);
+}
+
+.qs-sep {
+  color: var(--parch-border);
+  opacity: 0.4;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.qs-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.qs-label {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.qs-val {
+  font-family: var(--font-number);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.qs-val.pv-low  { color: var(--pv-bar-low); }
+.qs-val.pv-crit { color: var(--pv-bar-crit); animation: pvPulse 1.2s ease-in-out infinite; }
+
+@keyframes pvPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (max-width: 480px) {
+  #quick-stats { gap: 0; padding: 4px 8px; top: 46px; }
+  .qs-item { padding: 0 8px; }
+  .qs-label { display: none; }
+}
+
+/* ── CAMPO DE IDENTIDADE PERSONALIZADA ── */
+.hfield-custom {
+  background: rgba(160,100,20,0.05);
+  border-left: 2px solid var(--gold);
+}
+
+/* ── PAINEL DE TEMA: SELETOR DE FONTE ── */
+.cp-font-select {
+  background: var(--parch-mid);
+  border: 1px solid rgba(160,100,20,0.25);
+  border-radius: 7px;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--ink);
+  cursor: pointer;
+  max-width: 160px;
+}
+
+.cp-font-select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* ── PAINEL DE TEMA: TOGGLE E INPUT DE TEXTO ── */
+.cp-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+
+.cp-toggle-label input[type="checkbox"] {
+  accent-color: var(--gold);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.cp-custom-input {
+  width: 100%;
+  background: var(--parch-mid);
+  border: 1px solid rgba(160,100,20,0.25);
+  border-radius: 7px;
+  padding: 0.35rem 0.55rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+  transition: border-color 0.2s;
+}
+
+.cp-custom-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* ── SECTION TITLE — tamanhos melhorados ── */
+.section-title {
+  font-size: 1rem !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ── LABELS GERAIS — mais legíveis ── */
+.hfield label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1.2px !important;
+}
+
+/* ── ATTR CARDS — texto maior e mais respirável ── */
+.attr-card label {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+}
+
+.attr-card input[type="number"] {
+  font-size: 1.6rem;
+}
+
+.attr-mod {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── PERICIAS — texto mais legível ── */
+.skill-name {
+  font-size: 0.88rem !important;
+}
+
+.skill-val {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── SAVES — texto maior ── */
+.save-nome {
+  font-size: 0.88rem !important;
+}
+
+.save-bonus {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── BIG-NUM labels ── */
+.big-num label {
+  font-size: 0.65rem !important;
+  letter-spacing: 1.5px !important;
+}
+
+.big-num input {
+  font-size: 1.5rem !important;
+}
+
+/* ── NOME DO PERSONAGEM — mais expressivo ── */
+#nome-personagem {
+  font-size: clamp(2rem, 5vw, 3.2rem) !important;
+}
+
+/* ── FONTE PRESET: Legível ── */
+body.font-readable {
+  --font-title:   'Inter', 'Segoe UI', sans-serif;
+  --font-heading: 'Inter', 'Segoe UI', sans-serif;
+  --font-body:    'Inter', 'Segoe UI', sans-serif;
+  --font-number:  'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ── FONTE PRESET: Clássica ── */
+body.font-classic {
+  --font-title:   'Cinzel Decorative', serif;
+  --font-heading: 'Cinzel', serif;
+  --font-body:    'Crimson Pro', serif;
+  --font-number:  'Crimson Pro', serif;
+}
+
+/* ── FONTE PRESET: Fantasia ── */
+body.font-fantasy {
+  --font-title:   'MedievalSharp', 'Cinzel Decorative', fantasy;
+  --font-heading: 'Philosopher', 'Cinzel', fantasy;
+  --font-body:    'IM Fell English', serif;
+  --font-number:  'IM Fell English', serif;
+}
+
+/* ── FONTE PRESET: Tinta ── */
+body.font-ink {
+  --font-title:   'UnifrakturMaguntia', cursive;
+  --font-heading: 'Philosopher', serif;
+  --font-body:    'Crimson Pro', serif;
+  --font-number:  'Crimson Pro', serif;
+}
+
+/* ── PV BAR — cor personalizável via variável ── */
+.pv-high  { background: var(--pv-bar-color)  !important; }
+.pv-mid   { background: var(--pv-bar-low)    !important; }
+.pv-low   { background: var(--pv-bar-crit)   !important; }
+.pv-crit  { background: var(--pv-bar-crit)   !important; }
+
+/* ── ATRIBUTOS — cores aplicadas ao modificador ── */
+.attr-for .attr-mod { color: var(--for-color) !important; }
+.attr-des .attr-mod { color: var(--des-color) !important; }
+.attr-con .attr-mod { color: var(--con-color) !important; }
+.attr-int .attr-mod { color: var(--int-color) !important; }
+.attr-sab .attr-mod { color: var(--sab-color) !important; }
+.attr-car .attr-mod { color: var(--car-color) !important; }
+
+/* ── INSPIRAÇÃO — brilho pulsante quando ativa ── */
+.insp-card.on {
+  animation: inspiraPulse 2s ease-in-out infinite !important;
+}
+
+@keyframes inspiraPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(160,100,20,0); }
+  50%       { box-shadow: 0 0 18px 4px rgba(200,140,10,0.4); }
+}
+
+/* ── TABS: foco visível para acessibilidade ── */
+.tab-btn:focus-visible {
+  outline: 2px solid var(--gold-pale);
+  outline-offset: -2px;
+}
+
+/* ── BUTTONS: tamanho mínimo de toque ── */
+button, .btn-add, .save-btn, .rest-btn, .tab-btn, .cond-btn, .uso-pip {
+  min-height: 38px;
+}
+
+/* ── RIPPLE em botões de ação ── */
+.btn-add, .save-btn, .rest-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-add:active::after,
+.save-btn:active::after,
+.rest-btn:active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.35) 10%, transparent 80%);
+  animation: rippleEffect 0.4s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  from { transform: scale(0.3); opacity: 1; }
+  to   { transform: scale(2.5); opacity: 0; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   REVISÃO TIPOGRÁFICA v3 — tamanhos, contraste, hierarquia
+   Substitui os valores anteriores com !important cirúrgico
+═══════════════════════════════════════════════════════════ */
+
+/* ── VARIÁVEIS: contraste melhorado ── */
+:root {
+  --ink-light:  #4a2408;   /* era #5c3010 — mais escuro, mais legível */
+  --ink-muted:  #7a4a18;   /* era #9a6828 — ratio ~4.5:1 sobre fundo claro */
+  --ink-mid:    #251000;   /* era #2e1400 — mais denso */
+}
+
+/* ── BASE: tamanho de raiz levemente maior ── */
+html { font-size: 17px; }
+
+/* ─────────────────────────────────────────────
+   TÍTULOS DE SEÇÃO — mais altos e com mais peso
+───────────────────────────────────────────── */
+.section-title {
+  font-size: 1.05rem !important;
+  letter-spacing: 2.5px !important;
+  color: var(--ink) !important;
+  font-weight: 600 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Barra lateral mais alta e destaque mais vivo */
+.section-title::before {
+  width: 4px !important;
+  height: 17px !important;
+  background: var(--gold) !important;
+  box-shadow: 0 0 6px rgba(168, 100, 0, 0.35) !important;
+}
+
+/* Linha após o título — mais visível */
+.section-title::after {
+  opacity: 0.6 !important;
+  background: linear-gradient(to right, var(--parch-border), transparent) !important;
+}
+
+/* ─────────────────────────────────────────────
+   CABEÇALHO — nome e sub-campos
+───────────────────────────────────────────── */
+#nome-personagem {
+  font-size: clamp(2.2rem, 5vw, 3.4rem) !important;
+  color: var(--ink) !important;
+  text-shadow: 0 1px 6px rgba(160, 100, 0, 0.2) !important;
+}
+
+#header-sub {
+  font-size: 0.7rem !important;
+  letter-spacing: 7px !important;
+  color: rgba(80, 40, 0, 0.65) !important;
+}
+
+.hfield label {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.4px !important;
+  color: var(--ink-light) !important;
+  font-weight: 600 !important;
+}
+
+.hfield input {
+  font-size: 1.15rem !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   ABAS
+───────────────────────────────────────────── */
+.tab-btn {
+  font-size: 0.9rem !important;
+  letter-spacing: 1.2px !important;
+}
+
+.tab-btn.active {
+  font-weight: 700 !important;
+  color: #f5d97a !important;    /* dourado mais brilhante na aba ativa */
+}
+
+.tab-icon {
+  font-size: 1.1rem !important;
+}
+
+/* ─────────────────────────────────────────────
+   ATRIBUTOS — cards
+───────────────────────────────────────────── */
+.attr-card label {
+  font-size: 0.78rem !important;
+  letter-spacing: 2px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.attr-card input[type="number"] {
+  font-size: 1.75rem !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+.attr-mod {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   SAVES (Testes de Resistência)
+───────────────────────────────────────────── */
+.save-nome {
+  font-size: 0.95rem !important;
+  color: var(--ink) !important;
+}
+
+.save-bonus {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   PERÍCIAS
+───────────────────────────────────────────── */
+.skill-name {
+  font-size: 1.05rem !important;
+  color: var(--ink) !important;
+  font-weight: 500 !important;
+}
+
+.skill-val {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: var(--gold) !important;
+  min-width: 32px !important;
+}
+
+.skill-attr {
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* ─────────────────────────────────────────────
+   BIG-NUM (CA, PV, Iniciativa, etc.)
+───────────────────────────────────────────── */
+.big-num label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1.6px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.big-num input {
+  font-size: 1.65rem !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+/* CA total em dourado e maior */
+#ca-total {
+  font-size: 2rem !important;
+  color: var(--gold) !important;
+}
+
+/* ─────────────────────────────────────────────
+   LABELS GERAIS DE ARMADURA, CONDIÇÕES, ETC.
+───────────────────────────────────────────── */
+.arm-label {
+  font-size: 0.8rem !important;
+  color: var(--ink-light) !important;
+  font-weight: 600 !important;
+}
+
+.death-section-title {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+.death-label-suc,
+.death-label-fail {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   PROFICIÊNCIA & INSPIRAÇÃO
+───────────────────────────────────────────── */
+.prof-card label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  color: var(--ink-light) !important;
+}
+
+.insp-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+/* ─────────────────────────────────────────────
+   BARRA DE PV — labels e texto
+───────────────────────────────────────────── */
+.pv-bar-text {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   TABELA DE ATAQUES
+───────────────────────────────────────────── */
+.attacks-table th {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.2px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.attacks-table td input {
+  font-size: 0.95rem !important;
+}
+
+/* ─────────────────────────────────────────────
+   MAGIAS — badge de nível e labels
+───────────────────────────────────────────── */
+.spell-level-badge {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+}
+
+/* Alto nível (6–9): brilho dourado */
+.spell-level-badge[data-level="6"],
+.spell-level-badge[data-level="7"],
+.spell-level-badge[data-level="8"],
+.spell-level-badge[data-level="9"] {
+  background: linear-gradient(135deg, #b87800, #e8b020) !important;
+  box-shadow: 0 0 5px rgba(200, 150, 10, 0.45) !important;
+  color: #fff !important;
+}
+
+/* ─────────────────────────────────────────────
+   RECURSOS DE CLASSE
+───────────────────────────────────────────── */
+.recurso-nome {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   NOTAS / TEXTAREAS
+───────────────────────────────────────────── */
+.note {
+  font-size: 1rem !important;
+  color: var(--ink) !important;
+  line-height: 1.65 !important;
+}
+
+/* ─────────────────────────────────────────────
+   BARRA INFERIOR — botões e status
+───────────────────────────────────────────── */
+.save-btn {
+  font-size: 0.85rem !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+}
+
+.rest-btn {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+}
+
+#save-status {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   QUICK-STATS BAR — tamanhos revisados
+───────────────────────────────────────────── */
+.qs-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  color: var(--ink-muted) !important;
+}
+
+.qs-val {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   RESV (Resistências / Vuln / Imun) — títulos
+───────────────────────────────────────────── */
+.resv-col-title {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+}
+
+/* ─────────────────────────────────────────────
+   CONDIÇOES — botões
+───────────────────────────────────────────── */
+.cond-btn {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+}
+
+/* ─────────────────────────────────────────────
+   DESLOCAMENTO — labels
+───────────────────────────────────────────── */
+.deslocamento-label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  color: var(--ink-light) !important;
+}
+
+.desl-label {
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-muted) !important;
+}
+
+.desl-input {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE — ajustes de legibilidade
+───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+
+  .section-title { font-size: 0.98rem !important; }
+  .skill-name    { font-size: 0.98rem !important; }
+  .attr-mod      { font-size: 1.25rem !important; }
+  .big-num input { font-size: 1.4rem !important; }
+  #nome-personagem { font-size: 2rem !important; }
+
+  .tab-btn {
+    font-size: 0.78rem !important;
+    padding: 0.75rem 0.6rem !important;
+  }
+}
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS v3 — Ripple, Badges Alto Nível, Colapsáveis, Toast Undo
+═══════════════════════════════════════════════════════════ */
+
+/* ── 1. EFEITO RIPPLE NOS BOTÕES ─────────────────────────── */
+.btn-add,
+.save-btn,
+.rest-btn,
+.btn-rolar-ataque,
+.btn-remove,
+.tab-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes ripple-anim {
+  0%   { transform: scale(0); opacity: 0.55; }
+  60%  { transform: scale(2.5); opacity: 0.2; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ripple-anim 0.45s ease-out forwards;
+  transform-origin: center;
+  width: 80px;
+  height: 80px;
+  margin-left: -40px;
+  margin-top: -40px;
+}
+
+/* ── 2. BADGES DE MAGIA ALTO NÍVEL (6–9) ─────────────────── */
+.spell-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Estrela de alto nível */
+.spell-level-badge .spell-star {
+  font-size: 0.65em;
+  animation: star-pulse 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes star-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 1;   transform: scale(1.25) rotate(20deg); }
+}
+
+.spell-level-badge[data-level="6"] {
+  background: linear-gradient(135deg, #16a085, #1abc9c) !important;
+  box-shadow: 0 0 7px rgba(22,160,133,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="7"] {
+  background: linear-gradient(135deg, #1a6eb5, #2980b9) !important;
+  box-shadow: 0 0 7px rgba(41,128,185,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="8"] {
+  background: linear-gradient(135deg, #6c3483, #8e44ad) !important;
+  box-shadow: 0 0 7px rgba(142,68,173,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="9"] {
+  background: linear-gradient(135deg, #7c4a00, #d4af37, #ffd966) !important;
+  box-shadow: 0 0 10px rgba(212,175,55,0.65) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,220,80,0.5) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+}
+
+/* ── 3. SEÇÕES COLAPSÁVEIS ───────────────────────────────── */
+.section-title {
+  cursor: default;
+}
+
+/* Botão de colapso */
+.section-collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gold);
+  font-size: 0.8rem;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 3px;
+  transition: background 0.15s, color 0.15s, transform 0.2s;
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.section-collapse-btn:hover {
+  background: rgba(160,100,10,0.12);
+  color: var(--ink);
+}
+
+.section-collapse-btn.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Container colapsável */
+.collapsible-section {
+  overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.collapsible-section.collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Linha separadora quando colapsado */
+.section-title.has-collapse {
+  cursor: default;
+}
+
+/* ── 4. TOAST COM BOTÃO UNDO ─────────────────────────────── */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.toast-undo-btn {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  font-family: var(--font-body);
+  min-width: 48px;
+  min-height: 26px;
+}
+
+.toast-undo-btn:hover {
+  background: rgba(255,255,255,0.32);
+}
+
+/* Barra de progresso do toast */
+.toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 0 0 8px 8px;
+  animation: toast-timer var(--toast-dur, 3s) linear forwards;
+  width: 100%;
+}
+
+@keyframes toast-timer {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TEMA NOTURNO — ajustes que vão além das variáveis CSS
+   Ativado quando o tema "Noturno" é aplicado via JS
+   (detectado pela cor de --page próxima a #0f1117)
+═══════════════════════════════════════════════════════════ */
+
+/* Classe auxiliar adicionada pelo JS ao ativar o tema Noturno */
+body.tema-noturno {
+    /* Remove a textura de ruído clara — fica estranha no escuro */
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(180,140,30,0.06) 0%, transparent 55%);
+}
+
+/* ── Inputs: fundo escuro + texto claro ── */
+body.tema-noturno input,
+body.tema-noturno textarea,
+body.tema-noturno select {
+    background: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(184,146,42,0.35) !important;
+}
+
+body.tema-noturno input:focus,
+body.tema-noturno textarea:focus,
+body.tema-noturno select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(212,175,55,0.18) !important;
+}
+
+body.tema-noturno input::placeholder,
+body.tema-noturno textarea::placeholder {
+    color: var(--ink-muted) !important;
+    opacity: 0.7;
+}
+
+/* ── Painéis flutuantes (dados, tema) ── */
+body.tema-noturno #dados-panel,
+body.tema-noturno #tema-panel {
+    background: var(--parch) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.65) !important;
+}
+
+/* ── Sombras dos cards: mais dramáticas no escuro ── */
+body.tema-noturno .panel,
+body.tema-noturno .exp-card,
+body.tema-noturno .attr-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ── Ornamento do cabeçalho ── */
+body.tema-noturno #header-ornament-left,
+body.tema-noturno #header-ornament-right {
+    color: var(--gold) !important;
+    opacity: 0.5;
+}
+
+/* ── Scrollbar escura ── */
+body.tema-noturno ::-webkit-scrollbar-track {
+    background: #0f1117;
+}
+body.tema-noturno ::-webkit-scrollbar-thumb {
+    background: #303448;
+    border-color: #0f1117;
+}
+body.tema-noturno ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+/* ── Botões flutuantes (paleta + dado) — Noturno ── */
+body.tema-noturno #btn-tema {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-pale) !important;
+    color: #0f1117 !important;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-noturno #btn-tema:hover {
+    background: var(--gold-pale) !important;
+    box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+    transform: scale(1.1) !important;
+}
+
+/* ── Toasts no tema escuro ── */
+body.tema-noturno #toast-container .toast {
+    background: var(--parch-mid) !important;
+    border-color: rgba(212,175,55,0.35) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.55) !important;
+}
+
+/* ── Quick-stats bar ── */
+body.tema-noturno #quick-stats {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(26,29,38,0.92) !important;
+    border-bottom-color: rgba(212,175,55,0.4) !important;
+}
+
+/* ── Barra de PV no escuro ── */
+body.tema-noturno .pv-bar-wrap {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(212,175,55,0.2) !important;
+}
+
+/* ── Seção de condições ── */
+body.tema-noturno .cond-btn {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.3) !important;
+    color: var(--ink) !important;
+}
+body.tema-noturno .cond-btn:hover,
+body.tema-noturno .cond-btn.ativa {
+    background: rgba(212,175,55,0.15) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold-pale) !important;
+}
+
+/* ── Tags de proficiência / línguas ── */
+body.tema-noturno .prof-tag {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.35) !important;
+    color: var(--ink) !important;
+}
+
+/* ── Tabela de ataques ── */
+body.tema-noturno .attacks-table th {
+    background: rgba(212,175,55,0.08) !important;
+}
+body.tema-noturno .attacks-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+
+/* ── Badges de nível de magia — mantém cores próprias ── */
+/* (não precisa sobrescrever — as cores dos badges já têm contraste) */
+
+/* ── Attr cards: borda superior colorida mais visível ── */
+body.tema-noturno .attr-card {
+    background: var(--parch) !important;
+}
+
+/* ── Select elements ── */
+body.tema-noturno select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* ── Botão de dados flutuante — Noturno ── */
+body.tema-noturno #btn-dados {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-pale) !important;
+    color: #0f1117 !important;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-noturno #btn-dados:hover {
+    background: var(--gold-pale) !important;
+    box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+
+/* ── Death circles ── */
+body.tema-noturno .dcircle {
+    background: var(--parch-mid) !important;
+}
+
+/* ── Armadura box ── */
+body.tema-noturno .armadura-box {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ── Inspiração card ── */
+body.tema-noturno .insp-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.3) !important;
+}
+body.tema-noturno .insp-card.on {
+    background: rgba(212,175,55,0.2) !important;
+    border-color: var(--gold) !important;
+}
+
+/* ── Proficiência card ── */
+body.tema-noturno .prof-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CORREÇÕES v3.1 + TEMA CURSE OF STRAHD
+═══════════════════════════════════════════════════════════ */
+
+/* ── FIX 1: Tabela de Ataques — contraste igual ao de Munições ──
+   O problema: inputs da tabela de ataques herdavam cor do tema
+   escuro mas sem o background correto, ficando "apagados".
+   Solução: forçar color:var(--ink) em todos os inputs das tabelas,
+   e garantir que o thead use a mesma paleta escura das duas tabelas.
+────────────────────────────────────────────────────────────── */
+.attacks-table td input,
+.mun-table td input {
+    color: var(--ink) !important;
+    background: transparent !important;
+}
+
+/* thead igual entre as duas tabelas */
+.attacks-table thead tr,
+.mun-table thead tr {
+    background: var(--ink-mid) !important;
+}
+
+.attacks-table th,
+.mun-table th {
+    color: var(--parch-mid) !important;
+    opacity: 1 !important;
+}
+
+/* Hover das linhas usa variável em vez de cor fixa */
+.attacks-table tbody tr:hover,
+.mun-table tbody tr:hover {
+    background: var(--parch-deep) !important;
+}
+
+/* No tema escuro especificamente */
+body.tema-noturno .attacks-table td input,
+body.tema-noturno .mun-table td input,
+body.tema-strahd .attacks-table td input,
+body.tema-strahd .mun-table td input {
+    color: var(--ink) !important;
+}
+
+/* ── FIX 2: Linhas no topo do header ──
+   border-top: 4px double cria linhas duplas que ficam estranhas
+   nos temas escuros. Substituímos por uma linha simples mais elegante
+   com pseudo-elemento que respeita o tema.
+────────────────────────────────────────────────────────────── */
+#header {
+    border-top: none !important;  /* remove o double problemático */
+    border-bottom: 2px solid var(--gold) !important;
+}
+
+/* Linha superior ornamental via pseudo-elemento — mais controlável */
+#header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--gold) 20%,
+        var(--gold-pale) 50%,
+        var(--gold) 80%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+/* ── FIX 3: Campo "PERSONAGEM" / header-sub visível ──
+   Antes usava rgba(100,60,0,0.55) — hardcoded, invisível no escuro.
+   Agora usa variável de tema com opacidade adequada.
+────────────────────────────────────────────────────────────── */
+#header-sub {
+    color: var(--ink-muted) !important;
+    opacity: 0.85;
+    font-size: 0.68rem !important;
+    letter-spacing: 7px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEMA CURSE OF STRAHD
+   ── Inspirado na ficha do Adam: bordô profundo, vermelho
+      sangue, névoa violeta. Atmosfera gótica de Barovia.
+════════════════════════════════════════════════════════════ */
+body.tema-strahd {
+    background-image:
+        radial-gradient(ellipse at 30% 10%, rgba(180,20,40,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 90%, rgba(100,0,20,0.10) 0%, transparent 50%);
+}
+
+/* Inputs */
+body.tema-strahd input,
+body.tema-strahd textarea,
+body.tema-strahd select {
+    background: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd input:focus,
+body.tema-strahd textarea:focus,
+body.tema-strahd select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(200,30,50,0.2) !important;
+}
+
+body.tema-strahd input::placeholder,
+body.tema-strahd textarea::placeholder {
+    color: var(--ink-muted) !important;
+    opacity: 0.65;
+}
+
+/* Cards e painéis */
+body.tema-strahd .panel,
+body.tema-strahd .exp-card,
+body.tema-strahd .attr-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+    border-color: rgba(180,40,60,0.22) !important;
+}
+
+/* Quick-stats */
+body.tema-strahd #quick-stats {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(30,8,12,0.92) !important;
+    border-bottom-color: rgba(200,30,50,0.5) !important;
+}
+
+/* Painéis flutuantes */
+body.tema-strahd #dados-panel,
+body.tema-strahd #tema-panel {
+    background: var(--parch) !important;
+    border-color: rgba(200,30,50,0.3) !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.7) !important;
+}
+
+/* Btn de tema e dados — Strahd: vermelho vivo */
+body.tema-strahd #btn-tema,
+body.tema-strahd #btn-dados {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-light) !important;
+    color: #f0e0e4 !important;
+    box-shadow: 0 4px 20px rgba(200,32,58,0.6), 0 2px 8px rgba(0,0,0,0.7) !important;
+}
+body.tema-strahd #btn-tema:hover,
+body.tema-strahd #btn-dados:hover {
+    background: var(--gold-light) !important;
+    box-shadow: 0 6px 28px rgba(200,32,58,0.8), 0 2px 8px rgba(0,0,0,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+/* Scrollbar */
+body.tema-strahd ::-webkit-scrollbar-track { background: #0d0508; }
+body.tema-strahd ::-webkit-scrollbar-thumb { background: #3a1018; border-color: #0d0508; }
+body.tema-strahd ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Condições */
+body.tema-strahd .cond-btn {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    color: var(--ink) !important;
+}
+body.tema-strahd .cond-btn:hover,
+body.tema-strahd .cond-btn.ativa {
+    background: rgba(200,30,50,0.18) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold-pale) !important;
+}
+
+/* Tags */
+body.tema-strahd .prof-tag {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    color: var(--ink) !important;
+}
+
+/* Armadura box */
+body.tema-strahd .armadura-box {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.2) !important;
+}
+
+/* Inspiração */
+body.tema-strahd .insp-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+body.tema-strahd .insp-card.on {
+    background: rgba(200,30,50,0.2) !important;
+    border-color: var(--gold) !important;
+}
+
+/* Proficiência */
+body.tema-strahd .prof-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.22) !important;
+}
+
+/* PV bar wrap */
+body.tema-strahd .pv-bar-wrap {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: rgba(200,30,50,0.2) !important;
+}
+
+/* Toasts */
+body.tema-strahd #toast-container .toast {
+    background: var(--parch-mid) !important;
+    border-color: rgba(200,30,50,0.35) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
+/* Ornamentos do header mais suaves */
+body.tema-strahd #header-ornament-left,
+body.tema-strahd #header-ornament-right {
+    color: var(--gold) !important;
+    opacity: 0.45;
+}
+
+/* Select options */
+body.tema-strahd select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* Death circles */
+body.tema-strahd .dcircle {
+    background: var(--parch-mid) !important;
+}
+
+/* Attr cards */
+body.tema-strahd .attr-card {
+    background: var(--parch) !important;
+}
