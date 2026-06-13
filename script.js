@@ -2127,7 +2127,13 @@ function renderRecursos() {
                 <input class="recurso-nome-input" value="${r.nome}"
                     onchange="_recursos.find(x=>x.id==='${r.id}').nome=this.value;salvar()">
                 <div class="recurso-controles">
-                    <span class="recurso-recarga-tag">${r.recarga === 'dc' ? '☽ DC' : r.recarga === 'dl' ? '☀ DL' : '✦ AM'}</span>
+                    <select class="recurso-recarga-select" title="Tipo de recuperação"
+                        onchange="_recursos.find(x=>x.id==='${r.id}').recarga=this.value;salvar()">
+                        <option value="dc" ${r.recarga === 'dc' ? 'selected' : ''}>☽ DC</option>
+                        <option value="dl" ${r.recarga === 'dl' ? 'selected' : ''}>☀ DL</option>
+                        <option value="am" ${r.recarga === 'am' ? 'selected' : ''}>✦ AM</option>
+                        <option value="manual" ${(!r.recarga || r.recarga === 'manual') ? 'selected' : ''}>— Manual</option>
+                    </select>
                     ${r.dado ? `<button class="recurso-dado-btn" onclick="rolarRecurso('${r.id}')" title="Rolar ${r.dado}">🎲 ${r.dado}</button>` : ''}
                     <button class="recurso-del" onclick="removerRecurso('${r.id}')" title="Remover">✕</button>
                 </div>
@@ -2136,17 +2142,29 @@ function renderRecursos() {
                 <button class="uso-btn" onclick="mudarRecurso('${r.id}',-1)">−</button>
                 <div class="uso-pips">
                     ${Array.from({length: Math.min(r.max,20)}, (_,i) => `
-                        <button class="uso-pip ${i < r.atual ? 'cheio' : ''}"
-                            onclick="setRecurso('${r.id}',${i < r.atual ? i : i+1})"></button>`
+                        <button class="uso-pip uso-pip-rect ${i < r.atual ? 'cheio' : ''}"
+                            onclick="setRecurso('${r.id}',${i < r.atual ? i : i+1})"
+                            title="${i+1}/${r.max}"></button>`
                     ).join('')}
                 </div>
                 <button class="uso-btn" onclick="mudarRecurso('${r.id}',1)">+</button>
                 <span class="uso-label">${r.atual}/${r.max}</span>
             </div>
-            <div class="recurso-max-wrap">
-                <label>Máx:</label>
-                <input type="number" class="recurso-max-input" value="${r.max}" min="1" max="99"
-                    onchange="setMaxRecurso('${r.id}',this.value)">
+            <div class="recurso-mid-wrap">
+                <div class="recurso-max-wrap">
+                    <label>Máx:</label>
+                    <input type="number" class="recurso-max-input" value="${r.max}" min="1" max="99"
+                        onchange="setMaxRecurso('${r.id}',this.value)">
+                </div>
+                <div class="recurso-dado-wrap">
+                    <label>Dado:</label>
+                    <input type="text" class="recurso-dado-input" placeholder="d6, d8…" value="${r.dado || ''}"
+                        onchange="setDadoRecurso('${r.id}',this.value)">
+                </div>
+            </div>
+            <div class="recurso-desc-wrap">
+                <textarea class="recurso-desc" placeholder="Descrição do recurso…"
+                    onchange="_recursos.find(x=>x.id==='${r.id}').desc=this.value;salvar()">${r.desc || ''}</textarea>
             </div>
         </div>`).join('')
 }
@@ -2186,6 +2204,14 @@ function setMaxRecurso(id, val) {
     r.max = Math.max(1, parseInt(val) || 1)
     r.atual = Math.min(r.atual, r.max)
     renderRecursos()
+    salvar()
+}
+
+function setDadoRecurso(id, val) {
+    const r = _recursos.find(x => x.id === id)
+    if (!r) return
+    r.dado = val.trim() || null
+    // Não re-renderiza tudo para não perder o foco do input
     salvar()
 }
 
@@ -2385,28 +2411,75 @@ function dispararFalha() {
 ═══════════════════════════════════════════════════════════ */
 
 /* ── BARRA DE STATS RÁPIDOS ──────────────────────────────── */
+
+// Definição dos slots disponíveis
+const QS_SLOTS = [
+    { id: 'pv',   label: 'PV',       icon: '❤',  title: 'Pontos de Vida',   get: () => { const a=parseInt(g('pv-atual')?.value)||0; const m=parseInt(g('pv-max')?.value)||0; return m>0?a+'/'+m:'—' }, extra: (el) => { const pvAtual=parseInt(g('pv-atual')?.value)||0; const pvMax=parseInt(g('pv-max')?.value)||1; const pct=pvMax>0?pvAtual/pvMax:1; el.className='qs-val'; if(pct<=0.25) el.classList.add('pv-crit'); else if(pct<=0.5) el.classList.add('pv-low'); } },
+    { id: 'ca',   label: 'CA',       icon: '🛡',  title: 'Classe de Armadura',get: () => g('ca-total')?.value || '—' },
+    { id: 'init', label: 'INIT',     icon: '⚡',  title: 'Iniciativa',        get: () => g('iniciativa')?.value || '—' },
+    { id: 'sab',  label: 'SAB.PASS', icon: '👁',  title: 'Sabedoria Passiva', get: () => g('sab-passiva')?.value || '—' },
+    { id: 'prof', label: 'PROF',     icon: '✦',  title: 'Bônus de Proficiência', get: () => { const v=parseInt(g('proficiencia')?.value)||2; return '+'+ v } },
+    { id: 'exau', label: 'EXAUSTÃO', icon: '↯',  title: 'Nível de Exaustão', get: () => g('exaustao')?.value || '0' },
+]
+
+let _qsAtivos = new Set(['pv','ca','init','sab']) // padrão
+
+function renderQuickStatsBar() {
+    const bar = g('quick-stats')
+    if (!bar) return
+    bar.innerHTML = ''
+    const ativos = QS_SLOTS.filter(s => _qsAtivos.has(s.id))
+    ativos.forEach((slot, i) => {
+        const item = document.createElement('div')
+        item.className = 'qs-item'
+        item.title = slot.title
+        item.innerHTML = `<span class="qs-icon">${slot.icon}</span><span class="qs-label">${slot.label}</span><span class="qs-val" id="qs-${slot.id}">—</span>`
+        bar.appendChild(item)
+        if (i < ativos.length - 1) {
+            const sep = document.createElement('div')
+            sep.className = 'qs-sep'
+            sep.textContent = '|'
+            bar.appendChild(sep)
+        }
+    })
+    atualizarQuickStats()
+}
+
 function atualizarQuickStats() {
-    const pvAtual = parseInt(document.getElementById('pv-atual')?.value) || 0
-    const pvMax   = parseInt(document.getElementById('pv-max')?.value)   || 0
-    const ca      = document.getElementById('ca-total')?.value || '—'
-    const init    = document.getElementById('iniciativa')?.value || '—'
-    const sabPass = document.getElementById('sab-passiva')?.value || '—'
+    QS_SLOTS.forEach(slot => {
+        const el = g('qs-' + slot.id)
+        if (!el) return
+        el.textContent = slot.get()
+        if (slot.extra) slot.extra(el)
+    })
+}
 
-    const qsPv   = document.getElementById('qs-pv')
-    const qsCa   = document.getElementById('qs-ca')
-    const qsInit = document.getElementById('qs-init')
-    const qsSab  = document.getElementById('qs-sab')
+function renderCPQuickStats() {
+    const el = g('cp-quickstats-opts')
+    if (!el) return
+    el.innerHTML = QS_SLOTS.map(s => `
+        <div class="cp-row" style="padding:3px 0;">
+            <label class="cp-toggle-label">
+                <input type="checkbox" ${_qsAtivos.has(s.id) ? 'checked' : ''}
+                    onchange="toggleQSSlot('${s.id}', this.checked)">
+                ${s.icon} ${s.title}
+            </label>
+        </div>`).join('')
+}
 
-    if (qsPv) {
-        qsPv.textContent = pvMax > 0 ? pvAtual + '/' + pvMax : '—'
-        qsPv.className = 'qs-val'
-        const pct = pvMax > 0 ? pvAtual / pvMax : 1
-        if (pct <= 0.25) qsPv.classList.add('pv-crit')
-        else if (pct <= 0.5) qsPv.classList.add('pv-low')
+function toggleQSSlot(id, on) {
+    if (on) _qsAtivos.add(id); else _qsAtivos.delete(id)
+    ls.set('qs-ativos', JSON.stringify([..._qsAtivos]))
+    renderQuickStatsBar()
+}
+
+function restaurarQSAtivos() {
+    const raw = ls.get('qs-ativos')
+    if (raw) {
+        try { _qsAtivos = new Set(JSON.parse(raw)) } catch(e) {}
     }
-    if (qsCa)   qsCa.textContent   = ca
-    if (qsInit) qsInit.textContent = init
-    if (qsSab)  qsSab.textContent  = sabPass
+    renderQuickStatsBar()
+    renderCPQuickStats()
 }
 
 // Hook atualizarQuickStats into atualizarTudo
@@ -2587,6 +2660,7 @@ window.inicializarTemas = function() {
     try { restaurarCampoCustom() }   catch(e) { console.warn('restaurarCampoCustom:', e) }
     try { restaurarAttrColors() }    catch(e) { console.warn('restaurarAttrColors:', e) }
     try { sincronizarAttrPickers() } catch(e) {}
+    try { restaurarQSAtivos() }      catch(e) { console.warn('restaurarQSAtivos:', e) }
     // Initial quick stats render
     setTimeout(() => { try { atualizarQuickStats() } catch(e) {} }, 200)
 }
@@ -2599,6 +2673,18 @@ window.salvar = function() {
     const campo = document.getElementById('campo-custom')
     if (campo) ls.set('campo-custom-valor', campo.value)
 }
+
+// Patch toggleTemaPanel para renderizar opções de QS ao abrir
+;(function() {
+    const _orig = window.toggleTemaPanel
+    window.toggleTemaPanel = function() {
+        if (_orig) _orig()
+        const panel = document.getElementById('tema-panel')
+        if (panel?.classList.contains('open')) {
+            try { renderCPQuickStats() } catch(e) {}
+        }
+    }
+})()
 /* ═══════════════════════════════════════════════════════════
    MELHORIAS v3
    1. Efeito Ripple nos botões

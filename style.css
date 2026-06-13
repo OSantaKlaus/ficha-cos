@@ -2744,8 +2744,13 @@ input:focus, select:focus, textarea:focus {
     background: transparent; border: 1.5px solid rgba(160,100,20,0.3);
     cursor: pointer; transition: all 0.15s; padding: 0;
 }
+/* Variante retangular para recursos */
+.uso-pip-rect {
+    width: 22px !important; height: 18px !important;
+    border-radius: 4px !important;
+}
 .uso-pip.cheio { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 4px rgba(200,150,10,0.35); }
-.uso-pip:hover { border-color: var(--gold); transform: scale(1.15); }
+.uso-pip:hover { border-color: var(--gold); transform: scale(1.1); }
 .uso-label {
     font-family: var(--font-heading); font-size: 0.78rem;
     color: var(--ink-muted); white-space: nowrap;
@@ -2760,6 +2765,47 @@ input:focus, select:focus, textarea:focus {
     font-size: 0.78rem !important;
     padding: 1px 3px !important;
 }
+/* Linha com Máx + Dado */
+.recurso-mid-wrap {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 6px;
+}
+.recurso-dado-wrap {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; color: var(--ink-muted);
+    font-family: var(--font-heading);
+}
+.recurso-dado-input {
+    width: 50px !important; text-align: center;
+    font-size: 0.78rem !important;
+    padding: 1px 4px !important;
+    background: var(--parch) !important;
+    border: 1px solid rgba(160,100,20,0.2) !important;
+    border-radius: 4px !important;
+    color: var(--ink) !important;
+}
+/* Select de recarga embutido */
+.recurso-recarga-select {
+    font-size: 0.68rem !important; font-family: var(--font-heading);
+    color: var(--ink-muted); letter-spacing: 0.03em;
+    background: var(--parch); border-radius: 4px;
+    padding: 2px 4px; border: 1px solid rgba(160,100,20,0.15);
+    cursor: pointer; outline: none;
+}
+.recurso-recarga-select:focus { border-color: var(--gold); }
+/* Descrição do recurso */
+.recurso-desc-wrap { margin-top: 4px; }
+.recurso-desc {
+    width: 100%; min-height: 44px; resize: vertical;
+    background: var(--parch) !important;
+    border: 1px solid rgba(160,100,20,0.15) !important;
+    border-left: 2px solid rgba(160,100,20,0.25) !important;
+    border-radius: 0 4px 4px 0 !important;
+    font-family: var(--font-body); font-size: 0.82rem;
+    color: var(--ink); padding: 5px 8px;
+    line-height: 1.5; transition: border-color 0.2s;
+}
+.recurso-desc:focus { border-left-color: var(--gold) !important; outline: none; }
 
 .btn-add-recurso {
     display: flex; align-items: center; gap: 5px;
@@ -4261,7 +4307,29 @@ body.tema-noturno .dcircle {
     background: var(--parch-mid) !important;
 }
 
-/* ── Armadura box ── */
+/* ── Cargas de habilidades — legibilidade ── */
+body.tema-noturno .card-field input[type=number],
+body.tema-noturno .card-field input[type=text],
+body.tema-noturno .card-field select {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+}
+body.tema-noturno .card-field label {
+    color: var(--ink-light) !important;
+}
+body.tema-noturno .cargas-badge {
+    background: rgba(212,175,55,0.25) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.5) !important;
+}
+body.tema-noturno .recurso-recarga-select,
+body.tema-noturno .recurso-dado-input,
+body.tema-noturno .recurso-desc {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.25) !important;
+}
 body.tema-noturno .armadura-box {
     background: var(--parch-mid) !important;
     border-color: rgba(184,146,42,0.25) !important;
@@ -4512,6 +4580,30 @@ body.tema-strahd select option {
 /* Death circles */
 body.tema-strahd .dcircle {
     background: var(--parch-mid) !important;
+}
+
+/* ── Cargas de habilidades — legibilidade ── */
+body.tema-strahd .card-field input[type=number],
+body.tema-strahd .card-field input[type=text],
+body.tema-strahd .card-field select {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+body.tema-strahd .card-field label {
+    color: var(--ink-light) !important;
+}
+body.tema-strahd .cargas-badge {
+    background: rgba(200,30,50,0.18) !important;
+    color: var(--ink) !important;
+    border-color: rgba(200,60,80,0.45) !important;
+}
+body.tema-strahd .recurso-recarga-select,
+body.tema-strahd .recurso-dado-input,
+body.tema-strahd .recurso-desc {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.25) !important;
 }
 
 /* Attr cards */

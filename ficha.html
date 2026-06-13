@@ -596,29 +596,7 @@
 
   <!-- ════ BARRA DE STATS RÁPIDOS (sticky) ════ -->
   <div id="quick-stats">
-    <div class="qs-item" title="Pontos de Vida">
-      <span class="qs-icon">❤</span>
-      <span class="qs-label">PV</span>
-      <span id="qs-pv" class="qs-val">—</span>
-    </div>
-    <div class="qs-sep">|</div>
-    <div class="qs-item" title="Classe de Armadura">
-      <span class="qs-icon">🛡</span>
-      <span class="qs-label">CA</span>
-      <span id="qs-ca" class="qs-val">—</span>
-    </div>
-    <div class="qs-sep">|</div>
-    <div class="qs-item" title="Iniciativa">
-      <span class="qs-icon">⚡</span>
-      <span class="qs-label">INIT</span>
-      <span id="qs-init" class="qs-val">—</span>
-    </div>
-    <div class="qs-sep">|</div>
-    <div class="qs-item" title="Sabedoria Passiva">
-      <span class="qs-icon">👁</span>
-      <span class="qs-label">SAB.PASS</span>
-      <span id="qs-sab" class="qs-val">—</span>
-    </div>
+    <!-- Preenchido dinamicamente pelo script.js -->
   </div>
 
   <!-- ════ BARRA DE ABAS ════ -->
@@ -1383,6 +1361,13 @@
             <input type="text" class="cp-custom-input" id="cp-custom-label-input" placeholder="Nome do campo (ex: Subclasse, Clã...)" maxlength="30" oninput="onCustomLabelChange(this.value)">
           </div>
         </div>
+      </div>
+
+      <!-- Status Rápidos -->
+      <div class="cp-section">
+        <div class="cp-section-label">Status Rápidos</div>
+        <div class="cp-row-hint" style="margin-bottom:0.5rem;font-size:0.75rem;color:var(--ink-muted);">Escolha quais itens aparecem na barra de stats rápidos</div>
+        <div id="cp-quickstats-opts"></div>
       </div>
 
       <!-- Cores de Atributos -->
