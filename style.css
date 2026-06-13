@@ -1185,7 +1185,7 @@ textarea.note:focus {
 }
 
 .exp-header:hover {
-    background: #e8d4a0;
+    background: var(--parch-deep);
 }
 
 .exp-arrow {
@@ -1267,6 +1267,7 @@ textarea.note:focus {
 
 .card-field input:focus {
     border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(168,100,0,0.1);
 }
 
 .card-field input[type=number] {
@@ -1290,6 +1291,18 @@ textarea.note:focus {
     color: var(--ink);
     outline: none;
     cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a86400' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 26px;
+}
+.card-field select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(168,100,0,0.1);
 }
 
 .card-sublabel {
@@ -2786,13 +2799,27 @@ input:focus, select:focus, textarea:focus {
 }
 /* Select de recarga embutido */
 .recurso-recarga-select {
-    font-size: 0.68rem !important; font-family: var(--font-heading);
-    color: var(--ink-muted); letter-spacing: 0.03em;
-    background: var(--parch); border-radius: 4px;
-    padding: 2px 4px; border: 1px solid rgba(160,100,20,0.15);
+    font-size: 0.72rem; font-family: var(--font-heading);
+    font-weight: 600; letter-spacing: 0.04em;
+    color: var(--ink-mid);
+    background: var(--parch-mid);
+    border-radius: 5px;
+    padding: 3px 22px 3px 7px;
+    border: 1px solid rgba(160,100,20,0.25);
     cursor: pointer; outline: none;
+    /* Remove aparência nativa do browser */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Seta customizada usando SVG inline */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a86400' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    transition: border-color 0.15s, background-color 0.15s;
+    min-width: 72px;
 }
-.recurso-recarga-select:focus { border-color: var(--gold); }
+.recurso-recarga-select:hover { border-color: rgba(160,100,20,0.5); background-color: var(--parch-deep); }
+.recurso-recarga-select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(168,100,0,0.12); }
 /* Descrição do recurso */
 .recurso-desc-wrap { margin-top: 4px; }
 .recurso-desc {
@@ -4194,6 +4221,30 @@ body.tema-noturno .attr-card {
     border-color: rgba(184,146,42,0.25) !important;
 }
 
+/* ── exp-card internos: header, body e campos ── */
+body.tema-noturno .exp-header {
+    background: var(--parch-mid) !important;
+}
+body.tema-noturno .exp-header:hover {
+    background: var(--parch-deep) !important;
+}
+body.tema-noturno .exp-body {
+    background: var(--parch) !important;
+    border-top-color: rgba(212,175,55,0.15) !important;
+}
+body.tema-noturno .recurso-recarga-select {
+    background-color: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+}
+body.tema-noturno .recurso-recarga-select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
 /* ── Ornamento do cabeçalho ── */
 body.tema-noturno #header-ornament-left,
 body.tema-noturno #header-ornament-right {
@@ -4314,6 +4365,11 @@ body.tema-noturno .card-field select {
     background: var(--parch) !important;
     color: var(--ink) !important;
     border-color: rgba(212,175,55,0.3) !important;
+}
+body.tema-noturno .card-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
 }
 body.tema-noturno .card-field label {
     color: var(--ink-light) !important;
@@ -4472,6 +4528,30 @@ body.tema-strahd .attr-card {
     border-color: rgba(180,40,60,0.22) !important;
 }
 
+/* ── exp-card internos: header, body e campos ── */
+body.tema-strahd .exp-header {
+    background: var(--parch-mid) !important;
+}
+body.tema-strahd .exp-header:hover {
+    background: var(--parch-deep) !important;
+}
+body.tema-strahd .exp-body {
+    background: var(--parch) !important;
+    border-top-color: rgba(180,40,60,0.18) !important;
+}
+body.tema-strahd .recurso-recarga-select {
+    background-color: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+}
+body.tema-strahd .recurso-recarga-select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
 /* Quick-stats */
 body.tema-strahd #quick-stats {
     backdrop-filter: blur(8px);
@@ -4589,6 +4669,11 @@ body.tema-strahd .card-field select {
     background: var(--parch) !important;
     color: var(--ink) !important;
     border-color: rgba(180,40,60,0.3) !important;
+}
+body.tema-strahd .card-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
 }
 body.tema-strahd .card-field label {
     color: var(--ink-light) !important;
