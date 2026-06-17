@@ -12,6 +12,7 @@
     rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="strahd-rework.css">
   <style>
     /* ════ ROLADOR DE DADOS ════ */
     #btn-dados {
@@ -563,10 +564,67 @@
         max-height: 70vh;
       }
     }
+
+    /* ── SECTION-TITLE: destaque por tema ── */
+    body.tema-noturno .section-title {
+      color: #c8d8e8 !important;
+      letter-spacing: 3px !important;
+    }
+    body.tema-noturno .section-title::before {
+      background: linear-gradient(180deg, #5b8db8, #3a6090) !important;
+      box-shadow: 0 0 8px rgba(90,140,180,0.5) !important;
+    }
+    body.tema-noturno .section-title::after {
+      background: linear-gradient(to right, rgba(80,130,180,0.35), transparent) !important;
+      opacity: 1 !important;
+    }
+
+    /* ── EXP-CARD: título e placeholder visíveis ── */
+    body.tema-noturno .exp-title-input {
+      color: #c8d8e8 !important;
+    }
+    body.tema-noturno .exp-title-input::placeholder {
+      color: rgba(140,180,220,0.35) !important;
+    }
+    body.tema-noturno .exp-header {
+      background: rgba(30,36,44,0.95) !important;
+    }
+    body.tema-noturno .exp-header:hover {
+      background: rgba(38,46,56,0.95) !important;
+    }
+    body.tema-strahd .exp-title-input::placeholder {
+      color: rgba(240,180,190,0.3) !important;
+    }
+
+    /* ── BOTÕES FLUTUANTES: ícone sempre visível ── */
+    body.tema-noturno #btn-dados,
+    body.tema-noturno #btn-tema {
+      background: #1e242c !important;
+      border-color: #5b8db8 !important;
+      color: #a8cce8 !important;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5) !important;
+    }
+    body.tema-noturno #btn-dados:hover,
+    body.tema-noturno #btn-tema:hover {
+      background: #262e38 !important;
+      box-shadow: 0 6px 24px rgba(91,141,184,0.3) !important;
+    }
+    body.tema-strahd #btn-dados,
+    body.tema-strahd #btn-tema {
+      background: #200c18 !important;
+      border-color: #c82040 !important;
+      color: #f07080 !important;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5) !important;
+    }
+    body.tema-strahd #btn-dados:hover,
+    body.tema-strahd #btn-tema:hover {
+      background: #301020 !important;
+      box-shadow: 0 6px 24px rgba(200,32,64,0.3) !important;
+    }
   </style>
 </head>
 
-<body>
+<body class="tema-strahd">
 
   <!-- ════ CABEÇALHO CINEMATOGRÁFICO ════ -->
   <div id="header">
@@ -894,15 +952,6 @@
 
       </div>
 
-      <!-- RECURSOS DE CLASSE — faixa abaixo do grid -->
-      <div class="recursos-faixa">
-        <div class="section-title" style="margin-bottom:0.75rem;">Recursos de Classe</div>
-        <div id="recursos-lista"></div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
-          <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecursoPreset()">✦ Recurso da classe</button>
-          <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecurso()">+ Personalizado</button>
-        </div>
-      </div>
     </div>
 
     <div id="tab-habilidades" class="tab-panel">
@@ -911,6 +960,14 @@
           <div class="section-title">Características & Habilidades</div>
           <div id="habilidades-lista"></div>
           <button class="btn-add" onclick="addHabilidade()">+ NOVA HABILIDADE</button>
+          <div class="recursos-faixa">
+            <div class="section-title" style="margin-bottom:0.75rem;">Recursos de Classe</div>
+            <div id="recursos-lista"></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+              <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecursoPreset()">✦ Recurso da classe</button>
+              <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecurso()">+ Personalizado</button>
+            </div>
+          </div>
         </div>
         <div>
           <div class="section-title">Proficiências</div>
@@ -1287,10 +1344,13 @@
     <!-- Corpo scrollável -->
     <div class="cp-scroll">
 
-      <!-- Presets rápidos -->
+      <!-- Tema base -->
       <div class="cp-section">
-        <div class="cp-section-label">Início rápido</div>
-        <div class="cp-presets" id="cp-presets"></div>
+        <div class="cp-section-label">Tema da campanha</div>
+        <div id="cp-presets" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.6rem;"></div>
+        <div style="font-size:0.78rem;color:var(--ink-muted);margin-bottom:0.5rem;">
+          Selecione um tema acima ou personalize as cores abaixo. Use ↺ Resetar para voltar ao padrão.
+        </div>
       </div>
 
       <!-- Cabeçalho & Abas -->

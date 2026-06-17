@@ -1332,113 +1332,76 @@ const CP_GROUPS = {
 }
 
 const TEMAS = {
-    'Pergaminho': {
-        swatch: '#e8b830',
-        vars: { '--page':'#e8d8b0','--parch':'#fefaf0','--parch-mid':'#f5e8c8','--parch-deep':'#e8cc80',
-                '--parch-border':'#c8901a','--gold':'#a86400','--gold-light':'#c87e10','--gold-pale':'#e8b830',
-                '--ink':'#1a0c00','--ink-mid':'#2e1400','--ink-light':'#5c3010','--ink-muted':'#9a6828' ,'--header-top':'#f5e8c0','--header-mid':'#eedda0','--header-bot':'#e8d090','--tabs-top':'#2e1608','--tabs-bot':'#1e0e04','--bar-bg':'rgba(30,14,4,0.97)'}
-    },
-    'Floresta': {
-        swatch: '#4a8a1a',
-        vars: { '--page':'#d0e8b8','--parch':'#f0f8ea','--parch-mid':'#d4ecc0','--parch-deep':'#a8d880',
-                '--parch-border':'#4a8a1a','--gold':'#2e7010','--gold-light':'#4a9820','--gold-pale':'#6ab830',
-                '--ink':'#081802','--ink-mid':'#103008','--ink-light':'#1e5010','--ink-muted':'#3a7020' ,'--header-top':'#d8f0c0','--header-mid':'#c0e8a0','--header-bot':'#a8d880','--tabs-top':'#0a2006','--tabs-bot':'#061404','--bar-bg':'rgba(8,24,4,0.97)'}
-    },
-    'Arcano': {
-        swatch: '#7030c8',
-        vars: { '--page':'#d8ccf0','--parch':'#f5f0ff','--parch-mid':'#e0d0f8','--parch-deep':'#c0a0e8',
-                '--parch-border':'#7030c8','--gold':'#5820a0','--gold-light':'#7040c0','--gold-pale':'#9060d8',
-                '--ink':'#0a0020','--ink-mid':'#180840','--ink-light':'#301870','--ink-muted':'#6040a0' ,'--header-top':'#e8d8ff','--header-mid':'#d4b8f8','--header-bot':'#b890e8','--tabs-top':'#1a0840','--tabs-bot':'#0e0428','--bar-bg':'rgba(10,0,28,0.97)'}
-    },
-    'Inferno': {
-        swatch: '#c83010',
-        vars: { '--page':'#f0d8c8','--parch':'#fff5f0','--parch-mid':'#f8ddd0','--parch-deep':'#e8b0a0',
-                '--parch-border':'#c83010','--gold':'#a02010','--gold-light':'#c84020','--gold-pale':'#e06030',
-                '--ink':'#200800','--ink-mid':'#3a1008','--ink-light':'#602010','--ink-muted':'#903020' ,'--header-top':'#ffd8c0','--header-mid':'#f8b898','--header-bot':'#e89070','--tabs-top':'#3a0808','--tabs-bot':'#220404','--bar-bg':'rgba(24,4,4,0.97)'}
-    },
-    'Glacial': {
-        swatch: '#1878c8',
-        vars: { '--page':'#c8ddf0','--parch':'#f0f6ff','--parch-mid':'#cce0f8','--parch-deep':'#98c4f0',
-                '--parch-border':'#1878c8','--gold':'#0858a8','--gold-light':'#1878c8','--gold-pale':'#38a0e8',
-                '--ink':'#001028','--ink-mid':'#002040','--ink-light':'#004080','--ink-muted':'#2060a0' ,'--header-top':'#d0eeff','--header-mid':'#b0d8f8','--header-bot':'#88c0f0','--tabs-top':'#041828','--tabs-bot':'#020e18','--bar-bg':'rgba(2,10,20,0.97)'}
-    },
-
-    'Oceano': {
-        swatch: '#0878a0',
-        vars: { '--page':'#c0e0f0','--parch':'#f0faff','--parch-mid':'#c8eaf8','--parch-deep':'#90d0f0',
-                '--parch-border':'#0878a0','--gold':'#055878','--gold-light':'#0878a0','--gold-pale':'#20a8d0',
-                '--ink':'#001828','--ink-mid':'#003050','--ink-light':'#006090','--ink-muted':'#1880a8' ,'--header-top':'#c0eeff','--header-mid':'#98d8f8','--header-bot':'#70c0f0','--tabs-top':'#021828','--tabs-bot':'#010e18','--bar-bg':'rgba(0,10,18,0.97)'}
-    },
-    'Outono': {
-        swatch: '#b86010',
-        vars: { '--page':'#f0dcc0','--parch':'#fff8f0','--parch-mid':'#f8e8d0','--parch-deep':'#e8c898',
-                '--parch-border':'#b86010','--gold':'#986010','--gold-light':'#c07820','--gold-pale':'#d89030',
-                '--ink':'#1a0c00','--ink-mid':'#2e1800','--ink-light':'#502800','--ink-muted':'#804010' ,'--header-top':'#ffe8c8','--header-mid':'#f8d4a0','--header-bot':'#e8b878','--tabs-top':'#2e1004','--tabs-bot':'#1e0802','--bar-bg':'rgba(20,8,2,0.97)'}
-    },
     'Strahd': {
         swatch: '#8b0000',
         vars: {
-            /* Fundo — negro de câmara mortuária com toque bordô */
-            '--page':         '#0d0508',
-            /* Cards — bordô profundo escuro */
-            '--parch':        '#1a0810',
-            /* Inputs — um tom acima, mais vinho */
-            '--parch-mid':    '#261018',
+            /* Fundo — negro absoluto com toque bordô-carmesim */
+            '--page':         '#080305',
+            /* Cards — negro profundo, quase black */
+            '--parch':        '#140610',
+            /* Inputs — um tom vinho-escuro */
+            '--parch-mid':    '#200c18',
             /* Hover / seleções */
-            '--parch-deep':   '#381520',
-            /* Bordas — vermelho sangue envelhecido */
-            '--parch-border': '#8b1a28',
-            /* Acento principal — vermelho carmesim */
-            '--gold':         '#c8203a',
+            '--parch-deep':   '#301020',
+            /* Bordas — vermelho sangue coagulado */
+            '--parch-border': '#7a1520',
+            /* Acento principal — carmesim rico */
+            '--gold':         '#c82040',
             '--gold-light':   '#e0304e',
             '--gold-pale':    '#f07080',
-            /* Texto — branco envelhecido levemente rosado */
-            '--ink':          '#f0e0e4',
-            '--ink-mid':      '#d4b8be',
-            '--ink-light':    '#b09098',
-            '--ink-muted':    '#705860',
-            /* Header — camadas negras com véu vermelho */
-            '--header-top':   '#220810',
-            '--header-mid':   '#180608',
-            '--header-bot':   '#0d0508',
-            /* Barra de abas — quase negro */
-            '--tabs-top':     '#080204',
-            '--tabs-bot':     '#040102',
+            /* Texto — branco envelhecido, levemente rosado */
+            '--ink':          '#f0dce0',
+            '--ink-mid':      '#d4b0b8',
+            '--ink-light':    '#a07880',
+            '--ink-muted':    '#604850',
+            /* Header — camadas negras com véu carmesim */
+            '--header-top':   '#1e0810',
+            '--header-mid':   '#140508',
+            '--header-bot':   '#080305',
+            /* Barra de abas — quase negro total */
+            '--tabs-top':     '#060102',
+            '--tabs-bot':     '#030001',
             /* Barra inferior */
-            '--bar-bg':       'rgba(4,1,2,0.97)'
+            '--bar-bg':       'rgba(4,1,3,0.97)',
+            /* Texto das abas */
+            '--tabs-txt-off':   'rgba(190,110,130,0.45)',
+            '--tabs-txt-hover': 'rgba(230,160,175,0.75)',
         }
     },
     'Noturno': {
-        swatch: '#d4af37',
+        swatch: '#3a4a5a',
         vars: {
-            /* Fundo da página — cinza muito escuro com leve tom azulado */
-            '--page':         '#0f1117',
-            /* Cards — dark com leve calor */
-            '--parch':        '#1a1d26',
-            /* Inputs, campos — um tom mais claro */
-            '--parch-mid':    '#252836',
+            /* Fundo — cinza carvão escuro, quase neutro */
+            '--page':         '#0e1014',
+            /* Cards — cinza grafite profundo */
+            '--parch':        '#161a20',
+            /* Inputs — cinza ardósia */
+            '--parch-mid':    '#1e242c',
             /* Hover / seleções */
-            '--parch-deep':   '#303448',
-            /* Bordas — dourado escuro luminoso */
-            '--parch-border': '#b8922a',
-            /* Dourado principal — mais brilhante para contraste */
-            '--gold':         '#d4af37',
-            '--gold-light':   '#e8c94a',
-            '--gold-pale':    '#f5e08a',
-            /* Texto — quase branco levemente quente */
-            '--ink':          '#f0ead8',
-            '--ink-mid':      '#d8ccb0',
-            '--ink-light':    '#b8a880',
-            '--ink-muted':    '#7a6a4a',
-            /* Header — camadas escuras com tom noturno */
-            '--header-top':   '#1e2130',
-            '--header-mid':   '#161922',
-            '--header-bot':   '#0f1117',
-            /* Barra de abas */
-            '--tabs-top':     '#0a0c12',
-            '--tabs-bot':     '#060709',
+            '--parch-deep':   '#262e38',
+            /* Bordas — cinza-azulado médio */
+            '--parch-border': '#3a4a5c',
+            /* Acento — azul-aço frio, legível e neutro */
+            '--gold':         '#5b8db8',
+            '--gold-light':   '#7aaed4',
+            '--gold-pale':    '#a8cce8',
+            /* Texto — branco frio ligeiramente acinzentado */
+            '--ink':          '#dce4ee',
+            '--ink-mid':      '#9aaabb',
+            '--ink-light':    '#607080',
+            '--ink-muted':    '#3a4858',
+            /* Header — camadas carvão com véu cinza-azulado */
+            '--header-top':   '#141820',
+            '--header-mid':   '#0e1218',
+            '--header-bot':   '#0a0d12',
+            /* Barra de abas — quase negro neutro */
+            '--tabs-top':     '#0a0c10',
+            '--tabs-bot':     '#08090e',
             /* Barra inferior */
-            '--bar-bg':       'rgba(6,7,9,0.97)'
+            '--bar-bg':       'rgba(10,12,18,0.97)',
+            /* Texto das abas */
+            '--tabs-txt-off':   'rgba(90,130,170,0.45)',
+            '--tabs-txt-hover': 'rgba(140,180,220,0.75)',
         }
     },
 }
@@ -1544,9 +1507,9 @@ function toggleImportArea() {
 }
 
 function resetarTema() {
-    aplicarTema('Pergaminho')
+    aplicarTema('Strahd')
     ls.del('tema-custom')
-    mostrarFeedback('Tema resetado para Pergaminho.')
+    mostrarFeedback('Tema resetado para Strahd.')
 }
 
 function mostrarFeedback(msg) {
@@ -1605,11 +1568,11 @@ function inicializarTemas() {
         try {
             aplicarVars(JSON.parse(custom))
             sincronizarPickers()
-        } catch(e) { aplicarTema('Pergaminho') }
+        } catch(e) { aplicarTema('Strahd') }
     } else if (preset && TEMAS[preset]) {
         aplicarTema(preset)
     } else {
-        sincronizarPickers() // usa valores padrão do CSS
+        aplicarTema('Strahd') // padrão da campanha
     }
 
     // Fecha painel clicando fora
@@ -1874,13 +1837,13 @@ function descanso(tipo) {
         const dadoRest  = document.getElementById('dado-vida-rest')
         if (dadoTotal && dadoRest) dadoRest.value = dadoTotal.value
 
-        // Restaura características com recarga dc ou dl
-        document.querySelectorAll('.caract-row').forEach(row => {
-            const recarga = row.querySelector('.caract-recarga')?.value || ''
-            if (recarga === 'dc' || recarga === 'dl') {
-                const rest  = row.querySelector('.caract-rest')
-                const total = row.querySelector('.caract-total')
-                if (rest && total) rest.value = total.value
+        // Restaura habilidades com recarga "Descanso Curto"
+        document.querySelectorAll('#habilidades-lista .exp-card').forEach(card => {
+            const recarga = card.querySelector('.exp-body select')?.value || ''
+            if (recarga === 'Descanso Curto') {
+                const usadas = card.querySelectorAll('.exp-body input[type=number]')[1]
+                if (usadas) usadas.value = 0
+                atualizarCargasBadge(card.id)
             }
         })
 
@@ -1911,11 +1874,14 @@ function descanso(tipo) {
         renderSpellSlotsUsados()
         descansarLongoSP()
 
-        // Restaura todos os recursos
-        document.querySelectorAll('.caract-row').forEach(row => {
-            const rest  = row.querySelector('.caract-rest')
-            const total = row.querySelector('.caract-total')
-            if (rest && total) rest.value = total.value
+        // Restaura todas as habilidades com carga (Descanso Curto, Longo ou Ao Amanhecer)
+        document.querySelectorAll('#habilidades-lista .exp-card').forEach(card => {
+            const recarga = card.querySelector('.exp-body select')?.value || ''
+            if (recarga === 'Descanso Curto' || recarga === 'Descanso Longo' || recarga === 'Ao Amanhecer') {
+                const usadas = card.querySelectorAll('.exp-body input[type=number]')[1]
+                if (usadas) usadas.value = 0
+                atualizarCargasBadge(card.id)
+            }
         })
 
         mostrarStatusSalvo('☀ Descanso Longo realizado!')
@@ -3046,8 +3012,8 @@ window.salvar = function() {
 ;(function patchAplicarTemaDark() {
 
     const DARK_TEMAS = {
-        'Noturno': 'tema-noturno',
         'Strahd':  'tema-strahd',
+        'Noturno': 'tema-noturno',
     }
 
     const _orig = window.aplicarTema
@@ -3074,8 +3040,8 @@ window.salvar = function() {
             if (!preset) {
                 const page = getComputedStyle(document.documentElement)
                     .getPropertyValue('--page').trim().toLowerCase()
-                if (page === '#0f1117') document.body.classList.add('tema-noturno')
-                if (page === '#0d0508') document.body.classList.add('tema-strahd')
+                if (page === '#0e1014') document.body.classList.add('tema-noturno')
+                if (page === '#080305') document.body.classList.add('tema-strahd')
             }
         }, 100)
     }

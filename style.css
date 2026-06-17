@@ -4,38 +4,48 @@
 
 /* ── 1. VARIÁVEIS ── */
 :root {
-    /* ── Pergaminho Solar — paleta totalmente clara ── */
-    --parch: #fefaf0;
-    /* cards: branco-creme luminoso */
-    --parch-mid: #f5e8c8;
-    /* inputs, linhas alternas: creme dourado */
-    --parch-deep: #e8cc80;
-    /* hover, abas ativas: âmbar suave */
-    --parch-border: #c8901a;
-    /* bordas: cobre-dourado rico */
+    /* ── Tema Strahd — padrão da campanha ── */
+    --page:         #080305;
+    /* Fundo — negro absoluto com toque bordô-carmesim */
+    --parch:        #140610;
+    /* Cards — negro profundo */
+    --parch-mid:    #200c18;
+    /* Inputs — tom vinho-escuro */
+    --parch-deep:   #301020;
+    /* Hover / seleções */
+    --parch-border: #7a1520;
+    /* Bordas — vermelho sangue coagulado */
 
-    /* Tinta — alta legibilidade sobre fundo claro */
-    --ink: #1a0c00;
-    /* texto principal: quase-preto quente */
-    --ink-mid: #2e1400;
-    /* texto secundário */
-    --ink-light: #5c3010;
-    /* labels, legendas — era muito claro, corrigido */
-    --ink-muted: #9a6828;
+    /* Acento carmesim */
+    --gold:         #c82040;
+    --gold-light:   #e0304e;
+    --gold-pale:    #f07080;
+
+    /* Tinta — texto claro sobre fundo escuro */
+    --ink:          #f0dce0;
+    /* texto principal: branco envelhecido rosado */
+    --ink-mid:      #d4b0b8;
+    --ink-light:    #a07880;
+    --ink-muted:    #604850;
     /* placeholders, detalhes sutis */
 
-    /* Dourado */
-    --gold: #a86400;
-    /* dourado escuro: legível sobre claro */
-    --gold-light: #c87e10;
-    --gold-pale: #e8b830;
+    /* Header */
+    --header-top:   #1e0810;
+    --header-mid:   #140508;
+    --header-bot:   #080305;
+
+    /* Abas */
+    --tabs-top:     #060102;
+    --tabs-bot:     #030001;
+    --tabs-txt-off:   rgba(190,110,130,0.45);
+    --tabs-txt-hover: rgba(230,160,175,0.75);
+
+    /* Barra inferior */
+    --bar-bg:       rgba(4,1,3,0.97);
 
     /* Status */
-    --red: #881010;
-    --green: #185818;
-
-    /* Fundo da página — claro, cor de pergaminho envelhecido */
-    --page: #e8d8b0;
+    --red: #c82040;
+    --green: #1a8a4a;
 
     /* Atributos — cores com contraste reforçado */
     --for-color: #a82418;
@@ -3366,7 +3376,6 @@ body {
   position: sticky;
   top: 52px;
   background: var(--parch);
-  background: rgba(254,250,240,0.97);
   border-bottom: 2px solid var(--gold);
   display: flex;
   align-items: center;
@@ -4182,7 +4191,7 @@ html { font-size: 17px; }
 /* ═══════════════════════════════════════════════════════════
    TEMA NOTURNO — ajustes que vão além das variáveis CSS
    Ativado quando o tema "Noturno" é aplicado via JS
-   (detectado pela cor de --page próxima a #0f1117)
+   (mapeado em DARK_TEMAS; fallback detecta --page = #0e1014)
 ═══════════════════════════════════════════════════════════ */
 
 /* Classe auxiliar adicionada pelo JS ao ativar o tema Noturno */
@@ -4704,4 +4713,1017 @@ body.tema-strahd .recurso-desc {
 /* Attr cards */
 body.tema-strahd .attr-card {
     background: var(--parch) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   STRAHD REWORK — Identidade Visual Refinada
+   ── Carregado APÓS style.css: sobrescreve com especificidade
+   ── Objetivo: gótico cinematográfico, hierarquia clara,
+      menos borders, mais profundidade e sombra.
+════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. VARIÁVEIS GLOBAIS REFINADAS (base Pergaminho — herança)
+   ── Usadas em todos os temas; temas dark sobrescrevem
+────────────────────────────────────────────────────────────── */
+:root {
+  /* Sombras premium — substituem as flats */
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.10);
+  --shadow-md:  0 6px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
+  --shadow-lg:  0 16px 56px rgba(0,0,0,0.30), 0 4px 12px rgba(0,0,0,0.15);
+
+  /* Raios ligeiramente aumentados para sensação premium */
+  --radius:    12px;
+  --radius-sm:  8px;
+
+  /* Easing cinematográfico */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. TEMA STRAHD — Variáveis Sobrescritas (via script.js já faz
+      isso com TEMAS['Strahd'], aqui reforçamos body.tema-strahd)
+   Paleta refinada: menos roxo-abordo, mais carmesim e névoa
+────────────────────────────────────────────────────────────── */
+
+/* Quando o tema Strahd está ativo, aplicamos variáveis extras */
+body.tema-strahd {
+  /* Paleta de fundo com mais profundidade — camadas visíveis */
+  --shadow-sm:  0 2px 16px rgba(0,0,0,0.55), 0 1px 4px rgba(180,20,40,0.12);
+  --shadow-md:  0 6px 36px rgba(0,0,0,0.65), 0 2px 8px rgba(180,20,40,0.18);
+  --shadow-lg:  0 16px 72px rgba(0,0,0,0.75), 0 4px 16px rgba(180,20,40,0.22);
+
+  /* Glow vermelho para elementos em destaque */
+  --glow-blood: 0 0 18px rgba(200,30,50,0.35), 0 0 40px rgba(180,20,40,0.15);
+  --glow-gold:  0 0 12px rgba(200,140,40,0.30), 0 0 28px rgba(180,120,20,0.12);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3. CORPO / PÁGINA
+   ── Névoa de Barovia mais imersiva no tema escuro
+────────────────────────────────────────────────────────────── */
+body.tema-strahd {
+  background-image:
+    /* Névoa de topo: vinheta carmesim */
+    radial-gradient(ellipse 80% 35% at 50% 0%,   rgba(140,15,30,0.22) 0%, transparent 70%),
+    /* Canto inferior esquerdo: sombra violeta-bordô */
+    radial-gradient(ellipse 45% 50% at 0% 100%,   rgba(80,5,20,0.28) 0%, transparent 65%),
+    /* Canto inferior direito: espelho */
+    radial-gradient(ellipse 45% 50% at 100% 100%, rgba(80,5,20,0.28) 0%, transparent 65%),
+    /* Textura sutil de ruído — grimório envelhecido */
+    url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. HEADER CINEMATOGRÁFICO
+   ── Linha superior com gradiente dourado → vermelho
+   ── Sombra dramática para separar do conteúdo
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #header {
+  background: linear-gradient(
+    180deg,
+    #2a0a14 0%,
+    #1c0610 40%,
+    #120408 80%,
+    #0d0508 100%
+  ) !important;
+  border-bottom: 1px solid rgba(180,30,50,0.4) !important;
+  box-shadow:
+    0 4px 40px rgba(0,0,0,0.7),
+    0 1px 0 rgba(180,30,50,0.2),
+    inset 0 -1px 0 rgba(200,60,80,0.08) !important;
+}
+
+/* Faixa superior ornamental mais visível */
+body.tema-strahd #header::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(160,20,40,0.5) 15%,
+    rgba(200,140,40,0.6) 40%,
+    rgba(240,100,120,0.7) 50%,
+    rgba(200,140,40,0.6) 60%,
+    rgba(160,20,40,0.5) 85%,
+    transparent 100%
+  ) !important;
+  height: 2px !important;
+}
+
+/* Linhas de fundo do header: veias de névoa */
+body.tema-strahd #header::before {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(180,30,50,0.04) 80px,
+      rgba(180,30,50,0.04) 81px
+    ) !important;
+}
+
+/* Nome do personagem: texto que brilha levemente */
+body.tema-strahd #nome-personagem {
+  color: #f0dce0 !important;
+  text-shadow:
+    0 0 40px rgba(200,60,80,0.25),
+    0 2px 8px rgba(0,0,0,0.8) !important;
+  letter-spacing: 6px !important;
+}
+
+body.tema-strahd #nome-personagem:focus {
+  text-shadow:
+    0 0 60px rgba(200,60,80,0.4),
+    0 0 20px rgba(200,60,80,0.2),
+    0 2px 8px rgba(0,0,0,0.9) !important;
+}
+
+/* Subtítulo PERSONAGEM */
+body.tema-strahd #header-sub {
+  color: rgba(200,140,160,0.45) !important;
+  letter-spacing: 8px !important;
+  opacity: 1 !important;
+}
+
+/* Ornamentos laterais */
+body.tema-strahd #header-ornament-left,
+body.tema-strahd #header-ornament-right {
+  color: rgba(180,40,60,0.5) !important;
+  text-shadow: 0 0 12px rgba(200,30,50,0.3) !important;
+  opacity: 1 !important;
+}
+
+/* Barra de campos do header */
+body.tema-strahd #header-fields {
+  background: rgba(180,20,40,0.06) !important;
+  border-top-color: rgba(180,30,50,0.2) !important;
+}
+
+body.tema-strahd .hfield {
+  border-right-color: rgba(180,30,50,0.15) !important;
+}
+
+body.tema-strahd .hfield:hover {
+  background: rgba(180,20,40,0.10) !important;
+}
+
+body.tema-strahd .hfield label {
+  color: rgba(200,140,160,0.65) !important;
+}
+
+body.tema-strahd .hfield input {
+  color: #f0dce0 !important;
+  border-bottom-color: rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd .hfield input:focus {
+  border-bottom-color: rgba(200,80,100,0.6) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   5. BARRA DE ABAS — Grimório Lateral
+   ── Menos borda inferior, mais blur e sombra
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #tabs {
+  background: linear-gradient(
+    180deg,
+    #0a0204 0%,
+    #060102 100%
+  ) !important;
+  border-bottom: 1px solid rgba(180,30,50,0.3) !important;
+  box-shadow:
+    0 4px 32px rgba(0,0,0,0.7),
+    0 1px 0 rgba(180,30,50,0.15) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body.tema-strahd .tab-btn {
+  color: rgba(200,140,160,0.45) !important;
+  border-bottom: 2px solid transparent !important;
+  transition:
+    color var(--ease-out) 0.2s,
+    border-color var(--ease-out) 0.2s,
+    background var(--ease-out) 0.2s !important;
+}
+
+body.tema-strahd .tab-btn:hover {
+  color: rgba(240,180,190,0.75) !important;
+  background: rgba(180,20,40,0.08) !important;
+}
+
+body.tema-strahd .tab-btn.active {
+  color: #f07080 !important;
+  border-bottom-color: #c82040 !important;
+  background: rgba(180,20,40,0.12) !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 20px rgba(200,40,60,0.4) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. CARDS E PAINÉIS — Hierarquia via Sombra, não Border
+   ── Redução drástica de borders; profundidade via shadow
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .panel {
+  background: linear-gradient(
+    145deg,
+    rgba(30,8,16,0.95) 0%,
+    rgba(22,5,12,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  border-radius: var(--radius) !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.55),
+    0 1px 0 rgba(200,60,80,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+  transition:
+    box-shadow var(--ease-out) 0.25s,
+    border-color var(--ease-out) 0.25s !important;
+}
+
+body.tema-strahd .panel:hover {
+  border-color: rgba(180,30,50,0.22) !important;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.65),
+    0 1px 0 rgba(200,60,80,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. CARDS DE ATRIBUTOS — Gemas do Grimório
+   ── Cada atributo com sua gema e brilho único
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .attr-card {
+  background: linear-gradient(
+    160deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+  transition:
+    transform var(--ease-out) 0.2s,
+    box-shadow var(--ease-out) 0.2s,
+    border-color var(--ease-out) 0.2s !important;
+}
+
+body.tema-strahd .attr-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(200,40,60,0.3) !important;
+  box-shadow:
+    0 10px 36px rgba(0,0,0,0.65),
+    0 0 0 1px rgba(200,40,60,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+/* Faixas coloridas por atributo — mais vívidas no dark */
+body.tema-strahd .attr-for::before { background: linear-gradient(90deg, #b02020, #e04040) !important; box-shadow: 0 0 8px rgba(200,40,40,0.5); }
+body.tema-strahd .attr-des::before { background: linear-gradient(90deg, #1a7840, #28aa58) !important; box-shadow: 0 0 8px rgba(40,170,80,0.4); }
+body.tema-strahd .attr-con::before { background: linear-gradient(90deg, #a06010, #d08020) !important; box-shadow: 0 0 8px rgba(200,130,20,0.4); }
+body.tema-strahd .attr-int::before { background: linear-gradient(90deg, #1860a0, #2888d0) !important; box-shadow: 0 0 8px rgba(40,130,210,0.4); }
+body.tema-strahd .attr-sab::before { background: linear-gradient(90deg, #702890, #9840c0) !important; box-shadow: 0 0 8px rgba(150,60,190,0.4); }
+body.tema-strahd .attr-car::before { background: linear-gradient(90deg, #b8860b, #d4af37) !important; box-shadow: 0 0 8px rgba(200,160,30,0.4); }
+
+/* Labels e valores dos atributos */
+body.tema-strahd .attr-card label {
+  color: rgba(200,140,160,0.6) !important;
+}
+
+body.tema-strahd .attr-card input[type="number"] {
+  color: #f0dce0 !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+}
+
+/* Modificadores com cor do atributo mais vibrante */
+body.tema-strahd .attr-for .attr-mod { color: #e04040 !important; text-shadow: 0 0 12px rgba(220,60,60,0.5) !important; }
+body.tema-strahd .attr-des .attr-mod { color: #28aa58 !important; text-shadow: 0 0 12px rgba(40,170,80,0.4) !important; }
+body.tema-strahd .attr-con .attr-mod { color: #d08020 !important; text-shadow: 0 0 12px rgba(200,130,20,0.4) !important; }
+body.tema-strahd .attr-int .attr-mod { color: #2888d0 !important; text-shadow: 0 0 12px rgba(40,130,210,0.4) !important; }
+body.tema-strahd .attr-sab .attr-mod { color: #9840c0 !important; text-shadow: 0 0 12px rgba(150,60,190,0.4) !important; }
+body.tema-strahd .attr-car .attr-mod { color: #d4af37 !important; text-shadow: 0 0 12px rgba(200,160,30,0.4) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   8. TÍTULOS DE SEÇÃO — Linha e Brilho Gótico
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .section-title {
+  color: rgba(240,180,190,0.9) !important;
+  letter-spacing: 3px !important;
+}
+
+body.tema-strahd .section-title::before {
+  background: linear-gradient(180deg, #c82040, #8b1020) !important;
+  box-shadow: 0 0 8px rgba(200,30,60,0.6) !important;
+}
+
+body.tema-strahd .section-title::after {
+  background: linear-gradient(
+    to right,
+    rgba(180,30,50,0.4),
+    transparent
+  ) !important;
+  opacity: 1 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   9. SAVES E PERÍCIAS — Pontos de Sangue
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #saves-list {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .save-row {
+  border-bottom-color: rgba(180,30,50,0.08) !important;
+}
+
+body.tema-strahd .save-row:hover {
+  background: rgba(180,20,40,0.10) !important;
+}
+
+body.tema-strahd .save-dot {
+  border-color: rgba(180,80,100,0.4) !important;
+}
+
+body.tema-strahd .save-dot.on {
+  background: #c82040 !important;
+  border-color: #e03050 !important;
+  box-shadow: 0 0 8px rgba(200,30,60,0.6) !important;
+}
+
+body.tema-strahd .save-bonus {
+  color: #c82040 !important;
+  text-shadow: 0 0 8px rgba(200,30,60,0.4) !important;
+}
+
+/* Perícias */
+body.tema-strahd .pericias-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .skill-row {
+  border-bottom-color: rgba(180,30,50,0.07) !important;
+}
+
+body.tema-strahd .skill-row:hover {
+  background: rgba(180,20,40,0.10) !important;
+}
+
+body.tema-strahd .skill-check {
+  accent-color: #c82040 !important;
+}
+
+body.tema-strahd .skill-val {
+  color: #c82040 !important;
+  text-shadow: 0 0 8px rgba(200,30,60,0.35) !important;
+}
+
+/* Tags coloridas de atributo nas perícias — mais vibrantes */
+body.tema-strahd .skill-attr.attr-for { color: #e04040 !important; border-color: rgba(224,64,64,0.3) !important; background: rgba(200,40,40,0.10) !important; }
+body.tema-strahd .skill-attr.attr-des { color: #28aa58 !important; border-color: rgba(40,170,80,0.3) !important; background: rgba(40,170,80,0.10) !important; }
+body.tema-strahd .skill-attr.attr-con { color: #d08020 !important; border-color: rgba(200,130,20,0.3) !important; background: rgba(200,130,20,0.10) !important; }
+body.tema-strahd .skill-attr.attr-int { color: #2888d0 !important; border-color: rgba(40,130,210,0.3) !important; background: rgba(40,130,210,0.10) !important; }
+body.tema-strahd .skill-attr.attr-sab { color: #9840c0 !important; border-color: rgba(150,60,190,0.3) !important; background: rgba(150,60,190,0.10) !important; }
+body.tema-strahd .skill-attr.attr-car { color: #d4af37 !important; border-color: rgba(200,160,30,0.3) !important; background: rgba(200,160,30,0.10) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   10. COMBATE — CA, PV e Stats Principais
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .big-num {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .big-num:hover {
+  border-color: rgba(200,40,60,0.28) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+body.tema-strahd .big-num label {
+  color: rgba(200,130,150,0.6) !important;
+}
+
+body.tema-strahd .big-num input {
+  color: #f0dce0 !important;
+  border-bottom-color: rgba(180,40,60,0.2) !important;
+}
+
+body.tema-strahd .big-num input:focus {
+  border-bottom-color: rgba(200,50,70,0.6) !important;
+}
+
+/* CA em destaque máximo */
+body.tema-strahd #ca-total {
+  color: #f07080 !important;
+  text-shadow: 0 0 20px rgba(200,50,80,0.5), 0 0 40px rgba(180,30,60,0.2) !important;
+}
+
+/* Barra de vida */
+body.tema-strahd .pv-bar-wrap {
+  background: rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(180,30,50,0.15) !important;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .pv-bar.pv-high {
+  background: linear-gradient(90deg, #0d3d14, #145a1e, #1c7a28) !important;
+  box-shadow: 0 0 12px rgba(20,90,30,0.4) !important;
+}
+
+body.tema-strahd .pv-bar.pv-medium {
+  background: linear-gradient(90deg, #4a2a00, #7a4a00, #a86000) !important;
+  box-shadow: 0 0 12px rgba(160,90,0,0.4) !important;
+}
+
+body.tema-strahd .pv-bar.pv-critical {
+  background: linear-gradient(90deg, #3d0808, #6b0f0f, #a81818) !important;
+  box-shadow: 0 0 16px rgba(180,20,20,0.6) !important;
+}
+
+body.tema-strahd .pv-bar-text {
+  color: rgba(255,255,255,0.92) !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9) !important;
+  font-weight: 700 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   11. PROFICIÊNCIA E INSPIRAÇÃO
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .prof-card {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .prof-card input {
+  color: #f07080 !important;
+  text-shadow: 0 0 12px rgba(200,50,80,0.4) !important;
+}
+
+body.tema-strahd .insp-card {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 2px solid rgba(180,30,50,0.18) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+  transition: all var(--ease-out) 0.22s !important;
+}
+
+body.tema-strahd .insp-card:hover {
+  border-color: rgba(200,50,70,0.45) !important;
+  background: rgba(180,20,40,0.15) !important;
+}
+
+body.tema-strahd .insp-card.on {
+  background: linear-gradient(
+    135deg,
+    rgba(160,20,40,0.8),
+    rgba(100,10,25,0.9)
+  ) !important;
+  border-color: #c82040 !important;
+  box-shadow: 0 0 0 2px rgba(200,30,60,0.2), var(--glow-blood) !important;
+  animation: insp-strahd-pulse 2.5s ease-in-out infinite !important;
+}
+
+@keyframes insp-strahd-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(200,30,60,0.2), 0 0 20px rgba(200,30,50,0.35); }
+  50%       { box-shadow: 0 0 0 3px rgba(200,30,60,0.4), 0 0 36px rgba(200,30,50,0.55); }
+}
+
+body.tema-strahd .insp-card.on .insp-icon {
+  color: #f07080 !important;
+  filter: drop-shadow(0 0 6px rgba(240,80,100,0.7)) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   12. ARMADURA
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .armadura-box {
+  background: linear-gradient(
+    145deg,
+    rgba(28,8,14,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .arm-input-text,
+body.tema-strahd .arm-input-num,
+body.tema-strahd .arm-select {
+  background: rgba(180,20,40,0.08) !important;
+  border-color: rgba(180,40,60,0.25) !important;
+  color: #f0dce0 !important;
+}
+
+body.tema-strahd .arm-input-text:focus,
+body.tema-strahd .arm-input-num:focus,
+body.tema-strahd .arm-select:focus {
+  border-color: rgba(200,50,70,0.55) !important;
+  box-shadow: 0 0 0 2px rgba(200,40,60,0.15) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   13. TABELA DE ATAQUES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .attacks-table thead tr,
+body.tema-strahd .mun-table thead tr {
+  background: rgba(12,3,6,0.95) !important;
+  border-bottom: 1px solid rgba(180,30,50,0.3) !important;
+}
+
+body.tema-strahd .attacks-table th,
+body.tema-strahd .mun-table th {
+  color: rgba(200,120,140,0.75) !important;
+  letter-spacing: 2px !important;
+}
+
+body.tema-strahd .attacks-table tbody tr,
+body.tema-strahd .mun-table tbody tr {
+  background: rgba(20,6,12,0.6) !important;
+  border-bottom-color: rgba(180,30,50,0.07) !important;
+}
+
+body.tema-strahd .attacks-table tbody tr:nth-child(even),
+body.tema-strahd .mun-table tbody tr:nth-child(even) {
+  background: rgba(26,8,16,0.8) !important;
+}
+
+body.tema-strahd .attacks-table tbody tr:hover,
+body.tema-strahd .mun-table tbody tr:hover {
+  background: rgba(180,20,40,0.14) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   14. CARDS EXPANSÍVEIS (Habilidades, Magias)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .exp-card {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  box-shadow:
+    0 3px 16px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.015) !important;
+  transition:
+    box-shadow var(--ease-out) 0.22s,
+    border-color var(--ease-out) 0.22s !important;
+}
+
+body.tema-strahd .exp-card:hover {
+  border-color: rgba(180,30,50,0.22) !important;
+  box-shadow:
+    0 6px 28px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .exp-header {
+  background: rgba(180,20,40,0.06) !important;
+}
+
+body.tema-strahd .exp-header:hover {
+  background: rgba(180,20,40,0.14) !important;
+}
+
+body.tema-strahd .exp-body {
+  background: rgba(14,4,8,0.5) !important;
+  border-top-color: rgba(180,30,50,0.12) !important;
+}
+
+body.tema-strahd .exp-title-input {
+  color: #f0d0d8 !important;
+}
+
+/* Badge de nível de magia */
+body.tema-strahd .spell-level-badge {
+  background: linear-gradient(135deg, #6a0f1e, #8b1a28) !important;
+  color: rgba(240,180,190,0.9) !important;
+  border: 1px solid rgba(180,40,60,0.3) !important;
+}
+
+/* Slots de magia */
+body.tema-strahd .slot-pill {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.18) !important;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .slot-pill:hover {
+  border-color: rgba(200,40,60,0.38) !important;
+  box-shadow: 0 0 0 1px rgba(200,40,60,0.1), 0 4px 20px rgba(0,0,0,0.6) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   15. INPUTS, TEXTAREAS, SELECTS — Tema Global Strahd
+────────────────────────────────────────────────────────────── */
+body.tema-strahd input:not([type="checkbox"]):not([type="radio"]),
+body.tema-strahd textarea,
+body.tema-strahd select {
+  background: rgba(180,20,40,0.06) !important;
+  border-color: rgba(180,40,60,0.22) !important;
+  color: #f0dce0 !important;
+  transition:
+    border-color var(--ease-out) 0.2s,
+    box-shadow var(--ease-out) 0.2s !important;
+}
+
+body.tema-strahd input:focus,
+body.tema-strahd textarea:focus,
+body.tema-strahd select:focus {
+  border-color: rgba(200,50,70,0.55) !important;
+  box-shadow: 0 0 0 3px rgba(200,40,60,0.10) !important;
+  outline: none !important;
+}
+
+body.tema-strahd input::placeholder,
+body.tema-strahd textarea::placeholder {
+  color: rgba(180,100,120,0.35) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   16. BOTÕES DE AÇÃO
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .btn-add {
+  border-color: rgba(180,30,50,0.3) !important;
+  color: rgba(200,120,140,0.8) !important;
+  background: transparent !important;
+}
+
+body.tema-strahd .btn-add:hover {
+  border-color: rgba(200,50,70,0.55) !important;
+  color: #f07080 !important;
+  background: rgba(180,20,40,0.10) !important;
+  box-shadow: 0 0 12px rgba(200,30,60,0.2) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   17. TESTES CONTRA A MORTE
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .dcircle {
+  background: rgba(14,4,8,0.7) !important;
+  border-color: rgba(180,50,70,0.3) !important;
+}
+
+body.tema-strahd .dcircle.suc.on {
+  background: #145a1e !important;
+  border-color: #1c7a28 !important;
+  box-shadow: 0 0 8px rgba(28,120,40,0.5) !important;
+}
+
+body.tema-strahd .dcircle.fail.on {
+  background: #6b0f0f !important;
+  border-color: #a81818 !important;
+  box-shadow: 0 0 8px rgba(180,20,20,0.6) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   18. MOEDAS E INVENTÁRIO
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .moeda-box {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .moeda-box:hover {
+  border-color: rgba(200,40,60,0.3) !important;
+}
+
+body.tema-strahd .moeda-box label {
+  color: rgba(200,100,120,0.7) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   19. TAGS (Línguas, Talentos, Proficiências)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .prof-tag {
+  background: rgba(180,20,40,0.10) !important;
+  border-color: rgba(180,40,60,0.28) !important;
+  color: rgba(240,180,190,0.85) !important;
+  transition: all var(--ease-out) 0.18s !important;
+}
+
+body.tema-strahd .prof-tag:hover {
+  border-color: rgba(200,50,70,0.5) !important;
+  background: rgba(180,20,40,0.18) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   20. CONDIÇÕES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .cond-btn {
+  background: rgba(20,6,12,0.7) !important;
+  border-color: rgba(180,40,60,0.2) !important;
+  color: rgba(200,130,150,0.7) !important;
+  transition: all var(--ease-out) 0.18s !important;
+}
+
+body.tema-strahd .cond-btn:hover {
+  background: rgba(180,20,40,0.14) !important;
+  border-color: rgba(200,50,70,0.42) !important;
+  color: #f07080 !important;
+}
+
+body.tema-strahd .cond-btn.ativa {
+  background: rgba(160,20,40,0.3) !important;
+  border-color: #c82040 !important;
+  color: #f07080 !important;
+  box-shadow: 0 0 10px rgba(200,30,60,0.3) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   21. BARRA INFERIOR (Quick Stats / Bottom Bar)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #quick-stats {
+  background: rgba(6,1,4,0.95) !important;
+  border-top: 1px solid rgba(180,30,50,0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.6) !important;
+}
+
+body.tema-strahd .qs-label {
+  color: rgba(180,100,120,0.55) !important;
+}
+
+body.tema-strahd .qs-val {
+  color: #f0dce0 !important;
+}
+
+body.tema-strahd .qs-sep {
+  background: rgba(180,30,50,0.25) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   22. PAINEL DE DADOS E TEMA (Flutuantes)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #dados-panel,
+body.tema-strahd #tema-panel {
+  background: linear-gradient(
+    160deg,
+    rgba(26,8,16,0.98) 0%,
+    rgba(14,4,8,0.99) 100%
+  ) !important;
+  border: 1px solid rgba(180,40,60,0.25) !important;
+  box-shadow:
+    0 16px 64px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(180,30,50,0.1) !important;
+}
+
+/* Botões de dado */
+body.tema-strahd .dado-btn {
+  background: rgba(180,20,40,0.12) !important;
+  border-color: rgba(180,40,60,0.3) !important;
+  color: rgba(240,160,175,0.8) !important;
+  transition: all var(--ease-out) 0.18s !important;
+}
+
+body.tema-strahd .dado-btn:hover,
+body.tema-strahd .dado-btn.ativo {
+  background: rgba(180,20,40,0.28) !important;
+  border-color: rgba(200,50,70,0.55) !important;
+  color: #f07080 !important;
+  box-shadow: 0 0 10px rgba(200,30,60,0.25) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   23. BOTÕES FLUTUANTES (Dados, Tema)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #btn-dados,
+body.tema-strahd #btn-tema {
+  background: linear-gradient(135deg, #8b1020, #5a0813) !important;
+  border: 1.5px solid rgba(200,40,60,0.5) !important;
+  color: rgba(240,180,190,0.9) !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(200,30,50,0.15),
+    0 0 20px rgba(180,20,40,0.3) !important;
+  transition: all var(--ease-out) 0.22s !important;
+}
+
+body.tema-strahd #btn-dados:hover,
+body.tema-strahd #btn-tema:hover {
+  background: linear-gradient(135deg, #a01828, #700a18) !important;
+  box-shadow:
+    0 6px 32px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(200,40,60,0.25),
+    0 0 36px rgba(180,20,40,0.5) !important;
+  transform: scale(1.08) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   24. TEXTAREA DE NOTAS
+────────────────────────────────────────────────────────────── */
+body.tema-strahd textarea.note {
+  background: rgba(14,4,8,0.6) !important;
+  border-color: rgba(180,40,60,0.2) !important;
+  color: rgba(240,210,218,0.9) !important;
+  line-height: 1.7 !important;
+}
+
+body.tema-strahd textarea.note:focus {
+  border-color: rgba(200,50,70,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(200,40,60,0.08) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   25. TOAST / NOTIFICAÇÕES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #toast-container .toast {
+  background: linear-gradient(135deg, rgba(40,10,20,0.97), rgba(26,6,12,0.98)) !important;
+  border: 1px solid rgba(180,40,60,0.35) !important;
+  color: rgba(240,190,200,0.9) !important;
+  box-shadow:
+    0 6px 32px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(200,30,50,0.1) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   26. SCROLLBAR PERSONALIZADA
+────────────────────────────────────────────────────────────── */
+body.tema-strahd ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+body.tema-strahd ::-webkit-scrollbar-track {
+  background: #060102;
+}
+
+body.tema-strahd ::-webkit-scrollbar-thumb {
+  background: rgba(140,20,35,0.5);
+  border-radius: 3px;
+}
+
+body.tema-strahd ::-webkit-scrollbar-thumb:hover {
+  background: rgba(200,40,60,0.7);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   27. ANIMAÇÕES GLOBAIS REFINADAS
+   ── Transições mais suaves com easing cinematográfico
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .panel,
+body.tema-strahd .attr-card,
+body.tema-strahd .exp-card,
+body.tema-strahd .big-num,
+body.tema-strahd .slot-pill,
+body.tema-strahd .moeda-box {
+  transition:
+    transform var(--ease-out) 0.22s,
+    box-shadow var(--ease-out) 0.22s,
+    border-color var(--ease-out) 0.22s !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   28. RECURSOS DE CLASSE
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .cargas-badge {
+  background: rgba(180,20,40,0.22) !important;
+  border-color: rgba(200,50,70,0.4) !important;
+  color: #f07080 !important;
+}
+
+body.tema-strahd .uso-pip {
+  border-color: rgba(180,40,60,0.4) !important;
+}
+
+body.tema-strahd .uso-pip.usado {
+  background: #c82040 !important;
+  box-shadow: 0 0 6px rgba(200,30,60,0.5) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   29. SELECT OPTIONS (abertas no navegador)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd select option {
+  background: #1a0810 !important;
+  color: #f0dce0 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   30. SEÇÕES COLAPSÁVEIS — Botão com cor Strahd
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .section-collapse-btn {
+  color: rgba(200,80,100,0.6) !important;
+}
+
+body.tema-strahd .section-collapse-btn:hover {
+  background: rgba(180,20,40,0.15) !important;
+  color: #f07080 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   31. DEATH SAVES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .death-section-title {
+  color: rgba(200,130,150,0.8) !important;
+}
+
+body.tema-strahd .death-section-title::before {
+  background: #8b0f0f !important;
+  box-shadow: 0 0 6px rgba(180,15,15,0.6) !important;
+}
+
+body.tema-strahd .death-label-suc { color: #1c7a28 !important; }
+body.tema-strahd .death-label-fail { color: #a81818 !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   32. IMAGEM DO PERSONAGEM
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #char-img-wrap {
+  background: rgba(14,4,8,0.7) !important;
+  border: 2px dashed rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd #char-img-wrap:hover {
+  border-color: rgba(200,50,70,0.55) !important;
+  box-shadow: 0 0 20px rgba(180,20,40,0.2) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   33. REFINAMENTOS TIPOGRÁFICOS NO TEMA STRAHD
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .section-title {
+  font-weight: 600 !important;
+  letter-spacing: 3px !important;
+}
+
+body.tema-strahd .skill-name,
+body.tema-strahd .save-row span {
+  color: rgba(240,210,218,0.88) !important;
+}
+
+body.tema-strahd .arm-label,
+body.tema-strahd .prof-card label,
+body.tema-strahd .insp-label {
+  color: rgba(180,100,120,0.65) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   34. INDEX.HTML — Cards de Personagem (tela inicial)
+   ── Estilo refinado para o .char-card no index
+────────────────────────────────────────────────────────────── */
+
+/* Sombra do wizard/overlay mais dramática */
+.wizard-box {
+  box-shadow:
+    0 24px 96px rgba(0,0,0,0.85),
+    0 0 0 1px rgba(200,150,10,0.10) !important;
+}
+
+.char-card {
+  transition:
+    transform var(--ease-out) 0.25s,
+    box-shadow var(--ease-out) 0.25s,
+    border-color var(--ease-out) 0.25s !important;
+}
+
+.char-card:hover {
+  box-shadow:
+    0 14px 56px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(200,150,10,0.14),
+    inset 0 1px 0 rgba(200,150,10,0.08) !important;
 }
