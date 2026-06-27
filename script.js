@@ -166,6 +166,12 @@ function sincronizarProfNivel() {
     if (el && el.dataset.manual !== 'true') {
         el.value = prof
     }
+    // Sincroniza total de dados de vida com o nível do personagem
+    const dtEl = g('dado-vida-total')
+    if (dtEl && dtEl.dataset.manual !== 'true') {
+        dtEl.value = nivel
+        sincronizarDadosVida()
+    }
 }
 
 // Quando o jogador edita a proficiência manualmente, para de recalcular pelo nível
@@ -177,6 +183,16 @@ g('iniciativa').addEventListener('input', function () {
 g('proficiencia').addEventListener('input', function () {
     this.dataset.manual = 'true'  // para de sincronizar com nível se editado manualmente
 })
+
+// Garante que total de dados de vida nunca fique abaixo de restantes
+function sincronizarDadosVida() {
+    const total = parseInt(g('dado-vida-total')?.value) || 1
+    const restEl = g('dado-vida-rest')
+    if (restEl) {
+        restEl.max = total
+        if ((parseInt(restEl.value) || 1) > total) restEl.value = total
+    }
+}
 
 /* ============================================================
    4. CÁLCULO DE CA (DEFESA)
@@ -550,6 +566,8 @@ function mostrarImagem(src) {
         wrap.appendChild(img)
     }
     img.src = src
+    // Classe CSS garante que placeholder some mesmo se JS inline for sobrescrito
+    wrap.classList.add('has-image')
     if (ph) ph.style.display = 'none'
 }
 
@@ -567,6 +585,7 @@ function setImgMode(modo) {
     // Se há imagem carregada, garante que o placeholder fica oculto
     const wrap = g('char-img-wrap')
     if (wrap && wrap.querySelector('img')) {
+        wrap.classList.add('has-image')
         const ph = g('img-placeholder')
         if (ph) ph.style.display = 'none'
     }
@@ -575,14 +594,8 @@ function setImgMode(modo) {
 }
 
 function restaurarModoImagem() {
-    const imgData   = ls.get('ficha-dnd-img')
-    const modoSalvo = ls.get('img-modo')
-    // Só usa token se há um data URL de imagem válido E o modo foi salvo como token
-    const temImagem = !!(imgData && imgData.startsWith('data:image'))
-    const modo = (temImagem && modoSalvo === 'token') ? 'token' : 'retrato'
-    // Limpa modo inválido do localStorage para não persistir
-    if (!temImagem && modoSalvo === 'token') ls.del('img-modo')
-    setImgMode(modo)
+    // Modo retrato removido — sempre usa token
+    setImgMode('token')
 }
 
 /* ============================================================
@@ -704,7 +717,9 @@ function salvar() {
         pvAtual: gV('pv-atual'),
         pvTemp: gV('pv-temp'),
         dadoVida: gV('dado-vida'),
-        dadoVida2: gV('dado-vida-2'),
+        dadoVidaTotal: gV('dado-vida-total'),
+        dadoVidaRest: gV('dado-vida-rest'),
+        deathSaves: Array.from(document.querySelectorAll('.death-check')).map(cb => cb.checked),
 
         conjHab: gV('conj-hab'),
         conjCD: gV('conj-cd'),
@@ -811,7 +826,9 @@ function carregar() {
     sV('antecedente', d.antecedente); sV('alinhamento', d.alinhamento); sV('jogador', d.jogador)
 
     // Combate
-    sV('proficiencia', d.proficiencia); sV('deslocamento', d.deslocamento)
+    // Proficiência: marca como manual se foi editada (para não sobrescrever pelo nível)
+    if (d.proficiencia) { sV('proficiencia', d.proficiencia); const pe = g('proficiencia'); if(pe) pe.dataset.manual = 'true' }
+    sV('deslocamento', d.deslocamento)
     sV('deslocamento-voo', d.deslocamentoVoo)
     sV('deslocamento-nado', d.deslocamentoNado)
     sV('deslocamento-escala', d.deslocamentoEscala)
@@ -825,7 +842,17 @@ function carregar() {
 
     // PV
     sV('pv-max', d.pvMax); sV('pv-atual', d.pvAtual); sV('pv-temp', d.pvTemp)
-    sV('dado-vida', d.dadoVida); sV('dado-vida-2', d.dadoVida2)
+    sV('dado-vida', d.dadoVida)
+    if (d.dadoVidaTotal ?? d.dadoVida2) {
+        sV('dado-vida-total', d.dadoVidaTotal ?? d.dadoVida2)
+        const dte = g('dado-vida-total'); if (dte) dte.dataset.manual = 'true'
+    }
+    sV('dado-vida-rest', d.dadoVidaRest ?? d.dadoVida2)
+    // Testes contra a morte
+    if (Array.isArray(d.deathSaves)) {
+        const dcs = document.querySelectorAll('.death-check')
+        d.deathSaves.forEach((v, i) => { if (dcs[i]) dcs[i].checked = !!v })
+    }
 
     // Magias
     sV('conj-hab', d.conjHab); sV('conj-cd', d.conjCD); sV('conj-atk', d.conjAtk)
@@ -1293,6 +1320,9 @@ window.onload = function () {
     try { inicializarTemas() }   catch(e) { console.warn('temas:', e) }
     try { inicializarDados() }   catch(e) { console.warn('dados:', e) }
     try { restaurarModoImagem() } catch(e) {}
+
+    // 6. Re-inicializa seções colapsáveis após saves/perícias renderizados
+    try { if (typeof setupColapsaveis === 'function') setupColapsaveis() } catch(e) { console.warn('collapse:', e) }
 }
 
 /* ============================================================
@@ -1333,78 +1363,232 @@ const CP_GROUPS = {
 
 const TEMAS = {
     'Strahd': {
-        swatch: '#8b0000',
+        swatch: '#c82040',
         vars: {
-            /* Fundo — negro absoluto com toque bordô-carmesim */
-            '--page':         '#080305',
-            /* Cards — negro profundo, quase black */
-            '--parch':        '#140610',
-            /* Inputs — um tom vinho-escuro */
-            '--parch-mid':    '#200c18',
-            /* Hover / seleções */
-            '--parch-deep':   '#301020',
-            /* Bordas — vermelho sangue coagulado */
-            '--parch-border': '#7a1520',
-            /* Acento principal — carmesim rico */
-            '--gold':         '#c82040',
-            '--gold-light':   '#e0304e',
-            '--gold-pale':    '#f07080',
-            /* Texto — branco envelhecido, levemente rosado */
-            '--ink':          '#f0dce0',
-            '--ink-mid':      '#d4b0b8',
-            '--ink-light':    '#a07880',
-            '--ink-muted':    '#604850',
-            /* Header — camadas negras com véu carmesim */
+            '--page':         '#06020a',
+            '--parch':        '#130918',
+            '--parch-mid':    '#1e0c18',
+            '--parch-deep':   '#2c1020',
+            '--parch-border': '#8a1825',
+            '--gold':         '#c8960a',
+            '--gold-light':   '#e0b020',
+            '--gold-pale':    '#f0d060',
+            '--ink':          '#f0e8d8',
+            '--ink-mid':      '#d4c0a8',
+            '--ink-light':    '#a08868',
+            '--ink-muted':    '#685040',
             '--header-top':   '#1e0810',
             '--header-mid':   '#140508',
             '--header-bot':   '#080305',
-            /* Barra de abas — quase negro total */
             '--tabs-top':     '#060102',
             '--tabs-bot':     '#030001',
-            /* Barra inferior */
             '--bar-bg':       'rgba(4,1,3,0.97)',
-            /* Texto das abas */
-            '--tabs-txt-off':   'rgba(190,110,130,0.45)',
-            '--tabs-txt-hover': 'rgba(230,160,175,0.75)',
+            '--tabs-txt-off':   'rgba(200,130,80,0.40)',
+            '--tabs-txt-hover': 'rgba(240,190,120,0.70)',
         }
     },
     'Noturno': {
-        swatch: '#3a4a5a',
+        swatch: '#1a0808',
         vars: {
-            /* Fundo — cinza carvão escuro, quase neutro */
-            '--page':         '#0e1014',
-            /* Cards — cinza grafite profundo */
-            '--parch':        '#161a20',
-            /* Inputs — cinza ardósia */
-            '--parch-mid':    '#1e242c',
-            /* Hover / seleções */
-            '--parch-deep':   '#262e38',
-            /* Bordas — cinza-azulado médio */
-            '--parch-border': '#3a4a5c',
-            /* Acento — azul-aço frio, legível e neutro */
-            '--gold':         '#5b8db8',
-            '--gold-light':   '#7aaed4',
-            '--gold-pale':    '#a8cce8',
-            /* Texto — branco frio ligeiramente acinzentado */
-            '--ink':          '#dce4ee',
-            '--ink-mid':      '#9aaabb',
-            '--ink-light':    '#607080',
-            '--ink-muted':    '#3a4858',
-            /* Header — camadas carvão com véu cinza-azulado */
-            '--header-top':   '#141820',
-            '--header-mid':   '#0e1218',
-            '--header-bot':   '#0a0d12',
-            /* Barra de abas — quase negro neutro */
-            '--tabs-top':     '#0a0c10',
-            '--tabs-bot':     '#08090e',
-            /* Barra inferior */
-            '--bar-bg':       'rgba(10,12,18,0.97)',
-            /* Texto das abas */
-            '--tabs-txt-off':   'rgba(90,130,170,0.45)',
-            '--tabs-txt-hover': 'rgba(140,180,220,0.75)',
+            '--page':         '#040202',
+            '--parch':        '#0e0808',
+            '--parch-mid':    '#180e0c',
+            '--parch-deep':   '#221210',
+            '--parch-border': '#7a5408',
+            '--gold':         '#c8960a',
+            '--gold-light':   '#e0b020',
+            '--gold-pale':    '#f0d060',
+            '--ink':          '#f0e8d8',
+            '--ink-mid':      '#d4c0a8',
+            '--ink-light':    '#a08868',
+            '--ink-muted':    '#685040',
+            '--header-top':   '#180808',
+            '--header-mid':   '#100504',
+            '--header-bot':   '#060302',
+            '--tabs-top':     '#040101',
+            '--tabs-bot':     '#020001',
+            '--bar-bg':       'rgba(3,1,1,0.98)',
+            '--tabs-txt-off':   'rgba(180,110,50,0.40)',
+            '--tabs-txt-hover': 'rgba(220,160,80,0.72)',
+        }
+    },
+    'Arcano': {
+        swatch: '#8040d0',
+        vars: {
+            '--page':         '#06020e',
+            '--parch':        '#100820',
+            '--parch-mid':    '#180e30',
+            '--parch-deep':   '#20143e',
+            '--parch-border': '#5028a0',
+            '--gold':         '#8040d0',
+            '--gold-light':   '#a060e8',
+            '--gold-pale':    '#c090f8',
+            '--ink':          '#ece8f8',
+            '--ink-mid':      '#c0b0e0',
+            '--ink-light':    '#8870b0',
+            '--ink-muted':    '#504068',
+            '--header-top':   '#18083a',
+            '--header-mid':   '#100528',
+            '--header-bot':   '#080318',
+            '--tabs-top':     '#060114',
+            '--tabs-bot':     '#030009',
+            '--bar-bg':       'rgba(4,1,10,0.97)',
+            '--tabs-txt-off':   'rgba(120,80,200,0.40)',
+            '--tabs-txt-hover': 'rgba(180,130,240,0.72)',
+        }
+    },
+    'Floresta': {
+        swatch: '#3a7020',
+        vars: {
+            '--page':         '#020804',
+            '--parch':        '#080e06',
+            '--parch-mid':    '#0e160a',
+            '--parch-deep':   '#141e0e',
+            '--parch-border': '#2a5018',
+            '--gold':         '#3a7020',
+            '--gold-light':   '#4e9030',
+            '--gold-pale':    '#70b848',
+            '--ink':          '#e0eed8',
+            '--ink-mid':      '#b0c8a0',
+            '--ink-light':    '#708060',
+            '--ink-muted':    '#405030',
+            '--header-top':   '#081808',
+            '--header-mid':   '#041004',
+            '--header-bot':   '#020802',
+            '--tabs-top':     '#020604',
+            '--tabs-bot':     '#010402',
+            '--bar-bg':       'rgba(2,6,2,0.97)',
+            '--tabs-txt-off':   'rgba(60,100,30,0.50)',
+            '--tabs-txt-hover': 'rgba(100,170,60,0.75)',
+        }
+    },
+    'Glacial': {
+        swatch: '#2878c0',
+        vars: {
+            '--page':         '#020608',
+            '--parch':        '#060e14',
+            '--parch-mid':    '#0a1620',
+            '--parch-deep':   '#0e1e2c',
+            '--parch-border': '#184878',
+            '--gold':         '#2878c0',
+            '--gold-light':   '#3898e0',
+            '--gold-pale':    '#80c8f0',
+            '--ink':          '#d8ecf8',
+            '--ink-mid':      '#a0c4e0',
+            '--ink-light':    '#6090b0',
+            '--ink-muted':    '#305070',
+            '--header-top':   '#081828',
+            '--header-mid':   '#04101e',
+            '--header-bot':   '#020810',
+            '--tabs-top':     '#020610',
+            '--tabs-bot':     '#010408',
+            '--bar-bg':       'rgba(2,4,10,0.97)',
+            '--tabs-txt-off':   'rgba(40,100,180,0.45)',
+            '--tabs-txt-hover': 'rgba(90,160,230,0.75)',
+        }
+    },
+    'Outono': {
+        swatch: '#b06020',
+        vars: {
+            '--page':         '#080402',
+            '--parch':        '#140a04',
+            '--parch-mid':    '#1e1008',
+            '--parch-deep':   '#2c180e',
+            '--parch-border': '#784018',
+            '--gold':         '#b06020',
+            '--gold-light':   '#d08030',
+            '--gold-pale':    '#e8b060',
+            '--ink':          '#f0e0cc',
+            '--ink-mid':      '#d0b890',
+            '--ink-light':    '#a08050',
+            '--ink-muted':    '#705030',
+            '--header-top':   '#1c0c06',
+            '--header-mid':   '#120804',
+            '--header-bot':   '#080502',
+            '--tabs-top':     '#060301',
+            '--tabs-bot':     '#030200',
+            '--bar-bg':       'rgba(5,3,1,0.97)',
+            '--tabs-txt-off':   'rgba(160,90,20,0.45)',
+            '--tabs-txt-hover': 'rgba(220,150,60,0.75)',
+        }
+    },
+    'Inferno': {
+        swatch: '#c05020',
+        vars: {
+            '--page':         '#080402',
+            '--parch':        '#140804',
+            '--parch-mid':    '#200e06',
+            '--parch-deep':   '#2e1408',
+            '--parch-border': '#802810',
+            '--gold':         '#c05020',
+            '--gold-light':   '#e07030',
+            '--gold-pale':    '#f09060',
+            '--ink':          '#f0e0d0',
+            '--ink-mid':      '#d0b098',
+            '--ink-light':    '#a07860',
+            '--ink-muted':    '#704838',
+            '--header-top':   '#220a04',
+            '--header-mid':   '#180602',
+            '--header-bot':   '#0e0302',
+            '--tabs-top':     '#080200',
+            '--tabs-bot':     '#050100',
+            '--bar-bg':       'rgba(5,1,0,0.97)',
+            '--tabs-txt-off':   'rgba(180,70,20,0.45)',
+            '--tabs-txt-hover': 'rgba(240,110,50,0.75)',
+        }
+    },
+    'Pergaminho': {
+        swatch: '#c8960a',
+        vars: {
+            '--page':         '#06020a',
+            '--parch':        '#130918',
+            '--parch-mid':    '#1e0c18',
+            '--parch-deep':   '#2c1020',
+            '--parch-border': '#7a5408',
+            '--gold':         '#c8960a',
+            '--gold-light':   '#e0b020',
+            '--gold-pale':    '#f0d060',
+            '--ink':          '#f0e8d8',
+            '--ink-mid':      '#d4c0a8',
+            '--ink-light':    '#a08868',
+            '--ink-muted':    '#685040',
+            '--header-top':   '#1a0e08',
+            '--header-mid':   '#100806',
+            '--header-bot':   '#080502',
+            '--tabs-top':     '#050200',
+            '--tabs-bot':     '#030100',
+            '--bar-bg':       'rgba(4,2,1,0.97)',
+            '--tabs-txt-off':   'rgba(160,110,30,0.45)',
+            '--tabs-txt-hover': 'rgba(220,160,60,0.75)',
+        }
+    },
+    'Forja': {
+        swatch: '#906030',
+        vars: {
+            '--page':         '#060402',
+            '--parch':        '#100a04',
+            '--parch-mid':    '#1a1208',
+            '--parch-deep':   '#241a0c',
+            '--parch-border': '#604018',
+            '--gold':         '#906030',
+            '--gold-light':   '#b08040',
+            '--gold-pale':    '#d0a868',
+            '--ink':          '#eedcb8',
+            '--ink-mid':      '#c8b088',
+            '--ink-light':    '#907848',
+            '--ink-muted':    '#604828',
+            '--header-top':   '#180e06',
+            '--header-mid':   '#100804',
+            '--header-bot':   '#080402',
+            '--tabs-top':     '#060300',
+            '--tabs-bot':     '#030100',
+            '--bar-bg':       'rgba(4,2,0,0.97)',
+            '--tabs-txt-off':   'rgba(130,80,20,0.45)',
+            '--tabs-txt-hover': 'rgba(190,130,50,0.75)',
         }
     },
 }
+
 
 function lerVarCSS(cssVar) {
     const raw = getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim()
@@ -1509,7 +1693,7 @@ function toggleImportArea() {
 function resetarTema() {
     aplicarTema('Strahd')
     ls.del('tema-custom')
-    mostrarFeedback('Tema resetado para Strahd.')
+    mostrarFeedback('Tema vampírico restaurado.')
 }
 
 function mostrarFeedback(msg) {
@@ -1830,13 +2014,11 @@ function descanso(tipo) {
     const nome = document.getElementById('nome-personagem')?.textContent?.trim() || 'o personagem'
 
     if (tipo === 'curto') {
-        if (!confirm(`Descanso Curto para ${nome}?\n\n• Dados de Vida gastos restaurados\n• Recursos de "descanso curto" restaurados`)) return
+        if (!confirm(`Descanso Curto para ${nome}?\n\n• Recursos de "descanso curto" restaurados\n• Use seus Dados de Vida para recuperar PV manualmente`)) return
 
-        // Restaura dados de vida restantes ao total
-        const dadoTotal = document.getElementById('dado-vida-total')
-        const dadoRest  = document.getElementById('dado-vida-rest')
-        if (dadoTotal && dadoRest) dadoRest.value = dadoTotal.value
-
+        // Descanso Curto NÃO recupera dados de vida automaticamente.
+        // O jogador deve gastar dados de vida manualmente para recuperar PV.
+        // (Apenas restauramos recursos de classe aqui.)
         // Restaura habilidades com recarga "Descanso Curto"
         document.querySelectorAll('#habilidades-lista .exp-card').forEach(card => {
             const recarga = card.querySelector('.exp-body select')?.value || ''
@@ -1851,7 +2033,7 @@ function descanso(tipo) {
         salvar()
 
     } else {
-        if (!confirm(`Descanso Longo para ${nome}?\n\n• PV restaurado ao máximo\n• Todos os Dados de Vida restaurados\n• Slots de magia restaurados\n• Testes contra a morte limpos\n• Todos os recursos restaurados`)) return
+        if (!confirm(`Descanso Longo para ${nome}?\n\n• PV restaurado ao máximo\n• Metade dos Dados de Vida recuperados (mín. 1)\n• Slots de magia restaurados\n• Testes contra a morte limpos\n• Todos os recursos restaurados`)) return
 
         // Restaura PV
         const pvMax = document.getElementById('pv-max')
@@ -1861,10 +2043,15 @@ function descanso(tipo) {
         if (pvTemp) pvTemp.value = 0
         atualizarPVBar()
 
-        // Restaura dados de vida
+        // Restaura dados de vida: recupera metade do total (mín. 1), regra D&D 5e
         const dadoTotal = document.getElementById('dado-vida-total')
         const dadoRest  = document.getElementById('dado-vida-rest')
-        if (dadoTotal && dadoRest) dadoRest.value = dadoTotal.value
+        if (dadoTotal && dadoRest) {
+            const total = parseInt(dadoTotal.value) || 1
+            const atual = parseInt(dadoRest.value)  || 0
+            const recupera = Math.max(1, Math.floor(total / 2))
+            dadoRest.value = Math.min(total, atual + recupera)
+        }
 
         // Limpa testes contra a morte
         document.querySelectorAll('.death-check').forEach(cb => cb.checked = false)
@@ -1974,6 +2161,7 @@ const CONDICOES = [
     { id:'envenenado',  emoji:'☠', label:'Envenenado',  positiva: false },
     { id:'exausto',     emoji:'↯', label:'Exausto',     positiva: false },
     { id:'incapacitado',emoji:'✖', label:'Incapacitado',positiva: false },
+    { id:'inconsciente',emoji:'💤', label:'Inconsciente',positiva: false },
     { id:'invisivel',   emoji:'◌', label:'Invisível',   positiva: true  },
     { id:'paralisado',  emoji:'⊗', label:'Paralisado',  positiva: false },
     { id:'petrificado', emoji:'◼', label:'Petrificado', positiva: false },
@@ -2798,7 +2986,7 @@ window.salvar = function() {
     function agruparSecao(titulo) {
         const elementos = []
         let el = titulo.nextElementSibling
-        while (el && !el.classList.contains('section-title') && !el.classList.contains('prof-insp-row')) {
+        while (el && !el.classList.contains('section-title') && !el.classList.contains('death-section-title')) {
             elementos.push(el)
             el = el.nextElementSibling
         }
@@ -2870,12 +3058,15 @@ window.salvar = function() {
         })
     }
 
+    // Expõe setup globalmente para ser chamado após renderSaves no window.onload
+    window.setupColapsaveis = setup
+
     // Espera o DOM estar pronto (o script roda após o HTML)
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', setup)
     } else {
         // DOM já pronto: aguarda um tick para garantir que o render de saves/perícias ocorreu
-        setTimeout(setup, 350)
+        setTimeout(setup, 500)
     }
 
 })()
@@ -3012,8 +3203,15 @@ window.salvar = function() {
 ;(function patchAplicarTemaDark() {
 
     const DARK_TEMAS = {
-        'Strahd':  'tema-strahd',
-        'Noturno': 'tema-noturno',
+        'Strahd':    'tema-strahd',
+        'Noturno':   'tema-noturno',
+        'Arcano':    'tema-arcano',
+        'Floresta':  'tema-floresta',
+        'Glacial':   'tema-glacial',
+        'Outono':    'tema-outono',
+        'Inferno':   'tema-inferno',
+        'Forja':     'tema-forja',
+        'Pergaminho':'tema-pergaminho',
     }
 
     const _orig = window.aplicarTema
