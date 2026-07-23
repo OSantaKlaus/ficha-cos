@@ -1,4 +1,4 @@
-body.tema-noturno {
+body.tema-ladino {
     /* Remove a textura de ruído clara — fica estranha no escuro */
     background-image:
         radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.08) 0%, transparent 55%),
@@ -6,55 +6,55 @@ body.tema-noturno {
 }
 
 /* ── Inputs: fundo escuro + texto claro ── */
-body.tema-noturno input,
-body.tema-noturno textarea,
-body.tema-noturno select {
+body.tema-ladino input,
+body.tema-ladino textarea,
+body.tema-ladino select {
     background: var(--parch-mid) !important;
     color: var(--ink) !important;
     border-color: rgba(184,146,42,0.35) !important;
 }
 
-body.tema-noturno input:focus,
-body.tema-noturno textarea:focus,
-body.tema-noturno select:focus {
+body.tema-ladino input:focus,
+body.tema-ladino textarea:focus,
+body.tema-ladino select:focus {
     border-color: var(--gold) !important;
     box-shadow: 0 0 0 2px rgba(212,175,55,0.18) !important;
 }
 
-body.tema-noturno input::placeholder,
-body.tema-noturno textarea::placeholder {
+body.tema-ladino input::placeholder,
+body.tema-ladino textarea::placeholder {
     color: var(--ink-muted) !important;
     opacity: 0.7;
 }
 
 /* ── Painéis flutuantes (dados, tema) ── */
-body.tema-noturno #dados-panel,
-body.tema-noturno #tema-panel {
+body.tema-ladino #dados-panel,
+body.tema-ladino #tema-panel {
     background: var(--parch) !important;
     border-color: rgba(212,175,55,0.3) !important;
     box-shadow: 0 12px 48px rgba(0,0,0,0.65) !important;
 }
 
 /* ── Sombras dos cards: mais dramáticas no escuro ── */
-body.tema-noturno .panel,
-body.tema-noturno .exp-card,
-body.tema-noturno .attr-card {
+body.tema-ladino .panel,
+body.tema-ladino .exp-card,
+body.tema-ladino .attr-card {
     box-shadow: 0 4px 20px rgba(0,0,0,0.45) !important;
     border-color: rgba(184,146,42,0.25) !important;
 }
 
 /* ── exp-card internos: header, body e campos ── */
-body.tema-noturno .exp-header {
+body.tema-ladino .exp-header {
     background: var(--parch-mid) !important;
 }
-body.tema-noturno .exp-header:hover {
+body.tema-ladino .exp-header:hover {
     background: var(--parch-deep) !important;
 }
-body.tema-noturno .exp-body {
+body.tema-ladino .exp-body {
     background: var(--parch) !important;
     border-top-color: rgba(212,175,55,0.15) !important;
 }
-body.tema-noturno .recurso-recarga-select {
+body.tema-ladino .recurso-recarga-select {
     background-color: var(--parch-mid) !important;
     color: var(--ink) !important;
     border-color: rgba(212,175,55,0.3) !important;
@@ -62,45 +62,45 @@ body.tema-noturno .recurso-recarga-select {
     background-repeat: no-repeat !important;
     background-position: right 6px center !important;
 }
-body.tema-noturno .recurso-recarga-select option {
+body.tema-ladino .recurso-recarga-select option {
     background: var(--parch-mid);
     color: var(--ink);
 }
 
 /* ── Ornamento do cabeçalho ── */
-body.tema-noturno #header-ornament-left,
-body.tema-noturno #header-ornament-right {
+body.tema-ladino #header-ornament-left,
+body.tema-ladino #header-ornament-right {
     color: var(--gold) !important;
     opacity: 0.5;
 }
 
 /* ── Scrollbar escura ── */
-body.tema-noturno ::-webkit-scrollbar-track {
+body.tema-ladino ::-webkit-scrollbar-track {
     background: #0f1117;
 }
-body.tema-noturno ::-webkit-scrollbar-thumb {
+body.tema-ladino ::-webkit-scrollbar-thumb {
     background: #303448;
     border-color: #0f1117;
 }
-body.tema-noturno ::-webkit-scrollbar-thumb:hover {
+body.tema-ladino ::-webkit-scrollbar-thumb:hover {
     background: var(--gold);
 }
 
 /* ── Botões flutuantes (paleta + dado) — Noturno ── */
-body.tema-noturno #btn-tema {
+body.tema-ladino #btn-tema {
     background: var(--gold) !important;
     border: 2px solid var(--gold-pale) !important;
     color: #0f1117 !important;
     box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
 }
-body.tema-noturno #btn-tema:hover {
+body.tema-ladino #btn-tema:hover {
     background: var(--gold-pale) !important;
     box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
     transform: scale(1.1) !important;
 }
 
 /* ── Toasts no tema escuro ── */
-body.tema-noturno #toast-container .toast {
+body.tema-ladino #toast-container .toast {
     background: var(--parch-mid) !important;
     border-color: rgba(212,175,55,0.35) !important;
     color: var(--ink) !important;
@@ -108,7 +108,7 @@ body.tema-noturno #toast-container .toast {
 }
 
 /* ── Quick-stats bar ── */
-body.tema-noturno #quick-stats {
+body.tema-ladino #quick-stats {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     background: var(--parch) !important;
@@ -117,36 +117,33 @@ body.tema-noturno #quick-stats {
 }
 
 /* ── Barra de PV no escuro ── */
-body.tema-noturno .pv-bar-wrap {
-    background: rgba(255,255,255,0.06) !important;
-    border-color: rgba(212,175,55,0.2) !important;
-}
+/* (fundo da barra de PV padronizado — transparente, ver css/01-base.css) */
 
 /* ── Seção de condições ── */
-body.tema-noturno .cond-btn {
+body.tema-ladino .cond-btn {
     background: var(--parch-mid) !important;
     border-color: rgba(184,146,42,0.3) !important;
     color: var(--ink) !important;
 }
-body.tema-noturno .cond-btn:hover,
-body.tema-noturno .cond-btn.ativa {
+body.tema-ladino .cond-btn:hover,
+body.tema-ladino .cond-btn.ativa {
     background: rgba(212,175,55,0.15) !important;
     border-color: var(--gold) !important;
     color: var(--gold-pale) !important;
 }
 
 /* ── Tags de proficiência / línguas ── */
-body.tema-noturno .prof-tag {
+body.tema-ladino .prof-tag {
     background: var(--parch-mid) !important;
     border-color: rgba(184,146,42,0.35) !important;
     color: var(--ink) !important;
 }
 
 /* ── Tabela de ataques ── */
-body.tema-noturno .attacks-table th {
+body.tema-ladino .attacks-table th {
     background: rgba(212,175,55,0.08) !important;
 }
-body.tema-noturno .attacks-table tr:nth-child(even) td {
+body.tema-ladino .attacks-table tr:nth-child(even) td {
     background: rgba(255,255,255,0.03) !important;
 }
 
@@ -154,78 +151,67 @@ body.tema-noturno .attacks-table tr:nth-child(even) td {
 /* (não precisa sobrescrever — as cores dos badges já têm contraste) */
 
 /* ── Attr cards: borda superior colorida mais visível ── */
-body.tema-noturno .attr-card {
+body.tema-ladino .attr-card {
     background: var(--parch) !important;
 }
 
 /* ── Select elements ── */
-body.tema-noturno select option {
+body.tema-ladino select option {
     background: var(--parch-mid);
     color: var(--ink);
 }
 
 /* ── Botão de dados flutuante — Noturno ── */
-body.tema-noturno #btn-dados {
+body.tema-ladino #btn-dados {
     background: var(--gold) !important;
     border: 2px solid var(--gold-pale) !important;
     color: #0f1117 !important;
     box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
 }
-body.tema-noturno #btn-dados:hover {
+body.tema-ladino #btn-dados:hover {
     background: var(--gold-pale) !important;
     box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
 }
 
 /* ── Death circles ── */
-body.tema-noturno .dcircle {
+body.tema-ladino .dcircle {
     background: var(--parch-mid) !important;
 }
 
-/* ── Cargas de habilidades — legibilidade ── */
-body.tema-noturno .card-field input[type=number],
-body.tema-noturno .card-field input[type=text],
-body.tema-noturno .card-field select {
-    background: var(--parch) !important;
-    color: var(--ink) !important;
-    border-color: rgba(212,175,55,0.3) !important;
-}
-body.tema-noturno .card-field select {
+/* ── Cargas de habilidades: legibilidade agora universal (ver .card-field em css/01-base-v3.css) ── */
+body.tema-ladino .card-field select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
     background-repeat: no-repeat !important;
     background-position: right 8px center !important;
 }
-body.tema-noturno .card-field label {
+body.tema-ladino .card-field label {
     color: var(--ink-light) !important;
 }
-body.tema-noturno .cargas-badge {
-    background: rgba(212,175,55,0.25) !important;
-    color: var(--ink) !important;
-    border-color: rgba(212,175,55,0.5) !important;
-}
-body.tema-noturno .recurso-recarga-select,
-body.tema-noturno .recurso-dado-input,
-body.tema-noturno .recurso-desc {
+/* .cargas-badge legibilidade agora universal (ver css/01-base-v3.css) */
+body.tema-ladino .recurso-recarga-select,
+body.tema-ladino .recurso-dado-input,
+body.tema-ladino .recurso-desc {
     background: var(--parch) !important;
     color: var(--ink) !important;
     border-color: rgba(212,175,55,0.25) !important;
 }
-body.tema-noturno .armadura-box {
+body.tema-ladino .armadura-box {
     background: var(--parch-mid) !important;
     border-color: rgba(184,146,42,0.25) !important;
 }
 
 /* ── Inspiração card ── */
-body.tema-noturno .insp-card {
+body.tema-ladino .insp-card {
     background: var(--parch-mid) !important;
     border-color: rgba(184,146,42,0.3) !important;
 }
-body.tema-noturno .insp-card.on {
+body.tema-ladino .insp-card.on {
     background: rgba(212,175,55,0.2) !important;
     border-color: var(--gold) !important;
 }
 
 /* ── Proficiência card ── */
-body.tema-noturno .prof-card {
+body.tema-ladino .prof-card {
     background: var(--parch-mid) !important;
     border-color: rgba(184,146,42,0.25) !important;
 }
@@ -265,8 +251,8 @@ body.tema-noturno .prof-card {
 }
 
 /* No tema escuro especificamente */
-body.tema-noturno .attacks-table td input,
-body.tema-noturno .mun-table td input,
+body.tema-ladino .attacks-table td input,
+body.tema-ladino .mun-table td input,
 body.tema-strahd .attacks-table td input,
 body.tema-strahd .mun-table td input {
     color: var(--ink) !important;
@@ -346,10 +332,7 @@ body.tema-strahd textarea::placeholder {
 /* Cards e painéis */
 body.tema-strahd .panel,
 body.tema-strahd .exp-card,
-body.tema-strahd .attr-card {
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
-    border-color: rgba(180,40,60,0.22) !important;
-}
+/* (fundo do card padronizado — ver css/12-temas-unificados.css) */
 
 /* ── exp-card internos: header, body e campos ── */
 body.tema-strahd .exp-header {
@@ -418,11 +401,7 @@ body.tema-strahd .cond-btn {
     color: var(--ink) !important;
 }
 body.tema-strahd .cond-btn:hover,
-body.tema-strahd .cond-btn.ativa {
-    background: rgba(200,30,50,0.18) !important;
-    border-color: var(--gold) !important;
-    color: var(--gold-pale) !important;
-}
+/* (cor de condição ativa padronizada — vermelho/verde semântico do base) */
 
 /* Tags */
 body.tema-strahd .prof-tag {
@@ -454,10 +433,7 @@ body.tema-strahd .prof-card {
 }
 
 /* PV bar wrap */
-body.tema-strahd .pv-bar-wrap {
-    background: rgba(255,255,255,0.05) !important;
-    border-color: rgba(200,30,50,0.2) !important;
-}
+/* (fundo da barra de PV padronizado — transparente, ver css/01-base.css) */
 
 /* Toasts */
 body.tema-strahd #toast-container .toast {
@@ -485,14 +461,7 @@ body.tema-strahd .dcircle {
     background: var(--parch-mid) !important;
 }
 
-/* ── Cargas de habilidades — legibilidade ── */
-body.tema-strahd .card-field input[type=number],
-body.tema-strahd .card-field input[type=text],
-body.tema-strahd .card-field select {
-    background: var(--parch) !important;
-    color: var(--ink) !important;
-    border-color: rgba(180,40,60,0.3) !important;
-}
+/* ── Cargas de habilidades: legibilidade agora universal (ver .card-field em css/01-base-v3.css) ── */
 body.tema-strahd .card-field select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
     background-repeat: no-repeat !important;
@@ -501,11 +470,7 @@ body.tema-strahd .card-field select {
 body.tema-strahd .card-field label {
     color: var(--ink-light) !important;
 }
-body.tema-strahd .cargas-badge {
-    background: rgba(200,30,50,0.18) !important;
-    color: var(--ink) !important;
-    border-color: rgba(200,60,80,0.45) !important;
-}
+/* .cargas-badge legibilidade agora universal (ver css/01-base-v3.css) */
 body.tema-strahd .recurso-recarga-select,
 body.tema-strahd .recurso-dado-input,
 body.tema-strahd .recurso-desc {
@@ -515,9 +480,7 @@ body.tema-strahd .recurso-desc {
 }
 
 /* Attr cards */
-body.tema-strahd .attr-card {
-    background: var(--parch) !important;
-}
+/* (fundo do card padronizado — ver css/12-temas-unificados.css) */
 
 /* ════════════════════════════════════════════════════════════════
    STRAHD REWORK — Identidade Visual Refinada
@@ -527,23 +490,12 @@ body.tema-strahd .attr-card {
 ════════════════════════════════════════════════════════════════ */
 
 /* ──────────────────────────────────────────────────────────────
-   1. VARIÁVEIS GLOBAIS REFINADAS (base Pergaminho — herança)
-   ── Usadas em todos os temas; temas dark sobrescrevem
+   1. VARIÁVEIS GLOBAIS REFINADAS
+   ── Bloco :root global movido para o consolidado em
+      css/01-base-v3.css (2026-07); mesmos valores, sem mudança
+      visual. O override condicional de body.tema-strahd abaixo
+      continua aqui normalmente.
 ────────────────────────────────────────────────────────────── */
-:root {
-  /* Sombras premium — substituem as flats */
-  --shadow-sm:  0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.10);
-  --shadow-md:  0 6px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
-  --shadow-lg:  0 16px 56px rgba(0,0,0,0.30), 0 4px 12px rgba(0,0,0,0.15);
-
-  /* Raios ligeiramente aumentados para sensação premium */
-  --radius:    12px;
-  --radius-sm:  8px;
-
-  /* Easing cinematográfico */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-}
 
 /* ──────────────────────────────────────────────────────────────
    2. TEMA STRAHD — Variáveis Sobrescritas (via script.js já faz
@@ -592,7 +544,7 @@ body.tema-strahd #header {
     #120408 80%,
     #0d0508 100%
   ) !important;
-  border-bottom: 1px solid rgba(180,30,50,0.4) !important;
+  border-bottom: 3px solid var(--gold) !important;
   box-shadow:
     0 4px 40px rgba(0,0,0,0.7),
     0 1px 0 rgba(180,30,50,0.2),
@@ -645,7 +597,7 @@ body.tema-strahd #nome-personagem:focus {
 /* Subtítulo PERSONAGEM */
 body.tema-strahd #header-sub {
   color: rgba(200,140,160,0.45) !important;
-  letter-spacing: 8px !important;
+  letter-spacing: 7px !important;
   opacity: 1 !important;
 }
 
@@ -694,7 +646,7 @@ body.tema-strahd #tabs {
     #0a0204 0%,
     #060102 100%
   ) !important;
-  border-bottom: 1px solid rgba(180,30,50,0.3) !important;
+  border-bottom: 2px solid var(--gold) !important;
   box-shadow:
     0 4px 32px rgba(0,0,0,0.7),
     0 1px 0 rgba(180,30,50,0.15) !important;
@@ -703,7 +655,7 @@ body.tema-strahd #tabs {
 }
 
 body.tema-strahd .tab-btn {
-  color: rgba(200,140,160,0.45) !important;
+  color: rgba(220,160,180,0.62) !important;
   border-bottom: 2px solid transparent !important;
   transition:
     color var(--ease-out) 0.2s,
@@ -712,17 +664,11 @@ body.tema-strahd .tab-btn {
 }
 
 body.tema-strahd .tab-btn:hover {
-  color: rgba(240,180,190,0.75) !important;
+  color: rgba(250,195,205,0.88) !important;
   background: rgba(180,20,40,0.08) !important;
 }
 
-body.tema-strahd .tab-btn.active {
-  color: #f07080 !important;
-  border-bottom-color: #c82040 !important;
-  background: rgba(180,20,40,0.12) !important;
-  font-weight: 700 !important;
-  text-shadow: 0 0 20px rgba(200,40,60,0.4) !important;
-}
+/* (aba ativa padronizada — mesmo tratamento de todos os temas, ver css/01-base.css) */
 
 /* ──────────────────────────────────────────────────────────────
    6. CARDS E PAINÉIS — Hierarquia via Sombra, não Border
@@ -758,16 +704,6 @@ body.tema-strahd .panel:hover {
    ── Cada atributo com sua gema e brilho único
 ────────────────────────────────────────────────────────────── */
 body.tema-strahd .attr-card {
-  background: linear-gradient(
-    160deg,
-    rgba(26,8,16,0.95) 0%,
-    rgba(18,5,10,0.98) 100%
-  ) !important;
-  border: 1px solid rgba(180,30,50,0.14) !important;
-  border-radius: var(--radius-sm) !important;
-  box-shadow:
-    0 4px 20px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.02) !important;
   transition:
     transform var(--ease-out) 0.2s,
     box-shadow var(--ease-out) 0.2s,
@@ -784,12 +720,7 @@ body.tema-strahd .attr-card:hover {
 }
 
 /* Faixas coloridas por atributo — mais vívidas no dark */
-body.tema-strahd .attr-for::before { background: linear-gradient(90deg, #b02020, #e04040) !important; box-shadow: 0 0 8px rgba(200,40,40,0.5); }
-body.tema-strahd .attr-des::before { background: linear-gradient(90deg, #1a7840, #28aa58) !important; box-shadow: 0 0 8px rgba(40,170,80,0.4); }
-body.tema-strahd .attr-con::before { background: linear-gradient(90deg, #a06010, #d08020) !important; box-shadow: 0 0 8px rgba(200,130,20,0.4); }
-body.tema-strahd .attr-int::before { background: linear-gradient(90deg, #1860a0, #2888d0) !important; box-shadow: 0 0 8px rgba(40,130,210,0.4); }
-body.tema-strahd .attr-sab::before { background: linear-gradient(90deg, #702890, #9840c0) !important; box-shadow: 0 0 8px rgba(150,60,190,0.4); }
-body.tema-strahd .attr-car::before { background: linear-gradient(90deg, #b8860b, #d4af37) !important; box-shadow: 0 0 8px rgba(200,160,30,0.4); }
+/* (barras de atributo com brilho extra removidas — padronizadas com os demais 8 temas) */
 
 /* Labels e valores dos atributos */
 body.tema-strahd .attr-card label {
@@ -817,10 +748,8 @@ body.tema-strahd .section-title {
   letter-spacing: 3px !important;
 }
 
-body.tema-strahd .section-title::before {
-  background: linear-gradient(180deg, #c82040, #8b1020) !important;
-  box-shadow: 0 0 8px rgba(200,30,60,0.6) !important;
-}
+/* Glifo do título: forma e cor agora vêm de css/13-identidade-temas.css
+   (círculo mascarado). Estilo antigo de barra removido. */
 
 body.tema-strahd .section-title::after {
   background: linear-gradient(
@@ -890,9 +819,7 @@ body.tema-strahd .skill-row:hover {
   background: rgba(180,20,40,0.10) !important;
 }
 
-body.tema-strahd .skill-check {
-  accent-color: #c82040 !important;
-}
+/* .skill-check agora é um checkbox customizado via var(--gold) — não precisa mais de override por tema */
 
 body.tema-strahd .skill-val {
   color: #c82040 !important;
@@ -949,11 +876,7 @@ body.tema-strahd #ca-total {
 }
 
 /* Barra de vida */
-body.tema-strahd .pv-bar-wrap {
-  background: rgba(0,0,0,0.45) !important;
-  border: 1px solid rgba(180,30,50,0.15) !important;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5) !important;
-}
+/* (fundo da barra de PV padronizado — transparente, ver css/01-base.css) */
 
 body.tema-strahd .pv-bar.pv-high {
   background: linear-gradient(90deg, #0d3d14, #145a1e, #1c7a28) !important;
@@ -1065,7 +988,7 @@ body.tema-strahd .arm-select:focus {
 body.tema-strahd .attacks-table thead tr,
 body.tema-strahd .mun-table thead tr {
   background: rgba(12,3,6,0.95) !important;
-  border-bottom: 1px solid rgba(180,30,50,0.3) !important;
+  border-bottom: 2px solid var(--gold) !important;
 }
 
 body.tema-strahd .attacks-table th,
@@ -1206,12 +1129,14 @@ body.tema-strahd .dcircle {
   border-color: rgba(180,50,70,0.3) !important;
 }
 
+body.tema-strahd .dcircle.suc:checked,
 body.tema-strahd .dcircle.suc.on {
   background: #145a1e !important;
   border-color: #1c7a28 !important;
   box-shadow: 0 0 8px rgba(28,120,40,0.5) !important;
 }
 
+body.tema-strahd .dcircle.fail:checked,
 body.tema-strahd .dcircle.fail.on {
   background: #6b0f0f !important;
   border-color: #a81818 !important;
@@ -1270,12 +1195,7 @@ body.tema-strahd .cond-btn:hover {
   color: #f07080 !important;
 }
 
-body.tema-strahd .cond-btn.ativa {
-  background: rgba(160,20,40,0.3) !important;
-  border-color: #c82040 !important;
-  color: #f07080 !important;
-  box-shadow: 0 0 10px rgba(200,30,60,0.3) !important;
-}
+/* (cor de condição ativa padronizada — vermelho/verde semântico do base) */
 
 /* ──────────────────────────────────────────────────────────────
    21. BARRA INFERIOR (Quick Stats / Bottom Bar)
@@ -1424,11 +1344,7 @@ body.tema-strahd .moeda-box {
 /* ──────────────────────────────────────────────────────────────
    28. RECURSOS DE CLASSE
 ────────────────────────────────────────────────────────────── */
-body.tema-strahd .cargas-badge {
-  background: rgba(180,20,40,0.22) !important;
-  border-color: rgba(200,50,70,0.4) !important;
-  color: #f07080 !important;
-}
+/* .cargas-badge legibilidade agora universal (ver css/01-base-v3.css) */
 
 body.tema-strahd .uso-pip {
   border-color: rgba(180,40,60,0.4) !important;
@@ -1530,9 +1446,13 @@ body.tema-strahd .insp-label {
     0 14px 56px rgba(0,0,0,0.5),
     0 0 0 1px rgba(200,150,10,0.14),
     inset 0 1px 0 rgba(200,150,10,0.08) !important;
+}
 
 /* ═══════════════════════════════════════════════════════
    PATCH v3 — Expertise, Undo/Redo, Condições
+   (Fusão das duas cópias que existiam — uma aqui, outra
+   injetada via JS em patch.js. Agora vive só aqui, e
+   acompanha a cor do tema ativo via --gold-rgb.)
 ═══════════════════════════════════════════════════════ */
 
 /* Expertise toggle */
@@ -1543,40 +1463,45 @@ body.tema-strahd .insp-label {
   color:var(--ink-muted); border:1px solid transparent;
   transition:color .15s, border-color .15s, background .15s; user-select:none;
 }
-.exp-toggle-btn:hover { color:var(--gold); border-color:var(--gold); background:rgba(160,100,20,.1); }
-.exp-toggle-btn.exp-on { color:var(--gold-pale)!important; border-color:var(--gold)!important; background:rgba(160,100,20,.18)!important; text-shadow:0 0 8px rgba(160,100,20,.6); }
+.exp-toggle-btn:hover { color:var(--gold); border-color:var(--gold); background:rgba(var(--gold-rgb, 160,100,20),.1); }
+.exp-toggle-btn.exp-on { color:var(--gold-pale)!important; border-color:var(--gold)!important; background:rgba(var(--gold-rgb, 160,100,20),.18)!important; text-shadow:0 0 8px rgba(var(--gold-rgb, 160,100,20),.6); }
 .exp-toggle-btn.exp-oculto { visibility:hidden; }
-.expertise-bonus { color:var(--gold)!important; font-weight:700!important; }
+.expertise-bonus { color:var(--gold-pale)!important; font-weight:700!important; }
 
 /* Undo/Redo buttons */
 .btn-undo, .btn-redo {
-  background:transparent; border:1px solid rgba(160,100,20,.25);
+  background:transparent; border:1px solid rgba(var(--gold-rgb, 160,100,20),.25);
   color:var(--ink-muted); border-radius:5px;
   padding:4px 10px; font-size:.78rem; cursor:pointer;
   transition:color .15s, border-color .15s;
 }
 .btn-undo:hover:not(:disabled), .btn-redo:hover:not(:disabled) { color:var(--gold); border-color:var(--gold); }
 .btn-undo:disabled, .btn-redo:disabled { opacity:.28; cursor:default; }
-#save-status.auto-ok  { color:rgba(30,140,60,.9); }
-#save-status.auto-err { color:rgba(180,40,40,.9); }
+#save-status.auto-ok  { color:rgba(100,200,100,.85); }
+#save-status.auto-err { color:rgba(220,90,90,.9); }
 
 /* Condition popup */
 .cond-efeito-popup {
   position:fixed; z-index:9999; max-width:280px; padding:.75rem .9rem;
-  background:var(--parch-deep); border:1px solid rgba(160,100,20,.25);
-  border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,.4);
+  background:var(--parch-deep); border:1px solid rgba(var(--gold-rgb, 160,100,20),.25);
+  border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,.55);
   font-size:.85rem; line-height:1.55; color:var(--ink-mid);
   pointer-events:none; opacity:0; transition:opacity .15s;
 }
 .cond-efeito-popup.visivel { opacity:1; }
-.cond-efeito-popup strong { color:var(--gold); }
+.cond-efeito-popup strong { color:var(--gold-pale); }
 .cond-efeito-popup ul { margin:.35rem 0 0 1.1rem; padding:0; }
 .cond-efeito-popup li { margin-bottom:.2rem; }
+.cond-efeito-popup .cond-positiva-label { color:#70d870; }
+.cond-efeito-popup .cond-negativa-label { color:#f07070; }
 
 /* Quick roll input */
-.dados-quick-input-wrap { display:flex; gap:6px; padding:.5rem .75rem; border-top:1px solid rgba(160,100,20,.1); margin-top:.25rem; }
-.dados-quick-input { flex:1; background:var(--parch-mid); border:1px solid rgba(160,100,20,.18); border-radius:6px; padding:5px 10px; font-family:var(--font-body); font-size:.92rem; color:var(--ink); min-width:0; }
+.dados-quick-input-wrap { display:flex; gap:6px; padding:.5rem .75rem; border-top:1px solid rgba(var(--gold-rgb, 160,100,20),.1); margin-top:.25rem; }
+.dados-quick-input { flex:1; background:var(--parch-mid); border:1px solid rgba(var(--gold-rgb, 160,100,20),.18); border-radius:6px; padding:5px 10px; font-family:var(--font-body); font-size:.92rem; color:var(--ink); min-width:0; }
 .dados-quick-input:focus { outline:none; border-color:var(--gold); }
 .dados-quick-input::placeholder { color:var(--ink-muted); }
 .dados-quick-btn { background:var(--parch-mid); border:1px solid var(--gold); color:var(--gold); border-radius:6px; padding:5px 12px; font-family:var(--font-heading); font-size:.78rem; letter-spacing:.05em; cursor:pointer; transition:background .15s; }
-.dados-quick-btn:hover { background:rgba(160,100,20,.12); }
+.dados-quick-btn:hover { background:rgba(var(--gold-rgb, 160,100,20),.12); }
+
+/* Skill row: manter alinhamento com botão de expertise */
+.skill-row { gap: 5px !important; }

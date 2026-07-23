@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Maldição de Strahd — Grupo</title>
+  <title>Umbra — Gerenciador de Fichas</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     /* ── VARIÁVEIS VAMPÍRICAS ── */
     :root {
-      --dark:         #06020a;
-      --dark-mid:     #0e0614;
-      --dark-card:    #130918;
-      --fog:          rgba(200,140,160,0.05);
-      --blood:        #7a0c1e;
-      --blood-bright: #c01830;
+      --dark:         #050509;
+      --dark-mid:     #0c0c14;
+      --dark-card:    #10101a;
+      --fog:          rgba(140,140,195,0.05);
+      --blood:        #3a3a68;
+      --blood-bright: #6a5cb0;
       --crimson:      #e02040;
-      --gold:         #c8960a;
-      --gold-pale:    #e8c050;
-      --gold-dim:     #a07808;
-      --parch:        #e2d0a8;
-      --parch-mid:    #c8ad80;
-      --ink:          #f0e8d8;
-      --ink-muted:    #8a7860;
-      --shadow:       0 8px 40px rgba(180,0,30,0.22);
+      --gold:         #8890c0;
+      --gold-pale:    #c8ceec;
+      --gold-dim:     #6068a0;
+      --parch:        #d8d8ea;
+      --parch-mid:    #a8a8c4;
+      --ink:          #e4e4f2;
+      --ink-muted:    #7c7c98;
+      --shadow:       0 8px 40px rgba(100,95,165,0.22);
       --radius:       10px;
       --font-title:   'Cinzel Decorative', 'Cinzel', fantasy;
       --font-head:    'Cinzel', 'Philosopher', serif;
@@ -36,28 +36,28 @@
     body {
       background: var(--dark);
       background-image:
-        radial-gradient(ellipse 80% 50% at 50% -5%, rgba(150,0,25,0.55) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 70% at 10% 90%, rgba(80,0,20,0.28) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 70% at 90% 90%, rgba(80,0,20,0.28) 0%, transparent 55%);
+        radial-gradient(ellipse 80% 50% at 50% -5%, rgba(90,80,150,0.55) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 70% at 10% 90%, rgba(50,45,90,0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 70% at 90% 90%, rgba(50,45,90,0.28) 0%, transparent 55%);
       color: var(--ink);
       font-family: var(--font-body);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ── NÉVOA DE BAROVIA ── */
+    /* ── NÉVOA SOMBRIA ── */
     .fog-layer {
       position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
     }
     .fog-layer::before, .fog-layer::after {
       content: ''; position: absolute; width: 200%; height: 280px; bottom: 0;
-      background: linear-gradient(180deg, transparent, rgba(160,20,40,0.07) 50%, rgba(160,20,40,0.12));
+      background: linear-gradient(180deg, transparent, rgba(100,95,165,0.07) 50%, rgba(100,95,165,0.12));
       border-radius: 50%;
       animation: fogDrift 20s ease-in-out infinite alternate;
     }
     .fog-layer::after {
       height: 180px;
-      background: linear-gradient(180deg, transparent, rgba(120,0,30,0.08));
+      background: linear-gradient(180deg, transparent, rgba(70,65,120,0.08));
       animation-duration: 30s; animation-direction: alternate-reverse;
     }
     @keyframes fogDrift {
@@ -65,11 +65,11 @@
       to   { transform: translateX(5%)  scaleY(1.12); }
     }
 
-    /* ── SILHUETA DO CASTELO RAVENLOFT ── */
+    /* ── SILHUETA DO CASTELO ── */
     .castle-silhouette {
       position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
       width: min(1000px, 100vw); opacity: 0.1; pointer-events: none; z-index: 0;
-      fill: #4a0010;
+      fill: #211f38;
     }
 
     /* ── MORCEGOS ANIMADOS ── */
@@ -81,7 +81,7 @@
       opacity: 0;
       animation: batFly var(--fly-dur, 14s) var(--fly-delay, 0s) ease-in-out infinite;
     }
-    .bat svg { width: var(--bat-size, 22px); height: auto; fill: #3a0008; }
+    .bat svg { width: var(--bat-size, 22px); height: auto; fill: #262340; }
     @keyframes batFly {
       0%   { opacity: 0; transform: translate(var(--sx,0px), var(--sy,100vh)) scale(var(--sc,1)) rotate(0deg); }
       8%   { opacity: 0.55; }
@@ -111,7 +111,7 @@
     }
     .site-header::after {
       content: ''; display: block; width: 65%; max-width: 520px; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(200,150,10,0.45), rgba(192,24,48,0.3), rgba(200,150,10,0.45), transparent);
+      background: linear-gradient(90deg, transparent, rgba(136,144,192,0.45), rgba(106,92,176,0.3), rgba(136,144,192,0.45), transparent);
       margin: 1.5rem auto 0;
     }
     .ornament {
@@ -121,22 +121,22 @@
     }
     .ornament-line {
       flex: 1; max-width: 90px; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(192,24,48,0.55));
+      background: linear-gradient(90deg, transparent, rgba(106,92,176,0.55));
     }
-    .ornament-line.right { background: linear-gradient(90deg, rgba(192,24,48,0.55), transparent); }
+    .ornament-line.right { background: linear-gradient(90deg, rgba(106,92,176,0.55), transparent); }
     .site-title {
       font-family: var(--font-title);
       font-size: clamp(2rem, 5vw, 3.5rem);
       color: var(--gold-pale);
       text-shadow:
-        0 0 80px rgba(200,150,10,0.65),
+        0 0 80px rgba(136,144,192,0.65),
         0 2px 10px rgba(0,0,0,0.98),
-        0 0 160px rgba(200,150,10,0.22);
+        0 0 160px rgba(136,144,192,0.22);
       letter-spacing: 0.06em; line-height: 1.15; margin: 0.5rem 0;
     }
     .site-subtitle {
       font-family: var(--font-head); font-size: 0.82rem;
-      color: rgba(138,120,96,0.7); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 6px;
+      color: rgba(150,150,190,0.7); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 6px;
     }
 
     /* ── BARRA DE AÇÕES ── */
@@ -151,17 +151,31 @@
     }
     .btn-criar {
       display: flex; align-items: center; gap: 0.6rem;
-      background: linear-gradient(135deg, var(--blood) 0%, #3a0308 100%);
+      background: linear-gradient(135deg, var(--blood) 0%, #201e38 100%);
       color: var(--parch); border: 1px solid var(--blood-bright);
       border-radius: 25px; padding: 0.7rem 1.6rem;
       font-family: var(--font-head); font-size: 0.92rem; letter-spacing: 0.12em;
       cursor: pointer; transition: all 0.22s;
-      box-shadow: 0 4px 24px rgba(192,24,48,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: 0 4px 24px rgba(106,92,176,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .btn-criar:hover {
       background: linear-gradient(135deg, var(--blood-bright), var(--blood));
-      box-shadow: 0 6px 36px rgba(192,24,48,0.65); transform: translateY(-2px);
+      box-shadow: 0 6px 36px rgba(106,92,176,0.65); transform: translateY(-2px);
     }
+    .action-bar-btns { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+    .btn-secundario {
+      display: flex; align-items: center; gap: 0.55rem;
+      background: rgba(20,20,32,0.6);
+      color: var(--parch-mid); border: 1px solid rgba(136,144,192,0.28);
+      border-radius: 25px; padding: 0.65rem 1.3rem;
+      font-family: var(--font-head); font-size: 0.85rem; letter-spacing: 0.1em;
+      cursor: pointer; transition: all 0.22s;
+    }
+    .btn-secundario:hover {
+      color: var(--parch); border-color: var(--blood-bright);
+      background: rgba(58,58,104,0.35); transform: translateY(-2px);
+    }
+    .input-arquivo-oculto { display: none; }
 
     /* ── GRID DE PERSONAGENS ── */
     .characters-grid {
@@ -172,8 +186,8 @@
 
     /* ── CARD DE PERSONAGEM ── */
     .char-card {
-      background: linear-gradient(160deg, var(--dark-card) 0%, rgba(8,4,14,0.98) 100%);
-      border: 1px solid rgba(200,150,10,0.15);
+      background: linear-gradient(160deg, var(--dark-card) 0%, rgba(10,10,18,0.98) 100%);
+      border: 1px solid rgba(var(--card-rgb, 136,144,192),0.15);
       border-radius: 14px; overflow: hidden; position: relative;
       transition: transform 0.28s, box-shadow 0.28s, border-color 0.28s;
       animation: cardAppear 0.45s cubic-bezier(.17,.67,.35,1.1) both;
@@ -181,70 +195,70 @@
     }
     .char-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--blood-bright), var(--gold), var(--blood-bright), transparent);
+      background: linear-gradient(90deg, transparent, var(--blood-bright), var(--card-hex, var(--gold)), var(--blood-bright), transparent);
       opacity: 0.55;
     }
     .char-card::after {
       content: '✦'; position: absolute; top: 10px; right: 14px;
-      font-size: 0.55rem; color: var(--gold); opacity: 0.22; line-height: 1;
+      font-size: 0.55rem; color: var(--card-hex, var(--gold)); opacity: 0.22; line-height: 1;
     }
     @keyframes cardAppear {
       from { opacity: 0; transform: translateY(24px) scale(0.96); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
     .char-card:hover {
-      border-color: rgba(200,150,10,0.45);
-      box-shadow: 0 14px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(200,150,10,0.12), 0 0 40px rgba(192,24,48,0.1);
+      border-color: rgba(var(--card-rgb, 136,144,192),0.45);
+      box-shadow: 0 14px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(var(--card-rgb, 136,144,192),0.12), 0 0 40px rgba(106,92,176,0.1);
       transform: translateY(-5px);
     }
 
     .card-avatar-wrap {
       padding: 1.5rem 1.5rem 0.9rem;
       display: flex; flex-direction: column; align-items: center;
-      background: linear-gradient(180deg, rgba(200,150,10,0.05) 0%, transparent 100%);
-      border-bottom: 1px solid rgba(200,150,10,0.09);
+      background: linear-gradient(180deg, rgba(var(--card-rgb, 136,144,192),0.05) 0%, transparent 100%);
+      border-bottom: 1px solid rgba(var(--card-rgb, 136,144,192),0.09);
     }
-    .card-symbol { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(200,150,10,0.5)); line-height: 1; }
+    .card-symbol { font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(var(--card-rgb, 136,144,192),0.5)); line-height: 1; }
     .card-avatar {
       width: 86px; height: 86px; border-radius: 50%; margin: 0 auto 0.7rem;
-      background: linear-gradient(135deg, var(--dark-mid), rgba(30,10,45,1));
-      border: 2px solid rgba(200,150,10,0.35); overflow: hidden;
+      background: linear-gradient(135deg, var(--dark-mid), rgba(20,20,34,1));
+      border: 2px solid rgba(var(--card-rgb, 136,144,192),0.35); overflow: hidden;
       display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
       transition: border-color 0.25s, box-shadow 0.25s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 4px rgba(200,150,10,0.06);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 4px rgba(var(--card-rgb, 136,144,192),0.06);
     }
     .card-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .char-card:hover .card-avatar {
-      border-color: rgba(200,150,10,0.70);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 5px rgba(200,150,10,0.12), 0 0 20px rgba(200,150,10,0.25);
+      border-color: rgba(var(--card-rgb, 136,144,192),0.70);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 5px rgba(var(--card-rgb, 136,144,192),0.12), 0 0 20px rgba(var(--card-rgb, 136,144,192),0.25);
     }
     .card-name {
       font-family: var(--font-title); font-size: 1.2rem;
       color: var(--gold-pale); text-align: center; margin-top: 0.5rem;
-      line-height: 1.2; text-shadow: 0 0 24px rgba(200,150,10,0.28);
+      line-height: 1.2; text-shadow: 0 0 24px rgba(var(--card-rgb, 136,144,192),0.28);
     }
 
     .card-info-area { padding: 0.85rem 1.25rem; flex: 1; }
     .card-details {
       text-align: center; font-size: 0.88rem;
-      color: rgba(200,170,110,0.65); font-family: var(--font-head);
+      color: rgba(180,182,214,0.65); font-family: var(--font-head);
       letter-spacing: 0.1em; margin-bottom: 0.25rem;
     }
     .card-details strong { color: var(--parch-mid); font-weight: 600; }
     .card-class-badge {
       display: block; width: fit-content; margin: 0.3rem auto;
-      background: rgba(200,150,10,0.10); border: 1px solid rgba(200,150,10,0.22);
+      background: rgba(var(--card-rgb, 136,144,192),0.10); border: 1px solid rgba(var(--card-rgb, 136,144,192),0.22);
       border-radius: 20px; padding: 3px 12px;
       font-family: var(--font-head); font-size: 0.75rem;
-      color: var(--gold); letter-spacing: 0.08em; text-align: center;
+      color: var(--card-hex, var(--gold)); letter-spacing: 0.08em; text-align: center;
     }
     .card-player {
       text-align: center; font-size: 0.85rem;
-      color: rgba(200,170,120,0.5); font-style: italic; margin-bottom: 0.6rem;
+      color: rgba(180,182,214,0.5); font-style: italic; margin-bottom: 0.6rem;
     }
     .card-pv-wrap {
       position: relative; height: 5px;
-      background: rgba(160,100,20,0.12); border-radius: 3px; margin-bottom: 3px; overflow: hidden;
+      background: rgba(90,90,150,0.12); border-radius: 3px; margin-bottom: 3px; overflow: hidden;
     }
     .card-pv-bar { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
     .card-pv-label {
@@ -255,13 +269,13 @@
     .card-actions { display: flex; gap: 0.6rem; padding: 0 1.25rem 1.25rem; }
     .btn-abrir {
       flex: 1;
-      background: linear-gradient(135deg, rgba(200,150,10,0.18), rgba(200,150,10,0.06));
-      color: var(--gold); border: 1px solid rgba(200,150,10,0.38);
+      background: linear-gradient(135deg, rgba(var(--card-rgb, 136,144,192),0.18), rgba(var(--card-rgb, 136,144,192),0.06));
+      color: var(--card-hex, var(--gold)); border: 1px solid rgba(var(--card-rgb, 136,144,192),0.38);
       border-radius: 8px; padding: 0.55rem;
       font-family: var(--font-head); font-size: 0.9rem; letter-spacing: 0.08em;
       cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none;
     }
-    .btn-abrir:hover { background: rgba(200,150,10,0.28); border-color: var(--gold); color: var(--gold-pale); }
+    .btn-abrir:hover { background: rgba(var(--card-rgb, 136,144,192),0.28); border-color: var(--card-hex, var(--gold)); color: var(--gold-pale); }
     .btn-excluir {
       background: transparent; color: rgba(200,80,80,0.55);
       border: 1px solid rgba(200,80,80,0.22); border-radius: 8px;
@@ -280,29 +294,29 @@
     ════════════════════════════════════════ */
     .wizard-overlay {
       display: none; position: fixed; inset: 0; z-index: 100;
-      background: rgba(3,1,6,0.93); backdrop-filter: blur(8px); overflow-y: auto;
+      background: rgba(6,6,10,0.93); backdrop-filter: blur(8px); overflow-y: auto;
     }
     .wizard-overlay.open { display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
     .wizard-box {
-      background: linear-gradient(160deg, #160d20 0%, #0c0813 100%);
-      border: 1px solid rgba(200,150,10,0.28); border-radius: 16px;
+      background: linear-gradient(160deg, #14141f 0%, #0a0a10 100%);
+      border: 1px solid rgba(136,144,192,0.28); border-radius: 16px;
       width: min(680px, 100%);
-      box-shadow: 0 24px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(200,150,10,0.08);
+      box-shadow: 0 24px 90px rgba(0,0,0,0.85), 0 0 0 1px rgba(136,144,192,0.08);
       overflow: hidden; animation: wizardIn 0.35s ease-out both;
     }
     @keyframes wizardIn { from{opacity:0;transform:translateY(32px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
     .wizard-head {
-      background: linear-gradient(135deg, #200a16 0%, #160920 100%);
-      border-bottom: 1px solid rgba(200,150,10,0.2); padding: 1.5rem 1.8rem 1.1rem;
+      background: linear-gradient(135deg, #14141e 0%, #0e0e16 100%);
+      border-bottom: 1px solid rgba(136,144,192,0.2); padding: 1.5rem 1.8rem 1.1rem;
     }
-    .wizard-head h2 { font-family: var(--font-title); font-size: 1.25rem; color: var(--gold-pale); margin-bottom: 1rem; text-shadow: 0 0 24px rgba(200,150,10,0.4); }
+    .wizard-head h2 { font-family: var(--font-title); font-size: 1.25rem; color: var(--gold-pale); margin-bottom: 1rem; text-shadow: 0 0 24px rgba(136,144,192,0.4); }
     .wizard-progress { display: flex; gap: 0.4rem; align-items: center; }
     .wstep { display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-head); font-size: 0.82rem; letter-spacing: 0.06em; color: var(--ink-muted); white-space: nowrap; }
-    .wstep-num { width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(200,150,10,0.28); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; transition: all 0.3s; }
+    .wstep-num { width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(136,144,192,0.28); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; transition: all 0.3s; }
     .wstep.done .wstep-num { background: var(--blood); border-color: var(--blood); color: var(--parch); }
     .wstep.active .wstep-num { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 700; }
     .wstep.active { color: var(--gold-pale); }
-    .wstep-sep { flex: 1; height: 1px; background: rgba(200,150,10,0.15); min-width: 8px; }
+    .wstep-sep { flex: 1; height: 1px; background: rgba(136,144,192,0.15); min-width: 8px; }
 
     .wizard-body { padding: 2rem; }
     .wizard-step { display: none; }
@@ -314,21 +328,21 @@
 
     .wfield { margin-bottom: 1rem; }
     .wfield label { display: block; font-family: var(--font-head); font-size: 0.88rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.35rem; }
-    .wfield label small { font-size: 0.68rem; color: rgba(138,120,96,0.6); text-transform: none; letter-spacing: 0; font-family: var(--font-body); }
+    .wfield label small { font-size: 0.68rem; color: rgba(150,150,190,0.6); text-transform: none; letter-spacing: 0; font-family: var(--font-body); }
     .wfield input, .wfield select {
       width: 100%; background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(200,150,10,0.22); border-radius: 8px;
+      border: 1px solid rgba(136,144,192,0.22); border-radius: 8px;
       color: var(--ink); font-family: var(--font-body); font-size: 1rem;
       padding: 0.65rem 0.9rem; transition: border-color 0.2s; -webkit-appearance: none;
     }
-    .wfield input:focus, .wfield select:focus { outline: none; border-color: rgba(200,150,10,0.55); background: rgba(255,255,255,0.07); }
-    .wfield select option { background: #160d20; }
+    .wfield input:focus, .wfield select:focus { outline: none; border-color: rgba(136,144,192,0.55); background: rgba(255,255,255,0.07); }
+    .wfield select option { background: #14141f; }
     .wfield textarea {
-      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(200,150,10,0.22);
+      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(136,144,192,0.22);
       border-radius: 8px; color: var(--ink); font-family: var(--font-body); font-size: 0.97rem;
       padding: 0.65rem 0.9rem; resize: vertical; min-height: 65px; transition: border-color 0.2s;
     }
-    .wfield textarea:focus { outline: none; border-color: rgba(200,150,10,0.5); }
+    .wfield textarea:focus { outline: none; border-color: rgba(136,144,192,0.5); }
     .wfield-hint { font-size: 0.68rem; font-style: italic; opacity: 0.55; font-family: var(--font-body); font-weight: 400; letter-spacing: 0; text-transform: none; }
     .wfield input[list]::placeholder { opacity: 0.45; font-style: italic; font-size: 0.9rem; }
 
@@ -336,35 +350,35 @@
     .wrow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; }
 
     .attr-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; margin-bottom: 1rem; }
-    .attr-block { background: rgba(255,255,255,0.03); border: 1px solid rgba(200,150,10,0.16); border-radius: 10px; padding: 0.7rem; text-align: center; }
+    .attr-block { background: rgba(255,255,255,0.03); border: 1px solid rgba(136,144,192,0.16); border-radius: 10px; padding: 0.7rem; text-align: center; }
     .attr-block label { display: block; font-family: var(--font-head); font-size: 0.8rem; letter-spacing: 0.15em; color: var(--ink-muted); margin-bottom: 0.3rem; }
-    .attr-block input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(200,150,10,0.3); color: var(--gold-pale); font-family: var(--font-head); font-size: 1.9rem; font-weight: 700; text-align: center; padding: 0.2rem 0; }
+    .attr-block input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(136,144,192,0.3); color: var(--gold-pale); font-family: var(--font-head); font-size: 1.9rem; font-weight: 700; text-align: center; padding: 0.2rem 0; }
     .attr-block input:focus { outline: none; border-color: var(--gold); }
     .attr-mod-preview { font-size: 0.95rem; color: var(--ink-muted); margin-top: 0.2rem; }
     .attr-hint { font-size: 0.9rem; color: var(--ink-muted); font-style: italic; margin-bottom: 0.8rem; }
-    .btn-rolar-all { display: block; width: 100%; margin-bottom: 1rem; background: rgba(200,150,10,0.08); border: 1px solid rgba(200,150,10,0.28); border-radius: 8px; color: var(--gold); font-family: var(--font-head); font-size: 0.85rem; letter-spacing: 0.1em; padding: 0.6rem; cursor: pointer; transition: all 0.2s; }
-    .btn-rolar-all:hover { background: rgba(200,150,10,0.2); }
+    .btn-rolar-all { display: block; width: 100%; margin-bottom: 1rem; background: rgba(136,144,192,0.08); border: 1px solid rgba(136,144,192,0.28); border-radius: 8px; color: var(--gold); font-family: var(--font-head); font-size: 0.85rem; letter-spacing: 0.1em; padding: 0.6rem; cursor: pointer; transition: all 0.2s; }
+    .btn-rolar-all:hover { background: rgba(136,144,192,0.2); }
 
     .skills-limit-info { font-family: var(--font-head); font-size: 0.95rem; color: var(--blood-bright); margin-bottom: 0.8rem; }
     .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; max-height: 280px; overflow-y: auto; padding-right: 4px; }
     .skills-grid::-webkit-scrollbar { width: 4px; }
-    .skills-grid::-webkit-scrollbar-thumb { background: rgba(200,150,10,0.22); border-radius: 2px; }
-    .skill-option { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(200,150,10,0.1); border-radius: 6px; padding: 0.5rem 0.7rem; cursor: pointer; transition: all 0.15s; font-size: 0.97rem; }
-    .skill-option:hover { background: rgba(200,150,10,0.08); border-color: rgba(200,150,10,0.28); }
+    .skills-grid::-webkit-scrollbar-thumb { background: rgba(136,144,192,0.22); border-radius: 2px; }
+    .skill-option { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(136,144,192,0.1); border-radius: 6px; padding: 0.5rem 0.7rem; cursor: pointer; transition: all 0.15s; font-size: 0.97rem; }
+    .skill-option:hover { background: rgba(136,144,192,0.08); border-color: rgba(136,144,192,0.28); }
     .skill-option input[type=checkbox] { accent-color: var(--gold); cursor: pointer; }
-    .skill-option.checked { background: rgba(200,150,10,0.14); border-color: rgba(200,150,10,0.4); color: var(--gold-pale); }
+    .skill-option.checked { background: rgba(136,144,192,0.14); border-color: rgba(136,144,192,0.4); color: var(--gold-pale); }
     .skill-option.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
     .saves-preview { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .save-pill { background: rgba(200,150,10,0.12); border: 1px solid rgba(200,150,10,0.32); border-radius: 20px; padding: 0.28rem 0.8rem; font-family: var(--font-head); font-size: 0.78rem; color: var(--gold); letter-spacing: 0.1em; }
+    .save-pill { background: rgba(136,144,192,0.12); border: 1px solid rgba(136,144,192,0.32); border-radius: 20px; padding: 0.28rem 0.8rem; font-family: var(--font-head); font-size: 0.78rem; color: var(--gold); letter-spacing: 0.1em; }
 
-    .wizard-foot { padding: 1.3rem 1.8rem; border-top: 1px solid rgba(200,150,10,0.14); display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; }
+    .wizard-foot { padding: 1.3rem 1.8rem; border-top: 1px solid rgba(136,144,192,0.14); display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; }
     .btn-w { font-family: var(--font-head); font-size: 0.95rem; letter-spacing: 0.1em; border-radius: 8px; padding: 0.65rem 1.5rem; cursor: pointer; transition: all 0.2s; }
-    .btn-w-secondary { background: transparent; border: 1px solid rgba(200,150,10,0.22); color: var(--ink-muted); }
-    .btn-w-secondary:hover { border-color: rgba(200,150,10,0.45); color: var(--parch); }
-    .btn-w-primary { background: linear-gradient(135deg, var(--blood), #3a0308); border: 1px solid var(--blood-bright); color: var(--parch); box-shadow: 0 4px 22px rgba(192,24,48,0.35); }
+    .btn-w-secondary { background: transparent; border: 1px solid rgba(136,144,192,0.22); color: var(--ink-muted); }
+    .btn-w-secondary:hover { border-color: rgba(136,144,192,0.45); color: var(--parch); }
+    .btn-w-primary { background: linear-gradient(135deg, var(--blood), #201e38); border: 1px solid var(--blood-bright); color: var(--parch); box-shadow: 0 4px 22px rgba(106,92,176,0.35); }
     .btn-w-primary:hover { background: linear-gradient(135deg, var(--blood-bright), var(--blood)); }
-    .btn-w-final { background: linear-gradient(135deg, rgba(200,150,10,0.85), rgba(150,100,5,0.95)); border: 1px solid var(--gold); color: #0a0600; font-weight: 700; }
+    .btn-w-final { background: linear-gradient(135deg, rgba(136,144,192,0.85), rgba(90,80,150,0.95)); border: 1px solid var(--gold); color: #0a0a10; font-weight: 700; }
     .btn-w-final:hover { background: linear-gradient(135deg, var(--gold), var(--gold-pale)); }
     .btn-w-cancel { background: transparent; border: none; color: rgba(200,80,80,0.55); font-size: 0.82rem; padding: 0.65rem 0.5rem; }
     .btn-w-cancel:hover { color: var(--crimson); }
@@ -389,13 +403,13 @@
 </head>
 <body>
 
-  <!-- Névoa de Barovia -->
+  <!-- Névoa Sombria -->
   <div class="fog-layer"></div>
 
   <!-- Morcegos -->
   <div class="bat-container" id="bat-container"></div>
 
-  <!-- Silhueta do Castelo Ravenloft -->
+  <!-- Silhueta do Castelo -->
   <svg class="castle-silhouette" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,300 L0,200 L30,200 L30,160 L50,160 L50,140 L60,140 L60,100 L65,80 L70,100 L70,140 L80,140 L80,160
              L100,160 L100,200 L120,200 L120,180 L135,180 L135,140 L145,140 L145,100 L150,80 L155,100 L155,140
@@ -414,18 +428,27 @@
     <header class="site-header">
       <div class="ornament">
         <span class="ornament-line"></span>
-        🦇 ✝ 🦇
+        ☽ ✦ ☾
         <span class="ornament-line right"></span>
       </div>
-      <h1 class="site-title">A Maldição de Strahd</h1>
-      <div class="site-subtitle">Companheiros de Barovia · Que as trevas não os devorem</div>
+      <h1 class="site-title">Umbra</h1>
+      <div class="site-subtitle">Gerenciador de Fichas · Onde as sombras guardam sua lenda</div>
     </header>
 
     <div class="action-bar">
       <h2>☽ Aventureiros</h2>
-      <button class="btn-criar" onclick="abrirWizard()">
-        <span>✦</span> Criar Personagem
-      </button>
+      <div class="action-bar-btns">
+        <button class="btn-secundario" onclick="exportarBackupCompleto()" title="Baixa um arquivo .json com todos os personagens">
+          <span>⇩</span> Backup
+        </button>
+        <button class="btn-secundario" onclick="document.getElementById('input-restaurar-backup').click()" title="Restaura personagens a partir de um arquivo de backup">
+          <span>⇧</span> Restaurar
+        </button>
+        <input type="file" id="input-restaurar-backup" class="input-arquivo-oculto" accept="application/json,.json" onchange="importarBackupCompleto(event)">
+        <button class="btn-criar" onclick="abrirWizard()">
+          <span>✦</span> Criar Personagem
+        </button>
+      </div>
     </div>
 
     <div class="characters-grid" id="characters-grid"></div>
@@ -437,7 +460,7 @@
   <div class="wizard-overlay" id="wizard-overlay">
     <div class="wizard-box">
       <div class="wizard-head">
-        <h2>🩸 Criar Novo Personagem</h2>
+        <h2 id="wizard-titulo">✦ Criar Novo Personagem</h2>
         <div class="wizard-progress" id="wizard-progress"></div>
       </div>
       <div class="wizard-body">
@@ -445,7 +468,7 @@
         <!-- PASSO 1: Identidade -->
         <div class="wizard-step active" id="step-1">
           <div class="step-title">Identidade</div>
-          <div class="step-hint">Quem é esse aventureiro que ousou adentrar as brumas de Barovia?</div>
+          <div class="step-hint">Quem é esse aventureiro que emerge das sombras?</div>
           <div class="wrow">
             <div class="wfield"><label>Nome do Personagem</label><input type="text" id="w-nome" placeholder="ex: Gasphar" autocomplete="off"></div>
             <div class="wfield"><label>Nome do Jogador</label><input type="text" id="w-jogador" placeholder="seu nome" autocomplete="off"></div>
@@ -523,7 +546,7 @@
           <div class="step-title">Perícias</div>
           <div class="step-hint">Escolha as perícias em que seu personagem tem treinamento.</div>
           <div style="margin-bottom:0.8rem;">
-            <div style="font-family:var(--font-head);font-size:0.78rem;color:var(--ink-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Testes de Resistência (automático pela classe)</div>
+            <div style="font-family:var(--font-head);font-size:0.78rem;color:var(--ink-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Salvaguardas (automático pela classe)</div>
             <div class="saves-preview" id="w-saves-preview">—</div>
           </div>
           <div class="skills-limit-info" id="w-skills-limit">Escolha suas perícias:</div>
@@ -597,10 +620,23 @@
   }
 
   const CLASS_SYMBOLS = {
-    'Artificer':'⚙','Bárbaro':'⚔','Bardo':'♪','Bruxo':'☽',
-    'Caçador de Sangue':'🩸','Clérigo':'✝','Druida':'✾',
-    'Feiticeiro':'✧','Guerreiro':'◈','Ladino':'✦',
-    'Mago':'✦','Monge':'⊕','Paladino':'⚜','Patrulheiro':'↗',
+    'Artificer':'⚙','Bárbaro':'⚒','Bardo':'♪','Bruxo':'◉',
+    'Clérigo':'✝','Druida':'✾','Feiticeiro':'✧','Guerreiro':'⚔',
+    'Ladino':'†','Mago':'✦','Monge':'⊕','Paladino':'⛨','Patrulheiro':'↗',
+  }
+  /* Mesmas cores dos temas de classe da ficha (script.js → TEMAS[*].swatch),
+     assim o card do personagem já dá uma prévia da identidade visual dele. */
+  const CLASS_COLORS = {
+    'Artificer':'#6a4325','Bárbaro':'#E7623E','Bardo':'#AB6DAC','Bruxo':'#7B469B',
+    'Clérigo':'#91A1B2','Druida':'#7A853B','Feiticeiro':'#992E2E','Guerreiro':'#7F513E',
+    'Ladino':'#555752','Mago':'#2A50A1','Monge':'#51A5C5','Paladino':'#B59E54',
+    'Patrulheiro':'#507F62',
+  }
+  function classColor(classe) { return CLASS_COLORS[classe] || '#8890c0' }
+  function hexToRgb(hex) {
+    hex = (hex || '#8890c0').replace('#','')
+    const n = parseInt(hex, 16)
+    return `${(n>>16)&255},${(n>>8)&255},${n&255}`
   }
 
   /* ════════ MORCEGOS ANIMADOS ════════ */
@@ -679,9 +715,9 @@
     if (!lista.length) {
       grid.innerHTML = `
         <div class="empty-state">
-          <span class="empty-icon">🦇</span>
+          <span class="empty-icon">🌑</span>
           <p>Nenhum aventureiro ainda.</p>
-          <small>Clique em "Criar Personagem" para começar sua jornada em Barovia.</small>
+          <small>Clique em "Criar Personagem" para começar sua jornada.</small>
         </div>`
       return
     }
@@ -697,7 +733,7 @@
         ? `<div style="text-align:center;font-size:0.78rem;color:rgba(224,32,64,0.75);margin-bottom:0.3rem;">${p.condicoes.slice(0,3).join(' ')}</div>`
         : ''
       return `
-        <div class="char-card" style="animation-delay:${i*0.06}s">
+        <div class="char-card" style="animation-delay:${i*0.06}s; --card-hex:${classColor(p.classe)}; --card-rgb:${hexToRgb(classColor(p.classe))};">
           <div class="card-avatar-wrap">
             <div class="card-avatar">${imgHtml}</div>
             <div class="card-name">${p.nome}</div>
@@ -731,6 +767,68 @@
     renderPersonagens()
   }
 
+  /* ════════ BACKUP COMPLETO (todos os personagens) ════════ */
+  function exportarBackupCompleto() {
+    const lista = listarPersonagens()
+    if (!lista.length) { alert('Nenhum personagem para fazer backup ainda.'); return }
+
+    const dados = {}
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      dados[key] = localStorage.getItem(key)
+    }
+
+    const backup = {
+      tipo: 'umbra-backup',
+      versao: 1,
+      dataExportacao: new Date().toISOString(),
+      personagens: lista.map(p => p.nome),
+      dados
+    }
+
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    const dataStr = new Date().toISOString().slice(0, 10)
+    a.href = url; a.download = `umbra_backup_${dataStr}.json`
+    document.body.appendChild(a); a.click()
+    document.body.removeChild(a); URL.revokeObjectURL(url)
+  }
+
+  function importarBackupCompleto(event) {
+    const file = event.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = e => {
+      try {
+        const backup = JSON.parse(e.target.result)
+        if (!backup || backup.tipo !== 'umbra-backup' || !backup.dados) {
+          alert('Este arquivo não parece ser um backup válido do Umbra.')
+          event.target.value = ''; return
+        }
+        const nomes = backup.personagens && backup.personagens.length
+          ? backup.personagens.join(', ')
+          : 'personagens desconhecidos'
+        const aviso = `Restaurar backup de ${new Date(backup.dataExportacao).toLocaleString('pt-BR')}?\n\n` +
+          `Personagens no backup: ${nomes}\n\n` +
+          `Personagens com o mesmo nome/id serão sobrescritos. Os demais personagens atuais não serão apagados.`
+        if (!confirm(aviso)) { event.target.value = ''; return }
+
+        Object.keys(backup.dados).forEach(key => {
+          localStorage.setItem(key, backup.dados[key])
+        })
+
+        alert('Backup restaurado com sucesso!')
+        event.target.value = ''
+        renderPersonagens()
+      } catch (err) {
+        alert('Não foi possível ler o arquivo: ' + err.message)
+        event.target.value = ''
+      }
+    }
+    reader.readAsText(file)
+  }
+
   /* ════════ WIZARD ════════ */
   let wizardStep = 1
   const TOTAL_STEPS = 4
@@ -757,6 +855,9 @@
     ;['w-classe','w-raca','w-antecedente','w-alinhamento'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = ''
     })
+    document.getElementById('wizard-titulo').textContent = '✦ Criar Novo Personagem'
+    document.querySelector('.wizard-head')?.style.setProperty('border-bottom-color', '')
+    document.querySelector('.wizard-box')?.style.setProperty('border-color', '')
     const defaults = { 'w-for':15,'w-des':14,'w-con':13,'w-int':12,'w-sab':10,'w-car':8 }
     Object.entries(defaults).forEach(([id,v]) => {
       const el = document.getElementById(id)
@@ -836,16 +937,10 @@
     const classe = Object.keys(CLASSES_DATA).find(k => k.toLowerCase() === rawClasse.toLowerCase()) || rawClasse
     const cd = CLASSES_DATA[classe]; if (!cd) return
 
-    const CLASS_ACCENT = {
-      'Artificer':'#5080c0','Bárbaro':'#c84020','Bardo':'#c07820',
-      'Bruxo':'#7030c8','Caçador de Sangue':'#8b0000','Clérigo':'#c8901a',
-      'Druida':'#4a8a1a','Feiticeiro':'#c84020','Guerreiro':'#6060a0',
-      'Ladino':'#4a4a5a','Mago':'#5020a0','Monge':'#c07820',
-      'Paladino':'#1878c8','Patrulheiro':'#4a8a1a',
-    }
-    const accent = CLASS_ACCENT[classe] || 'var(--blood)'
-    document.querySelector('.wizard-head')?.style.setProperty('border-bottom-color', accent + '55')
-    document.querySelector('.wizard-box')?.style.setProperty('border-color', accent + '44')
+    document.querySelector('.wizard-head')?.style.setProperty('border-bottom-color', (CLASS_COLORS[classe] || '#6a5cb0') + '55')
+    document.querySelector('.wizard-box')?.style.setProperty('border-color', (CLASS_COLORS[classe] || '#6a5cb0') + '44')
+    const titulo = document.getElementById('wizard-titulo')
+    if (titulo) titulo.textContent = `${CLASS_SYMBOLS[classe] || '✦'} Criar Novo Personagem`
 
     document.getElementById('w-saves-preview').innerHTML = cd.saves.map(s => `<span class="save-pill">${s}</span>`).join('')
 
@@ -925,15 +1020,15 @@
       if (!confirm(`Já existe um personagem com o slug "${id}". Deseja substituí-lo?`)) return
     }
 
-    // Tema padrão Strahd para a campanha
+    // Cada classe tem seu próprio tema dedicado; Umbra é o padrão genérico
     const CLASS_THEME = {
-      'Artificer':'Pergaminho','Bárbaro':'Inferno','Bardo':'Outono',
-      'Bruxo':'Arcano','Caçador de Sangue':'Strahd','Clérigo':'Pergaminho',
-      'Druida':'Floresta','Feiticeiro':'Inferno','Guerreiro':'Pergaminho',
-      'Ladino':'Noturno','Mago':'Arcano','Monge':'Outono',
-      'Paladino':'Glacial','Patrulheiro':'Floresta',
+      'Artificer':'Artificer','Bárbaro':'Bárbaro','Bardo':'Bardo',
+      'Bruxo':'Bruxo','Caçador de Sangue':'Strahd','Clérigo':'Clérigo',
+      'Druida':'Druida','Feiticeiro':'Feiticeiro','Guerreiro':'Guerreiro',
+      'Ladino':'Ladino','Mago':'Mago','Monge':'Monge',
+      'Paladino':'Paladino','Patrulheiro':'Patrulheiro',
     }
-    localStorage.setItem(id + ':tema-preset', CLASS_THEME[classe] || 'Strahd')
+    localStorage.setItem(id + ':tema-preset', CLASS_THEME[classe] || 'Umbra')
     localStorage.setItem(key, JSON.stringify(ficha))
     window.location.href = 'ficha.html?id=' + id
   }

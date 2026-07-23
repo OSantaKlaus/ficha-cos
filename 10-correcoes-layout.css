@@ -1,0 +1,58 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════════
+   CORREÇÕES DE LAYOUT — Títulos e Imagem
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Coluna esquerda de Atributos (250px): só reduz letter-spacing
+      para evitar corte em "TESTES DE RESISTÊNCIA" e similares.
+      font-size mantido igual ao restante para consistência. ── */
+#atributos-grid > div:first-child .section-title,
+#atributos-grid > div:first-child .death-section-title {
+  letter-spacing: 1px !important;
+}
+
+/* ── Modo retrato: regras removidas (feature desativada,
+      ver nota em 01-base-v3.css junto a #char-img-outer) ── */
+
+/* ── Placeholder de imagem: centraliza texto e ícone ── */
+/* NOTA: display sem !important para que o JS possa ocultar com display:none */
+.img-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+/* ── Ícone e texto do placeholder de imagem ── */
+.img-placeholder .img-icon,
+.img-placeholder span {
+  font-size: 2rem;
+  display: block;
+  text-align: center;
+}
+
+.img-placeholder > div {
+  text-align: center;
+  width: 100%;
+}
+
+/* ── Garante que TODOS os .section-title nas abas Atributos/Ataques
+      tenham o marcador ::before mesmo que o JS ainda não tenha
+      adicionado has-collapse. Só o essencial pra existir — tamanho
+      e forma reais vêm de css/13-identidade-temas.css. ── */
+:is(#atributos-grid, #ataques-grid) .section-title::before {
+  content: '' !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+  opacity: 1 !important;
+}
+

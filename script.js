@@ -60,24 +60,24 @@ const ATTR_NOMES = {
 // Lista completa de perícias com seu atributo base
 // Para adicionar uma perícia: { nome: 'Nome', attr: 'id-atributo' }
 const PERICIAS = [
-    { nome: 'Acrobacia', attr: 'des' },
-    { nome: 'Arcanismo', attr: 'int' },
-    { nome: 'Atletismo', attr: 'for' },
-    { nome: 'Atuação', attr: 'car' },
-    { nome: 'Enganação', attr: 'car' },
-    { nome: 'Furtividade', attr: 'des' },
-    { nome: 'História', attr: 'int' },
-    { nome: 'Intimidação', attr: 'car' },
-    { nome: 'Intuição', attr: 'sab' },
-    { nome: 'Investigação', attr: 'int' },
-    { nome: 'Lidar c/ Animais', attr: 'sab' },
-    { nome: 'Medicina', attr: 'sab' },
-    { nome: 'Natureza', attr: 'int' },
-    { nome: 'Percepção', attr: 'sab' },
-    { nome: 'Persuasão', attr: 'car' },
-    { nome: 'Prestidigitação', attr: 'des' },
-    { nome: 'Religião', attr: 'int' },
-    { nome: 'Sobrevivência', attr: 'sab' },
+    { nome: 'Acrobacia', attr: 'des', desc: 'Manter o equilíbrio, cair bem, fazer acrobacias e escapar de agarrões.' },
+    { nome: 'Arcanismo', attr: 'int', desc: 'Conhecimento sobre magia, itens mágicos, planos e criaturas arcanas.' },
+    { nome: 'Atletismo', attr: 'for', desc: 'Escalar, saltar, nadar e vencer disputas físicas de força.' },
+    { nome: 'Atuação', attr: 'car', desc: 'Entreter uma plateia com música, dança, atuação ou contação de histórias.' },
+    { nome: 'Enganação', attr: 'car', desc: 'Mentir de forma convincente, blefar ou disfarçar intenções.' },
+    { nome: 'Furtividade', attr: 'des', desc: 'Esconder-se, mover-se em silêncio e passar despercebido.' },
+    { nome: 'História', attr: 'int', desc: 'Lembrar eventos históricos, lendas, reinos e civilizações antigas.' },
+    { nome: 'Intimidação', attr: 'car', desc: 'Influenciar alguém através de ameaças, hostilidade ou violência.' },
+    { nome: 'Intuição', attr: 'sab', desc: 'Perceber mentiras, ler intenções e prever o próximo passo de alguém.' },
+    { nome: 'Investigação', attr: 'int', desc: 'Analisar pistas, deduzir conclusões e encontrar detalhes escondidos.' },
+    { nome: 'Lidar c/ Animais', attr: 'sab', desc: 'Acalmar, treinar ou entender o comportamento de um animal.' },
+    { nome: 'Medicina', attr: 'sab', desc: 'Estabilizar um moribundo, diagnosticar doenças e identificar causa de morte.' },
+    { nome: 'Natureza', attr: 'int', desc: 'Conhecimento sobre terrenos, plantas, animais e ciclos naturais.' },
+    { nome: 'Percepção', attr: 'sab', desc: 'Notar detalhes, ouvir sons distantes ou detectar algo escondido.' },
+    { nome: 'Persuasão', attr: 'car', desc: 'Convencer alguém através de tato, boas maneiras ou apelos sinceros.' },
+    { nome: 'Prestidigitação', attr: 'des', desc: 'Truques manuais, punga, plantar objetos e outras manobras sutis.' },
+    { nome: 'Religião', attr: 'int', desc: 'Conhecimento sobre deuses, ritos, símbolos sagrados e organizações religiosas.' },
+    { nome: 'Sobrevivência', attr: 'sab', desc: 'Rastrear, caçar, prever o clima e evitar perigos naturais.' },
 ]
 
 /* ============================================================
@@ -230,6 +230,7 @@ function calcularCA() {
 
     const el = g('ca-total')
     if (el) el.value = total
+    try { atualizarQuickStats() } catch(e) {}
 }
 
 /* ============================================================
@@ -242,33 +243,40 @@ function atualizarPVBar() {
     const max = Math.max(1, gN('pv-max'))
     const cur = gN('pv-atual')
     const pvTemp = parseInt(g('pv-temp')?.value) || 0   // declarado ANTES de usar
-    const pct = Math.max(0, Math.min(100, (cur / max) * 100))
+
+    // Quando há PV temporário, a escala da barra passa a ser max+temp,
+    // senão o PV normal cheio (100%) nunca sobra espaço pro temporário aparecer.
+    const escala = pvTemp > 0 ? (max + pvTemp) : max
+    const pct = Math.max(0, Math.min(100, (cur / escala) * 100))
 
     const bar = g('pv-bar')
     if (bar) {
         bar.style.width = pct + '%'
         bar.classList.remove('pv-high', 'pv-medium', 'pv-critical', 'pv-dead')
         if (cur <= 0) bar.classList.add('pv-dead')
-        else if (pct <= 25) bar.classList.add('pv-critical')
-        else if (pct <= 60) bar.classList.add('pv-medium')
+        else if ((cur / max) * 100 <= 25) bar.classList.add('pv-critical')
+        else if ((cur / max) * 100 <= 60) bar.classList.add('pv-medium')
         else bar.classList.add('pv-high')
     }
 
     const tempBar = g('pv-bar-temp')
     if (tempBar) {
         if (pvTemp > 0) {
-            const pctTemp = Math.min(100, ((cur + pvTemp) / max) * 100)
-            tempBar.style.width = Math.max(pct, pctTemp) + '%'
+            const pctTempOnly = Math.max(0, Math.min(100 - pct, (pvTemp / escala) * 100))
+            tempBar.style.width = pctTempOnly + '%'
         } else {
             tempBar.style.width = '0%'
         }
     }
 
-    const txt = g('pv-bar-text')
-    if (txt) txt.textContent = pvTemp > 0 ? cur + ' (+' + pvTemp + ') / ' + max : cur + ' / ' + max
+    const lbl = g('pv-bar-label')
+    if (lbl) lbl.textContent = cur + ' / ' + max
+
+    const lblTemp = g('pv-bar-temp-label')
+    if (lblTemp) lblTemp.textContent = pvTemp > 0 ? '+' + pvTemp : ''
 
     const heart = g('pv-heart')
-    if (heart) heart.style.display = (cur > 0 && pct <= 25) ? 'inline' : 'none'
+    if (heart) heart.style.display = (cur > 0 && (cur / max) * 100 <= 25) ? 'inline' : 'none'
 }
 
 /* ============================================================
@@ -306,14 +314,29 @@ function renderPericias(sp) {
     g('pericias-lista').innerHTML = PERICIAS.map(p => {
         const sid = skillId(p.nome)
         const attrCls = 'attr-' + p.attr.toLowerCase()
-        return `<div class="skill-row" onclick="rolarPericia('${p.nome}','${sid}')" title="Clique para rolar ${p.nome}">
-      <input type="checkbox" class="skill-check" id="${sid}" ${sp[sid] ? 'checked' : ''} onchange="atualizarTudo()" onclick="event.stopPropagation()">
-      <span class="skill-name">${p.nome}</span>
-      <span class="skill-attr ${attrCls}">${p.attr.toUpperCase()}</span>
-      <span class="skill-val" id="${sid}-bonus">+0</span>
-      <span class="roll-hint">🎲</span>
+        return `<div class="skill-item">
+      <div class="skill-row" onclick="rolarPericia('${p.nome}','${sid}')" title="Clique para rolar ${p.nome}">
+        <input type="checkbox" class="skill-check" id="${sid}" ${sp[sid] ? 'checked' : ''} onchange="atualizarTudo()" onclick="event.stopPropagation()">
+        <span class="skill-name">${p.nome}</span>
+        <button type="button" class="skill-desc-toggle" onclick="toggleSkillDesc('${sid}', event)" title="Mostrar descrição" aria-label="Mostrar descrição de ${p.nome}">▸</button>
+        <span class="skill-attr ${attrCls}">${p.attr.toUpperCase()}</span>
+        <span class="skill-val" id="${sid}-bonus">+0</span>
+        <span class="roll-hint">🎲</span>
+      </div>
+      <div class="skill-desc" id="${sid}-desc">${p.desc}</div>
     </div>`
     }).join('')
+}
+
+function toggleSkillDesc(sid, event) {
+    event.stopPropagation()
+    const desc = g(sid + '-desc')
+    const btn = event.currentTarget
+    if (!desc) return
+    const abrindo = !desc.classList.contains('open')
+    desc.classList.toggle('open', abrindo)
+    btn.classList.toggle('open', abrindo)
+    btn.setAttribute('title', abrindo ? 'Ocultar descrição' : 'Mostrar descrição')
 }
 
 /* ============================================================
@@ -549,11 +572,38 @@ function coletarTags(cid) {
 function carregarImagem(event) {
     const file = event.target.files[0]
     if (!file) return
+
     const reader = new FileReader()
     reader.onload = e => {
-        mostrarImagem(e.target.result)
-        ls.set('ficha-dnd-img', e.target.result)
+        const img = new Image()
+        img.onload = () => {
+            // Redimensiona para no máximo 640px no lado maior, evitando
+            // estourar o limite de armazenamento do navegador (localStorage)
+            // com fotos de celular que costumam vir muito grandes.
+            const MAX_LADO = 640
+            let w = img.width, h = img.height
+            if (w > MAX_LADO || h > MAX_LADO) {
+                if (w >= h) { h = Math.round(h * (MAX_LADO / w)); w = MAX_LADO }
+                else { w = Math.round(w * (MAX_LADO / h)); h = MAX_LADO }
+            }
+            const canvas = document.createElement('canvas')
+            canvas.width = w; canvas.height = h
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.82)
+
+            mostrarImagem(dataUrl)
+            try {
+                ls.set('ficha-dnd-img', dataUrl)
+                mostrarToast('✦ Imagem salva', 'sucesso', 2000)
+            } catch (err) {
+                console.warn('[imagem]', err)
+                mostrarToast('Não foi possível salvar a imagem (espaço insuficiente no navegador)', 'erro', 4500)
+            }
+        }
+        img.onerror = () => mostrarToast('Não foi possível ler essa imagem', 'erro', 3500)
+        img.src = e.target.result
     }
+    reader.onerror = () => mostrarToast('Não foi possível ler o arquivo', 'erro', 3500)
     reader.readAsDataURL(file)
 }
 
@@ -1361,7 +1411,64 @@ const CP_GROUPS = {
     ],
 }
 
+/* Ícones por tema — SVG inline (herdam a cor via stroke=currentColor).
+   Compartilhados por família onde faz sentido, mas cada classe tem
+   assinatura própria. Usados em #header-ornament-left/right. */
+const ICONES = {
+    'Umbra':       '<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>',
+    'Strahd':      '<svg viewBox="0 0 24 24"><path d="M12 6c-2 0-3 2-3 2s-3-3-7-2c2 1 3 3 3 3s-2 0-3 2c2 0 3 1 3 1s-1 2-1 3c2-1 4-3 4-3s1 4 4 6c3-2 4-6 4-6s2 2 4 3c0-1-1-3-1-3s1-1 3-1c-1-2-3-2-3-2s1-2 3-3c-4-1-7 2-7 2s-1-2-3-2z"/></svg>',
+    'Bárbaro':     '<svg viewBox="0 0 24 24"><path d="M12 3 L12 21 M12 5 C8 4 5 6 5 10 C8 11 11 8 12 6 M12 6 C15 5 18 6.5 18 9 C15 10.5 13 8.5 12 7"/></svg>',
+    'Guerreiro':   '<svg viewBox="0 0 24 24"><path d="M12 2 L12 16 M8 15 L16 15 M12 16 L12 20"/><circle cx="12" cy="21" r="1.3"/></svg>',
+    'Paladino':    '<svg viewBox="0 0 24 24"><path d="M12 3 L19 6 V11 C19 16 16 19.5 12 21 C8 19.5 5 16 5 11 V6 Z M12 8 L12 15 M9 11.5 L15 11.5"/></svg>',
+    'Patrulheiro': '<svg viewBox="0 0 24 24"><path d="M6 3 C6 3 5 12 6 21 M6 3 C10 5 10 19 6 21 M6 12 L20 12 M17 9 L20 12 L17 15"/></svg>',
+    'Mago':        '<svg viewBox="0 0 24 24"><path d="M12 2 L14 9 L21 9 L15.5 13.5 L17.5 21 L12 16.5 L6.5 21 L8.5 13.5 L3 9 L10 9 Z"/></svg>',
+    'Feiticeiro':  '<svg viewBox="0 0 24 24"><path d="M12 2 C10 7 7 8 7 13 A5 5 0 0 0 17 13 C17 10 15 9 15 7 C15 9 13.5 10 13.5 12 C13 9 12 7 12 2 Z"/></svg>',
+    'Bruxo':       '<svg viewBox="0 0 24 24"><path d="M12 4 L21 19 H3 Z M12 12 A3 3 0 1 0 12 12.01"/></svg>',
+    'Artificer':   '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.3"/><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12 M4.5 4.5 L6.6 6.6 M17.4 17.4 L19.5 19.5 M19.5 4.5 L17.4 6.6 M6.6 17.4 L4.5 19.5"/></svg>',
+    'Clérigo':     '<svg viewBox="0 0 24 24"><path d="M12 2 V22 M6 8 H18"/></svg>',
+    'Druida':      '<svg viewBox="0 0 24 24"><path d="M12 21 C12 21 4 16 4 9 A8 8 0 0 1 12 3 A8 8 0 0 1 20 9 C20 16 12 21 12 21 Z M12 3 L12 21"/></svg>',
+    'Monge':       '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12 A4 4 0 0 1 12 8 M16 12 A4 4 0 0 1 12 16"/></svg>',
+    'Ladino':      '<svg viewBox="0 0 24 24"><path d="M12 2 L14 4 L14 15 L12 20 L10 15 L10 4 Z M9 6 L15 6 M8 3 L16 3"/></svg>',
+    'Bardo':       '<svg viewBox="0 0 24 24"><circle cx="7" cy="17" r="3"/><path d="M10 17 V5 L19 3 V15" /><circle cx="16" cy="15" r="3"/></svg>',
+}
+
+/* Família visual por tema — controla textura de fundo e moldura do
+   cabeçalho (ver css/13-identidade-temas.css). Strahd/Umbra ficam
+   fora do sistema de família (identidade própria). */
+const FAMILIAS = {
+    'Bárbaro': 'marcial', 'Guerreiro': 'marcial', 'Paladino': 'marcial', 'Patrulheiro': 'marcial',
+    'Mago': 'arcano', 'Feiticeiro': 'arcano', 'Bruxo': 'arcano', 'Artificer': 'arcano',
+    'Clérigo': 'divino', 'Druida': 'divino', 'Monge': 'divino',
+    'Ladino': 'furtivo', 'Bardo': 'furtivo',
+}
+
 const TEMAS = {
+    'Umbra': {
+        swatch: '#8890c0',
+        vars: {
+            '--page':         '#050509',
+            '--parch':        '#0c0c14',
+            '--parch-mid':    '#14141f',
+            '--parch-deep':   '#1c1c2a',
+            '--parch-border': '#4a4a68',
+            '--gold':         '#8890c0',
+            '--gold-light':   '#a8b0d8',
+            '--gold-pale':    '#c8ceec',
+            '--ink':          '#e4e4f2',
+            '--ink-mid':      '#b0b0c8',
+            '--ink-light':    '#9797ae',
+            '--ink-muted':    '#78788e',
+            '--header-top':   '#14141e',
+            '--header-mid':   '#0a0a10',
+            '--header-bot':   '#050508',
+            '--tabs-top':     '#08080c',
+            '--tabs-bot':     '#050508',
+            '--bar-bg':       'rgba(8,8,12,0.97)',
+            '--tabs-txt-off':   'rgba(140,140,190,0.42)',
+            '--tabs-txt-hover': 'rgba(200,204,236,0.75)',
+            '--gold-rgb':     '136,144,192',
+        }
+    },
     'Strahd': {
         swatch: '#c82040',
         vars: {
@@ -1375,8 +1482,8 @@ const TEMAS = {
             '--gold-pale':    '#f0d060',
             '--ink':          '#f0e8d8',
             '--ink-mid':      '#d4c0a8',
-            '--ink-light':    '#a08868',
-            '--ink-muted':    '#685040',
+            '--ink-light':    '#b8a488',
+            '--ink-muted':    '#9c8268',
             '--header-top':   '#1e0810',
             '--header-mid':   '#140508',
             '--header-bot':   '#080305',
@@ -1385,208 +1492,388 @@ const TEMAS = {
             '--bar-bg':       'rgba(4,1,3,0.97)',
             '--tabs-txt-off':   'rgba(200,130,80,0.40)',
             '--tabs-txt-hover': 'rgba(240,190,120,0.70)',
+            '--gold-rgb':     '200,150,10',
         }
     },
-    'Noturno': {
-        swatch: '#1a0808',
+    'Bárbaro': {
+        swatch: '#E7623E',
         vars: {
-            '--page':         '#040202',
-            '--parch':        '#0e0808',
-            '--parch-mid':    '#180e0c',
-            '--parch-deep':   '#221210',
-            '--parch-border': '#7a5408',
-            '--gold':         '#c8960a',
-            '--gold-light':   '#e0b020',
-            '--gold-pale':    '#f0d060',
-            '--ink':          '#f0e8d8',
-            '--ink-mid':      '#d4c0a8',
-            '--ink-light':    '#a08868',
-            '--ink-muted':    '#685040',
-            '--header-top':   '#180808',
-            '--header-mid':   '#100504',
-            '--header-bot':   '#060302',
-            '--tabs-top':     '#040101',
-            '--tabs-bot':     '#020001',
-            '--bar-bg':       'rgba(3,1,1,0.98)',
-            '--tabs-txt-off':   'rgba(180,110,50,0.40)',
-            '--tabs-txt-hover': 'rgba(220,160,80,0.72)',
+            '--page':       '#080403',
+            '--parch':      '#100705',
+            '--parch-mid':  '#190c08',
+            '--parch-deep': '#22100b',
+            '--parch-border':'#b93a17',
+            '--gold':       '#E7623E',
+            '--gold-light': '#df5d39',
+            '--gold-pale':  '#d19180',
+            '--ink':        '#eae7e6',
+            '--ink-mid':    '#bea49d',
+            '--ink-light':  '#a58278',
+            '--ink-muted':  '#815f56',
+            '--header-top': '#1f0f0a',
+            '--header-mid': '#100705',
+            '--header-bot': '#080403',
+            '--tabs-top':   '#080403',
+            '--tabs-bot':   '#040201',
+            '--bar-bg':     'rgba(4,2,1,0.97)',
+            '--tabs-txt-off':'rgba(231,98,62,0.42)',
+            '--tabs-txt-hover':'#c95d40',
+            '--gold-rgb':   '231,98,62',
+            '--shadow-sm':  '0 2px 8px rgba(231,98,62,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(231,98,62,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(231,98,62,0.20)',
         }
     },
-    'Arcano': {
-        swatch: '#8040d0',
+    'Bardo': {
+        swatch: '#AB6DAC',
         vars: {
-            '--page':         '#06020e',
-            '--parch':        '#100820',
-            '--parch-mid':    '#180e30',
-            '--parch-deep':   '#20143e',
-            '--parch-border': '#5028a0',
-            '--gold':         '#8040d0',
-            '--gold-light':   '#a060e8',
-            '--gold-pale':    '#c090f8',
-            '--ink':          '#ece8f8',
-            '--ink-mid':      '#c0b0e0',
-            '--ink-light':    '#8870b0',
-            '--ink-muted':    '#504068',
-            '--header-top':   '#18083a',
-            '--header-mid':   '#100528',
-            '--header-bot':   '#080318',
-            '--tabs-top':     '#060114',
-            '--tabs-bot':     '#030009',
-            '--bar-bg':       'rgba(4,1,10,0.97)',
-            '--tabs-txt-off':   'rgba(120,80,200,0.40)',
-            '--tabs-txt-hover': 'rgba(180,130,240,0.72)',
+            '--page':       '#070407',
+            '--parch':      '#0d080d',
+            '--parch-mid':  '#140d14',
+            '--parch-deep': '#1c121c',
+            '--parch-border':'#7e487f',
+            '--gold':       '#AB6DAC',
+            '--gold-light': '#a96faa',
+            '--gold-pale':  '#b69ab7',
+            '--ink':        '#eae6ea',
+            '--ink-mid':    '#b8a2b9',
+            '--ink-light':  '#9e7f9e',
+            '--ink-muted':  '#795c7a',
+            '--header-top': '#181019',
+            '--header-mid': '#0d080d',
+            '--header-bot': '#070407',
+            '--tabs-top':   '#070407',
+            '--tabs-bot':   '#030203',
+            '--bar-bg':     'rgba(3,2,3,0.97)',
+            '--tabs-txt-off':'rgba(171,109,172,0.42)',
+            '--tabs-txt-hover':'#9c6c9d',
+            '--gold-rgb':   '171,109,172',
+            '--shadow-sm':  '0 2px 8px rgba(171,109,172,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(171,109,172,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(171,109,172,0.20)',
         }
     },
-    'Floresta': {
-        swatch: '#3a7020',
+    'Bruxo': {
+        swatch: '#7B469B',
         vars: {
-            '--page':         '#020804',
-            '--parch':        '#080e06',
-            '--parch-mid':    '#0e160a',
-            '--parch-deep':   '#141e0e',
-            '--parch-border': '#2a5018',
-            '--gold':         '#3a7020',
-            '--gold-light':   '#4e9030',
-            '--gold-pale':    '#70b848',
-            '--ink':          '#e0eed8',
-            '--ink-mid':      '#b0c8a0',
-            '--ink-light':    '#708060',
-            '--ink-muted':    '#405030',
-            '--header-top':   '#081808',
-            '--header-mid':   '#041004',
-            '--header-bot':   '#020802',
-            '--tabs-top':     '#020604',
-            '--tabs-bot':     '#010402',
-            '--bar-bg':       'rgba(2,6,2,0.97)',
-            '--tabs-txt-off':   'rgba(60,100,30,0.50)',
-            '--tabs-txt-hover': 'rgba(100,170,60,0.75)',
+            '--page':       '#060407',
+            '--parch':      '#0b070d',
+            '--parch-mid':  '#120c15',
+            '--parch-deep': '#19101d',
+            '--parch-border':'#57326e',
+            '--gold':       '#7B469B',
+            '--gold-light': '#8f5ab0',
+            '--gold-pale':  '#ad95bc',
+            '--ink':        '#e9e6ea',
+            '--ink-mid':    '#b19ebd',
+            '--ink-light':  '#947aa4',
+            '--ink-muted':  '#70577f',
+            '--header-top': '#160f1a',
+            '--header-mid': '#0b070d',
+            '--header-bot': '#060407',
+            '--tabs-top':   '#060407',
+            '--tabs-bot':   '#030203',
+            '--bar-bg':     'rgba(3,2,3,0.97)',
+            '--tabs-txt-off':'rgba(123,70,155,0.42)',
+            '--tabs-txt-hover':'#8d63a6',
+            '--gold-rgb':   '123,70,155',
+            '--shadow-sm':  '0 2px 8px rgba(123,70,155,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(123,70,155,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(123,70,155,0.20)',
         }
     },
-    'Glacial': {
-        swatch: '#2878c0',
+    'Clérigo': {
+        swatch: '#91A1B2',
         vars: {
-            '--page':         '#020608',
-            '--parch':        '#060e14',
-            '--parch-mid':    '#0a1620',
-            '--parch-deep':   '#0e1e2c',
-            '--parch-border': '#184878',
-            '--gold':         '#2878c0',
-            '--gold-light':   '#3898e0',
-            '--gold-pale':    '#80c8f0',
-            '--ink':          '#d8ecf8',
-            '--ink-mid':      '#a0c4e0',
-            '--ink-light':    '#6090b0',
-            '--ink-muted':    '#305070',
-            '--header-top':   '#081828',
-            '--header-mid':   '#04101e',
-            '--header-bot':   '#020810',
-            '--tabs-top':     '#020610',
-            '--tabs-bot':     '#010408',
-            '--bar-bg':       'rgba(2,4,10,0.97)',
-            '--tabs-txt-off':   'rgba(40,100,180,0.45)',
-            '--tabs-txt-hover': 'rgba(90,160,230,0.75)',
+            '--page':       '#050606',
+            '--parch':      '#090a0c',
+            '--parch-mid':  '#0e1113',
+            '--parch-deep': '#14171a',
+            '--parch-border':'#5e7287',
+            '--gold':       '#91A1B2',
+            '--gold-light': '#798c9f',
+            '--gold-pale':  '#9fa8b1',
+            '--ink':        '#e7e8e9',
+            '--ink-mid':    '#a6adb5',
+            '--ink-light':  '#858e99',
+            '--ink-muted':  '#626b75',
+            '--header-top': '#121417',
+            '--header-mid': '#090a0c',
+            '--header-bot': '#050606',
+            '--tabs-top':   '#050606',
+            '--tabs-bot':   '#020303',
+            '--bar-bg':     'rgba(2,3,3,0.97)',
+            '--tabs-txt-off':'rgba(145,161,178,0.42)',
+            '--tabs-txt-hover':'#758494',
+            '--gold-rgb':   '145,161,178',
+            '--shadow-sm':  '0 2px 8px rgba(145,161,178,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(145,161,178,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(145,161,178,0.20)',
         }
     },
-    'Outono': {
-        swatch: '#b06020',
+    'Druida': {
+        swatch: '#7A853B',
         vars: {
-            '--page':         '#080402',
-            '--parch':        '#140a04',
-            '--parch-mid':    '#1e1008',
-            '--parch-deep':   '#2c180e',
-            '--parch-border': '#784018',
-            '--gold':         '#b06020',
-            '--gold-light':   '#d08030',
-            '--gold-pale':    '#e8b060',
-            '--ink':          '#f0e0cc',
-            '--ink-mid':      '#d0b890',
-            '--ink-light':    '#a08050',
-            '--ink-muted':    '#705030',
-            '--header-top':   '#1c0c06',
-            '--header-mid':   '#120804',
-            '--header-bot':   '#080502',
-            '--tabs-top':     '#060301',
-            '--tabs-bot':     '#030200',
-            '--bar-bg':       'rgba(5,3,1,0.97)',
-            '--tabs-txt-off':   'rgba(160,90,20,0.45)',
-            '--tabs-txt-hover': 'rgba(220,150,60,0.75)',
+            '--page':       '#070704',
+            '--parch':      '#0d0d07',
+            '--parch-mid':  '#14150c',
+            '--parch-deep': '#1c1e10',
+            '--parch-border':'#575e2a',
+            '--gold':       '#7A853B',
+            '--gold-light': '#929e4b',
+            '--gold-pale':  '#b6bc94',
+            '--ink':        '#e9eae6',
+            '--ink-mid':    '#b8bd9e',
+            '--ink-light':  '#9ea479',
+            '--ink-muted':  '#7a8056',
+            '--header-top': '#191a0f',
+            '--header-mid': '#0d0d07',
+            '--header-bot': '#070704',
+            '--tabs-top':   '#070704',
+            '--tabs-bot':   '#030302',
+            '--bar-bg':     'rgba(3,3,2,0.97)',
+            '--tabs-txt-off':'rgba(122,133,59,0.42)',
+            '--tabs-txt-hover':'#9ca763',
+            '--gold-rgb':   '122,133,59',
+            '--shadow-sm':  '0 2px 8px rgba(122,133,59,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(122,133,59,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(122,133,59,0.20)',
         }
     },
-    'Inferno': {
-        swatch: '#c05020',
+    'Feiticeiro': {
+        swatch: '#992E2E',
         vars: {
-            '--page':         '#080402',
-            '--parch':        '#140804',
-            '--parch-mid':    '#200e06',
-            '--parch-deep':   '#2e1408',
-            '--parch-border': '#802810',
-            '--gold':         '#c05020',
-            '--gold-light':   '#e07030',
-            '--gold-pale':    '#f09060',
-            '--ink':          '#f0e0d0',
-            '--ink-mid':      '#d0b098',
-            '--ink-light':    '#a07860',
-            '--ink-muted':    '#704838',
-            '--header-top':   '#220a04',
-            '--header-mid':   '#180602',
-            '--header-bot':   '#0e0302',
-            '--tabs-top':     '#080200',
-            '--tabs-bot':     '#050100',
-            '--bar-bg':       'rgba(5,1,0,0.97)',
-            '--tabs-txt-off':   'rgba(180,70,20,0.45)',
-            '--tabs-txt-hover': 'rgba(240,110,50,0.75)',
+            '--page':       '#080303',
+            '--parch':      '#0f0606',
+            '--parch-mid':  '#170a0a',
+            '--parch-deep': '#200e0e',
+            '--parch-border':'#6d2121',
+            '--gold':       '#992E2E',
+            '--gold-light': '#b43c3c',
+            '--gold-pale':  '#c48c8c',
+            '--ink':        '#eae6e6',
+            '--ink-mid':    '#be9d9d',
+            '--ink-light':  '#a57878',
+            '--ink-muted':  '#815656',
+            '--header-top': '#1d0c0c',
+            '--header-mid': '#0f0606',
+            '--header-bot': '#080303',
+            '--tabs-top':   '#080303',
+            '--tabs-bot':   '#040202',
+            '--bar-bg':     'rgba(4,2,2,0.97)',
+            '--tabs-txt-off':'rgba(153,46,46,0.42)',
+            '--tabs-txt-hover':'#b45555',
+            '--gold-rgb':   '153,46,46',
+            '--shadow-sm':  '0 2px 8px rgba(153,46,46,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(153,46,46,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(153,46,46,0.20)',
         }
     },
-    'Pergaminho': {
-        swatch: '#c8960a',
+    'Guerreiro': {
+        swatch: '#7F513E',
         vars: {
-            '--page':         '#06020a',
-            '--parch':        '#130918',
-            '--parch-mid':    '#1e0c18',
-            '--parch-deep':   '#2c1020',
-            '--parch-border': '#7a5408',
-            '--gold':         '#c8960a',
-            '--gold-light':   '#e0b020',
-            '--gold-pale':    '#f0d060',
-            '--ink':          '#f0e8d8',
-            '--ink-mid':      '#d4c0a8',
-            '--ink-light':    '#a08868',
-            '--ink-muted':    '#685040',
-            '--header-top':   '#1a0e08',
-            '--header-mid':   '#100806',
-            '--header-bot':   '#080502',
-            '--tabs-top':     '#050200',
-            '--tabs-bot':     '#030100',
+            '--page':       '#070504',
+            '--parch':      '#0d0908',
+            '--parch-mid':  '#150f0c',
+            '--parch-deep': '#1d1411',
+            '--parch-border':'#5a3a2c',
+            '--gold':       '#7F513E',
+            '--gold-light': '#98644e',
+            '--gold-pale':  '#baa196',
+            '--ink':        '#eae7e6',
+            '--ink-mid':    '#bba89f',
+            '--ink-light':  '#a2877c',
+            '--ink-muted':  '#7e6359',
+            '--header-top': '#1a120f',
+            '--header-mid': '#0d0908',
+            '--header-bot': '#070504',
+            '--tabs-top':   '#070504',
+            '--tabs-bot':   '#030202',
+            '--bar-bg':     'rgba(3,2,2,0.97)',
+            '--tabs-txt-off':'rgba(127,81,62,0.42)',
+            '--tabs-txt-hover':'#a37866',
+            '--gold-rgb':   '127,81,62',
+            '--shadow-sm':  '0 2px 8px rgba(127,81,62,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(127,81,62,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(127,81,62,0.20)',
+        }
+    },
+    'Ladino': {
+        swatch: '#555752',
+        vars: {
+            '--page':       '#060605',
+            '--parch':      '#0b0b0a',
+            '--parch-mid':  '#111110',
+            '--parch-deep': '#171716',
+            '--parch-border':'#3c3e3a',
+            '--gold':       '#555752',
+            '--gold-light': '#696c66',
+            '--gold-pale':  '#a9aaa7',
+            '--ink':        '#e8e8e8',
+            '--ink-mid':    '#aeafac',
+            '--ink-light':  '#8f908d',
+            '--ink-muted':  '#6b6d6a',
+            '--header-top': '#141514',
+            '--header-mid': '#0b0b0a',
+            '--header-bot': '#060605',
+            '--tabs-top':   '#060605',
+            '--tabs-bot':   '#030302',
+            '--bar-bg':     'rgba(3,3,2,0.97)',
+            '--tabs-txt-off':'rgba(85,87,82,0.42)',
+            '--tabs-txt-hover':'#858782',
+            '--gold-rgb':   '85,87,82',
+            '--shadow-sm':  '0 2px 8px rgba(85,87,82,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(85,87,82,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(85,87,82,0.20)',
+        }
+    },
+    'Mago': {
+        swatch: '#2A50A1',
+        vars: {
+            '--page':       '#030508',
+            '--parch':      '#06090f',
+            '--parch-mid':  '#090e18',
+            '--parch-deep': '#0d1321',
+            '--parch-border':'#1e3972',
+            '--gold':       '#2A50A1',
+            '--gold-light': '#3762bc',
+            '--gold-pale':  '#8a9dc7',
+            '--ink':        '#e6e7ea',
+            '--ink-mid':    '#9da8be',
+            '--ink-light':  '#7887a5',
+            '--ink-muted':  '#566381',
+            '--header-top': '#0b111d',
+            '--header-mid': '#06090f',
+            '--header-bot': '#030508',
+            '--tabs-top':   '#030508',
+            '--tabs-bot':   '#010204',
+            '--bar-bg':     'rgba(1,2,4,0.97)',
+            '--tabs-txt-off':'rgba(42,80,161,0.42)',
+            '--tabs-txt-hover':'#5172b8',
+            '--gold-rgb':   '42,80,161',
+            '--shadow-sm':  '0 2px 8px rgba(42,80,161,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(42,80,161,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(42,80,161,0.20)',
+        }
+    },
+    'Monge': {
+        swatch: '#51A5C5',
+        vars: {
+            '--page':       '#040708',
+            '--parch':      '#070c0e',
+            '--parch-mid':  '#0a1317',
+            '--parch-deep': '#0e1b20',
+            '--parch-border':'#317994',
+            '--gold':       '#51A5C5',
+            '--gold-light': '#57a4c2',
+            '--gold-pale':  '#8eb4c2',
+            '--ink':        '#e6e9ea',
+            '--ink-mid':    '#9db5be',
+            '--ink-light':  '#7899a5',
+            '--ink-muted':  '#567581',
+            '--header-top': '#0d181c',
+            '--header-mid': '#070c0e',
+            '--header-bot': '#040708',
+            '--tabs-top':   '#040708',
+            '--tabs-bot':   '#020304',
+            '--bar-bg':     'rgba(2,3,4,0.97)',
+            '--tabs-txt-off':'rgba(81,165,197,0.42)',
+            '--tabs-txt-hover':'#5998b1',
+            '--gold-rgb':   '81,165,197',
+            '--shadow-sm':  '0 2px 8px rgba(81,165,197,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(81,165,197,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(81,165,197,0.20)',
+        }
+    },
+    'Paladino': {
+        swatch: '#B59E54',
+        vars: {
+            '--page':       '#070604',
+            '--parch':      '#0e0c07',
+            '--parch-mid':  '#15130c',
+            '--parch-deep': '#1e1b10',
+            '--parch-border':'#837239',
+            '--gold':       '#B59E54',
+            '--gold-light': '#b7a262',
+            '--gold-pale':  '#bdb394',
+            '--ink':        '#eae9e6',
+            '--ink-mid':    '#beb69d',
+            '--ink-light':  '#a59a79',
+            '--ink-muted':  '#807656',
+            '--header-top': '#1a180e',
+            '--header-mid': '#0e0c07',
+            '--header-bot': '#070604',
+            '--tabs-top':   '#070604',
+            '--tabs-bot':   '#030302',
+            '--bar-bg':     'rgba(3,3,2,0.97)',
+            '--tabs-txt-off':'rgba(181,158,84,0.42)',
+            '--tabs-txt-hover':'#a79762',
+            '--gold-rgb':   '181,158,84',
+            '--shadow-sm':  '0 2px 8px rgba(181,158,84,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(181,158,84,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(181,158,84,0.20)',
+        }
+    },
+    'Patrulheiro': {
+        swatch: '#507F62',
+        vars: {
+            '--page':       '#050705',
+            '--parch':      '#090c0a',
+            '--parch-mid':  '#0e1310',
+            '--parch-deep': '#131b16',
+            '--parch-border':'#395a46',
+            '--gold':       '#507F62',
+            '--gold-light': '#629676',
+            '--gold-pale':  '#9cb4a6',
+            '--ink':        '#e6eae8',
+            '--ink-mid':    '#a4b7ab',
+            '--ink-light':  '#829c8c',
+            '--ink-muted':  '#5f7768',
+            '--header-top': '#111814',
+            '--header-mid': '#090c0a',
+            '--header-bot': '#050705',
+            '--tabs-top':   '#050705',
+            '--tabs-bot':   '#020302',
+            '--bar-bg':     'rgba(2,3,2,0.97)',
+            '--tabs-txt-off':'rgba(80,127,98,0.42)',
+            '--tabs-txt-hover':'#719980',
+            '--gold-rgb':   '80,127,98',
+            '--shadow-sm':  '0 2px 8px rgba(80,127,98,0.14)',
+            '--shadow-md':  '0 5px 18px rgba(80,127,98,0.22)',
+            '--shadow-lg':  '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(80,127,98,0.20)',
+        }
+    },
+    'Artificer': {
+        swatch: '#6a4325',
+        vars: {
+            '--page':         '#080503',
+            '--parch':        '#0f0a06',
+            '--parch-mid':    '#181009',
+            '--parch-deep':   '#21160d',
+            '--parch-border': '#4b301b',
+            '--gold':         '#6a4325',
+            '--gold-light':   '#835734',
+            '--gold-pale':    '#c1a590',
+            '--ink':          '#e9e5e2',
+            '--ink-mid':      '#bcab9f',
+            '--ink-light':    '#9f8d7f',
+            '--ink-muted':    '#78695e',
+            '--header-top':   '#1e130b',
+            '--header-mid':   '#0f0a05',
+            '--header-bot':   '#080503',
+            '--tabs-top':     '#080503',
+            '--tabs-bot':     '#040201',
             '--bar-bg':       'rgba(4,2,1,0.97)',
-            '--tabs-txt-off':   'rgba(160,110,30,0.45)',
-            '--tabs-txt-hover': 'rgba(220,160,60,0.75)',
+            '--tabs-txt-off':   'rgba(106,67,37,0.42)',
+            '--tabs-txt-hover': '#ad7f5c',
+            '--gold-rgb':     '106,67,37',
+            '--shadow-sm':    '0 2px 8px rgba(106,67,37,0.14)',
+            '--shadow-md':    '0 5px 18px rgba(106,67,37,0.22)',
+            '--shadow-lg':    '0 16px 56px rgba(0,0,0,0.35), 0 4px 14px rgba(106,67,37,0.20)',
         }
     },
-    'Forja': {
-        swatch: '#906030',
-        vars: {
-            '--page':         '#060402',
-            '--parch':        '#100a04',
-            '--parch-mid':    '#1a1208',
-            '--parch-deep':   '#241a0c',
-            '--parch-border': '#604018',
-            '--gold':         '#906030',
-            '--gold-light':   '#b08040',
-            '--gold-pale':    '#d0a868',
-            '--ink':          '#eedcb8',
-            '--ink-mid':      '#c8b088',
-            '--ink-light':    '#907848',
-            '--ink-muted':    '#604828',
-            '--header-top':   '#180e06',
-            '--header-mid':   '#100804',
-            '--header-bot':   '#080402',
-            '--tabs-top':     '#060300',
-            '--tabs-bot':     '#030100',
-            '--bar-bg':       'rgba(4,2,0,0.97)',
-            '--tabs-txt-off':   'rgba(130,80,20,0.45)',
-            '--tabs-txt-hover': 'rgba(190,130,50,0.75)',
-        }
-    },
+
+
 }
 
 
@@ -1691,9 +1978,9 @@ function toggleImportArea() {
 }
 
 function resetarTema() {
-    aplicarTema('Strahd')
+    aplicarTema('Umbra')
     ls.del('tema-custom')
-    mostrarFeedback('Tema vampírico restaurado.')
+    mostrarFeedback('Tema Umbra restaurado.')
 }
 
 function mostrarFeedback(msg) {
@@ -1732,9 +2019,9 @@ function renderPresets() {
     const el = document.getElementById('cp-presets')
     if (!el) return
     el.innerHTML = Object.entries(TEMAS).map(([nome, d]) => `
-        <button class="cp-preset" data-preset="${nome}" onclick="aplicarTema('${nome}')">
+        <button class="cp-preset" data-preset="${nome}" onclick="aplicarTema('${nome}')" title="${nome === 'Strahd' ? 'Homenagem ao Curse of Strahd original' : nome}">
             <span class="cp-preset-dot" style="background:${d.swatch}"></span>
-            ${nome}
+            ${nome}${nome === 'Strahd' ? ' <small style="opacity:.55;font-size:.7em;">(homenagem)</small>' : ''}
         </button>`).join('')
 }
 
@@ -1752,11 +2039,11 @@ function inicializarTemas() {
         try {
             aplicarVars(JSON.parse(custom))
             sincronizarPickers()
-        } catch(e) { aplicarTema('Strahd') }
+        } catch(e) { aplicarTema('Umbra') }
     } else if (preset && TEMAS[preset]) {
         aplicarTema(preset)
     } else {
-        aplicarTema('Strahd') // padrão da campanha
+        aplicarTema('Umbra') // padrão do gerenciador
     }
 
     // Fecha painel clicando fora
@@ -2962,9 +3249,10 @@ window.salvar = function() {
 })()
 
 /* ══════════════════════════════════════════════════════════
-   3. SEÇÕES COLAPSÁVEIS NA ABA COMBATE
-   ── Varre todos .section-title dentro de #tab-combate e
-      insere um botão [▼] que colapsa o conteúdo seguinte.
+   3. SEÇÕES COLAPSÁVEIS NAS ABAS ATRIBUTOS E ATAQUES
+   ── Varre todos .section-title dentro de #tab-atributos e
+      #tab-ataques e insere um botão [▼] que colapsa o conteúdo
+      seguinte.
    ── Estado salvo no localStorage (chave: secoes-colapsadas).
 ══════════════════════════════════════════════════════════ */
 ;(function initColapsaveis() {
@@ -3017,10 +3305,15 @@ window.salvar = function() {
     }
 
     function setup() {
-        const painel = document.getElementById('tab-combate')
-        if (!painel) return
-
         const colapsadas = carregarEstado()
+        ;['tab-atributos', 'tab-ataques'].forEach(tabId => {
+            const painel = document.getElementById(tabId)
+            if (!painel) return
+            setupPainel(painel, colapsadas)
+        })
+    }
+
+    function setupPainel(painel, colapsadas) {
         let idx = 0
 
         painel.querySelectorAll('.section-title').forEach(titulo => {
@@ -3196,22 +3489,28 @@ window.salvar = function() {
 })()
 
 /* ═══════════════════════════════════════════════════════════
-   TEMA NOTURNO + STRAHD — classes auxiliares no body
-   ── Intercepta aplicarTema para adicionar/remover
-      body.tema-noturno e body.tema-strahd automaticamente.
+   CLASSES AUXILIARES DE TEMA — no body
+   ── Intercepta aplicarTema para adicionar/remover a classe
+      body.tema-* correspondente automaticamente (ver DARK_TEMAS).
 ═══════════════════════════════════════════════════════════ */
 ;(function patchAplicarTemaDark() {
 
     const DARK_TEMAS = {
-        'Strahd':    'tema-strahd',
-        'Noturno':   'tema-noturno',
-        'Arcano':    'tema-arcano',
-        'Floresta':  'tema-floresta',
-        'Glacial':   'tema-glacial',
-        'Outono':    'tema-outono',
-        'Inferno':   'tema-inferno',
-        'Forja':     'tema-forja',
-        'Pergaminho':'tema-pergaminho',
+        'Umbra':       'tema-umbra',
+        'Strahd':      'tema-strahd',
+        'Bárbaro':     'tema-barbaro',
+        'Bardo':       'tema-bardo',
+        'Bruxo':       'tema-bruxo',
+        'Clérigo':     'tema-clerigo',
+        'Druida':      'tema-druida',
+        'Feiticeiro':  'tema-feiticeiro',
+        'Guerreiro':   'tema-guerreiro',
+        'Ladino':      'tema-ladino',
+        'Mago':        'tema-mago',
+        'Monge':       'tema-monge',
+        'Paladino':    'tema-paladino',
+        'Patrulheiro': 'tema-patrulheiro',
+        'Artificer':   'tema-artificer',
     }
 
     const _orig = window.aplicarTema
@@ -3222,6 +3521,20 @@ window.salvar = function() {
         if (DARK_TEMAS[nome]) {
             document.body.classList.add(DARK_TEMAS[nome])
         }
+        aplicarFamiliaEIcone(nome)
+    }
+
+    function aplicarFamiliaEIcone(nome) {
+        // Remove classes de família anteriores
+        ;['fam-marcial', 'fam-arcano', 'fam-divino', 'fam-furtivo'].forEach(c => document.body.classList.remove(c))
+        const fam = FAMILIAS[nome]
+        if (fam) document.body.classList.add('fam-' + fam)
+        // Troca o ícone do cabeçalho (fallback: ✦ se tema não tiver ícone definido)
+        const icone = ICONES[nome] || '✦'
+        const el = document.getElementById('header-ornament-left')
+        const er = document.getElementById('header-ornament-right')
+        if (el) el.innerHTML = icone
+        if (er) er.innerHTML = icone
     }
 
     // Restaura a classe ao carregar
@@ -3234,13 +3547,14 @@ window.salvar = function() {
             if (preset && DARK_TEMAS[preset]) {
                 document.body.classList.add(DARK_TEMAS[preset])
             }
-            // Fallback: detecta Noturno pela cor --page
+            // Fallback: detecta o tema pela cor --page (Umbra é o padrão)
             if (!preset) {
                 const page = getComputedStyle(document.documentElement)
                     .getPropertyValue('--page').trim().toLowerCase()
-                if (page === '#0e1014') document.body.classList.add('tema-noturno')
                 if (page === '#080305') document.body.classList.add('tema-strahd')
+                else document.body.classList.add('tema-umbra')
             }
+            aplicarFamiliaEIcone(preset && TEMAS[preset] ? preset : 'Umbra')
         }, 100)
     }
 

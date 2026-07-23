@@ -4,18 +4,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ficha D&D</title>
+  <title>Umbra — Ficha de Personagem</title>
 
   <!-- Fontes medievais do Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Philosopher:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/01-base-v3.css">
+  <link rel="stylesheet" href="css/02-melhorias-v2.css">
+  <link rel="stylesheet" href="css/03-tipografia-v3.css">
+  <link rel="stylesheet" href="css/04-melhorias-v3.css">
+  <link rel="stylesheet" href="css/05-tema-ladino.css">
+  <link rel="stylesheet" href="css/06-strahd-correcoes.css">
+  <!-- css/07-strahd-rework-inline.css removido: 100% redundante com
+       strahd-rework.css (mesmas regras, mesmos valores), que já
+       carrega mais abaixo com prioridade maior na cascata. -->
+  <link rel="stylesheet" href="css/08-paineis-flutuantes.css">
+  <link rel="stylesheet" href="css/09-botoes-flutuantes.css">
+  <link rel="stylesheet" href="css/10-correcoes-layout.css">
+  <link rel="stylesheet" href="css/11-correcoes-v6.css">
+  <link rel="stylesheet" href="css/12-temas-unificados.css">
+  <link rel="stylesheet" href="css/13-identidade-temas.css">
   <link rel="stylesheet" href="strahd-rework.css">
+  <link rel="stylesheet" href="tema-umbra.css">
 </head>
 
-<body class="tema-strahd">
+<body class="tema-umbra">
 
   <!-- ════ CABEÇALHO CINEMATOGRÁFICO ════ -->
   <div id="header">
@@ -51,7 +66,8 @@
   <!-- ════ BARRA DE ABAS ════ -->
   <div id="tabs">
     <div id="tab-indicator"></div>
-    <button class="tab-btn active" onclick="showTab('combate', this)"><span class="tab-icon">⚔</span><span class="tab-label">Combate</span></button>
+    <button class="tab-btn active" onclick="showTab('atributos', this)"><span class="tab-icon">⬟</span><span class="tab-label">Atributos</span></button>
+    <button class="tab-btn" onclick="showTab('ataques', this)"><span class="tab-icon">⚔</span><span class="tab-label">Ataques</span></button>
     <button class="tab-btn" onclick="showTab('habilidades', this)"><span class="tab-icon">✦</span><span class="tab-label">Habilidades</span></button>
     <button class="tab-btn" onclick="showTab('magias', this)"><span class="tab-icon">✧</span><span class="tab-label">Magias</span></button>
     <button class="tab-btn" onclick="showTab('inventario', this)"><span class="tab-icon">◈</span><span class="tab-label">Inventário</span></button>
@@ -62,9 +78,10 @@
   <!-- ════ CONTEÚDO DAS ABAS ════ -->
   <div id="sheet-body">
 
-    <div id="tab-combate" class="tab-panel active">
-      <div id="combate-grid">
+    <div id="tab-atributos" class="tab-panel active">
+      <div id="atributos-grid">
 
+        <!-- COL ESQUERDA: Atributos + Saves -->
         <!-- COL ESQUERDA: Atributos + Saves -->
         <div>
           <div class="section-title">Atributos</div>
@@ -107,7 +124,7 @@
             </div>
           </div>
 
-          <div class="section-title" style="margin-top:1rem;">Testes de Resistência</div>
+          <div class="section-title" style="margin-top:1rem;">Salvaguardas</div>
           <div id="saves-list"></div>
 
           <div class="prof-insp-row">
@@ -150,7 +167,20 @@
 
         </div>
 
-        <!-- COL CENTRAL -->
+        <!-- COL DIREITA: Perícias -->
+        <!-- COL DIREITA: Perícias -->
+        <div>
+          <div class="section-title">Perícias</div>
+          <div class="pericias-panel" id="pericias-lista"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="tab-ataques" class="tab-panel">
+      <div id="ataques-grid">
+
+        <!-- COL A: Combate, Armadura, Resistências & Vulnerabilidades -->
         <div>
           <div class="section-title">Combate</div>
           <div style="display:flex;gap:0.75rem;margin-bottom:0.75rem;">
@@ -193,7 +223,7 @@
                 <span id="visao-escuro-icon" class="visao-escuro-icon" title="Visão no Escuro ativa"
                   style="display:none;">🌙</span>
               </div>
-              <label class="visao-check-label"><input type="checkbox" id="visao-escuro" onchange="toggleVisaoEscuro()">
+              <label class="visao-check-label"><input type="checkbox" class="prof-check" id="visao-escuro" onchange="toggleVisaoEscuro()">
                 V. Escuro</label>
             </div>
             <div class="big-num" style="flex:1;"><label>EXAUSTÃO</label><input type="number" id="exaustao" value="0"
@@ -235,7 +265,7 @@
                 </select>
               </div>
               <label class="arm-check-label">
-                <input type="checkbox" id="escudo" onchange="calcularCA()">
+                <input type="checkbox" class="prof-check" id="escudo" onchange="calcularCA()">
                 <span>Escudo <span style="color:var(--ink-light);font-size:0.78rem;">(+2)</span></span>
               </label>
               <div style="display:flex;align-items:center;gap:6px;">
@@ -243,7 +273,7 @@
                 <input type="number" class="arm-input-num" id="arm-bonus" value="0" oninput="calcularCA()">
               </div>
               <label class="arm-check-label">
-                <input type="checkbox" id="arm-desv">
+                <input type="checkbox" class="prof-check" id="arm-desv">
                 <span style="font-size:0.85rem;">Desv. Furtividade</span>
               </label>
             </div>
@@ -280,7 +310,10 @@
               </div>
             </div>
           </div>
+        </div>
 
+        <!-- COL B: Pontos de Vida, Ataques & Magia, Munições -->
+        <div>
           <!-- PV -->
           <div class="section-title">
             Pontos de Vida
@@ -295,9 +328,8 @@
                 oninput="atualizarPVBar()"></div>
           </div>
           <div class="pv-bar-wrap">
-            <div class="pv-bar pv-high" id="pv-bar" style="width:100%"></div>
-            <div class="pv-bar-temp" id="pv-bar-temp" style="width:0%"></div>
-            <div class="pv-bar-text" id="pv-bar-text">10 / 10</div>
+            <div class="pv-bar pv-high" id="pv-bar" style="width:100%"><span class="pv-bar-label" id="pv-bar-label">10 / 10</span></div>
+            <div class="pv-bar-temp" id="pv-bar-temp" style="width:0%"><span class="pv-bar-temp-label" id="pv-bar-temp-label"></span></div>
           </div>
           <div style="display:flex;gap:0.75rem;margin-top:0.5rem;margin-bottom:1rem;">
             <div class="big-num" style="flex:1"><label>TIPO DE DADO</label><input type="text" id="dado-vida" placeholder="ex: d8"></div>
@@ -337,14 +369,7 @@
           <button class="btn-add" onclick="addMunicaoRow()">+ ADICIONAR MUNIÇÃO</button>
         </div>
 
-        <!-- COL DIREITA: Perícias -->
-        <div>
-          <div class="section-title">Perícias</div>
-          <div class="pericias-panel" id="pericias-lista"></div>
-        </div>
-
       </div>
-
     </div>
 
     <div id="tab-habilidades" class="tab-panel">
@@ -371,16 +396,16 @@
             <div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:10px;">
               <label
                 style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
-                  type="checkbox" id="prof-leve" accent-color="var(--gold)"> Leve</label>
+                  type="checkbox" class="prof-check" id="prof-leve"> Leve</label>
               <label
                 style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
-                  type="checkbox" id="prof-media"> Média</label>
+                  type="checkbox" class="prof-check" id="prof-media"> Média</label>
               <label
                 style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
-                  type="checkbox" id="prof-pesada"> Pesada</label>
+                  type="checkbox" class="prof-check" id="prof-pesada"> Pesada</label>
               <label
                 style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
-                  type="checkbox" id="prof-escudo"> Escudo</label>
+                  type="checkbox" class="prof-check" id="prof-escudo"> Escudo</label>
             </div>
             <div
               style="font-family:var(--font-title);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink-light);margin-bottom:7px;">
@@ -388,10 +413,10 @@
             <div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:10px;">
               <label
                 style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
-                  type="checkbox" id="prof-simples"> Simples</label>
+                  type="checkbox" class="prof-check" id="prof-simples"> Simples</label>
               <label
                 style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
-                  type="checkbox" id="prof-marciais"> Marciais</label>
+                  type="checkbox" class="prof-check" id="prof-marciais"> Marciais</label>
             </div>
           </div>
           <div class="section-title">Línguas</div>
@@ -664,7 +689,7 @@
   <div id="dados-panel">
     <div class="dados-head">
       <span class="dados-head-title">🎲 Rolador de Dados</span>
-      <button onclick="toggleDados()">✕</button>
+      <button class="cp-close" onclick="toggleDados()">✕</button>
     </div>
     <div class="dados-scroll">
 
@@ -808,7 +833,7 @@
         <div class="cp-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
           <div style="display:flex;align-items:center;gap:0.5rem;width:100%;">
             <label class="cp-toggle-label">
-              <input type="checkbox" id="cp-custom-field-on" onchange="toggleCampoCustom(this.checked)">
+              <input type="checkbox" class="prof-check" id="cp-custom-field-on" onchange="toggleCampoCustom(this.checked)">
               Ativar campo personalizado
             </label>
           </div>

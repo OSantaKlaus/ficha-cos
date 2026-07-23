@@ -7,94 +7,9 @@
 ════════════════════════════════════════════════════════════════ */
 
 /* ────────────────────────────────────────────────────────────────
-   0. INJEÇÃO DE CSS — novos elementos sem arquivo extra
+   0. CSS de expertise/undo/redo/condições/quick-roll agora vive só
+      em strahd-rework.css — removida a injeção duplicada via JS.
 ──────────────────────────────────────────────────────────────── */
-;(function injetarCSS() {
-    const style = document.createElement('style')
-    style.id = 'patch-styles'
-    style.textContent = `
-/* ── Expertise toggle ── */
-.exp-toggle-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; flex-shrink: 0;
-  font-size: 0.7rem; border-radius: 3px; cursor: pointer;
-  color: var(--ink-muted); border: 1px solid transparent;
-  transition: color .15s, border-color .15s, background .15s;
-  user-select: none;
-}
-.exp-toggle-btn:hover { color: var(--gold); border-color: var(--gold); background: rgba(160,100,20,.1); }
-.exp-toggle-btn.exp-on {
-  color: var(--gold-pale) !important;
-  border-color: var(--gold) !important;
-  background: rgba(160,100,20,.18) !important;
-  text-shadow: 0 0 8px rgba(200,150,10,.6);
-}
-.exp-toggle-btn.exp-oculto { visibility: hidden; }
-.expertise-bonus { color: var(--gold-pale) !important; font-weight: 700 !important; }
-
-/* ── Undo / Redo ── */
-.btn-undo, .btn-redo {
-  background: transparent; border: 1px solid rgba(155,128,96,.25);
-  color: var(--ink-muted); border-radius: 5px;
-  padding: 4px 10px; font-size: 0.78rem; cursor: pointer;
-  transition: color .15s, border-color .15s;
-}
-.btn-undo:hover:not(:disabled), .btn-redo:hover:not(:disabled) {
-  color: var(--gold); border-color: var(--gold);
-}
-.btn-undo:disabled, .btn-redo:disabled { opacity: .28; cursor: default; }
-
-/* ── Auto-save indicator ── */
-#save-status.auto-ok  { color: rgba(100,200,100,.75); }
-#save-status.auto-err { color: rgba(200,80,80,.75); }
-
-/* ── Condition tooltip popup ── */
-.cond-efeito-popup {
-  position: fixed; z-index: 9999;
-  max-width: 280px; padding: .75rem .9rem;
-  background: var(--parch-deep, #1c1010);
-  border: 1px solid rgba(155,128,96,.25);
-  border-radius: 8px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.7);
-  font-size: .85rem; line-height: 1.55;
-  color: var(--ink-mid); pointer-events: none;
-  opacity: 0; transition: opacity .15s;
-}
-.cond-efeito-popup.visivel { opacity: 1; }
-.cond-efeito-popup strong { color: var(--gold-pale); }
-.cond-efeito-popup ul { margin: .35rem 0 0 1.1rem; padding: 0; }
-.cond-efeito-popup li { margin-bottom: .2rem; }
-.cond-efeito-popup .cond-positiva-label { color: #70d870; }
-.cond-efeito-popup .cond-negativa-label { color: #f07070; }
-
-/* ── Quick roll input ── */
-.dados-quick-input-wrap {
-  display: flex; gap: 6px; padding: .5rem .75rem;
-  border-top: 1px solid rgba(155,128,96,.1);
-  margin-top: .25rem;
-}
-.dados-quick-input {
-  flex: 1; background: var(--parch-mid); border: 1px solid rgba(155,128,96,.18);
-  border-radius: 6px; padding: 5px 10px;
-  font-family: var(--font-body); font-size: .92rem; color: var(--ink);
-  min-width: 0;
-}
-.dados-quick-input:focus { outline: none; border-color: var(--gold); }
-.dados-quick-input::placeholder { color: var(--ink-muted); }
-.dados-quick-btn {
-  background: var(--parch-mid); border: 1px solid var(--gold);
-  color: var(--gold); border-radius: 6px; padding: 5px 12px;
-  font-family: var(--font-heading); font-size: .78rem;
-  letter-spacing: .05em; cursor: pointer;
-  transition: background .15s;
-}
-.dados-quick-btn:hover { background: rgba(200,150,10,.12); }
-
-/* ── Skill row: manter alinhamento com expertise btn ── */
-.skill-row { gap: 5px !important; }
-`
-    document.head.appendChild(style)
-})()
 
 /* ────────────────────────────────────────────────────────────────
    1. UTILITÁRIOS
@@ -136,6 +51,15 @@ document.addEventListener('change', e => {
     if (e.target.matches('input[type=checkbox], select'))
         _autoSalvarDebounced()
 }, { passive: true })
+
+// Garante que a última alteração seja salva mesmo se o jogador sair da
+// página (ex: clicar em "Grupo") antes do debounce de 800ms disparar.
+function _flushSalvarPendente() {
+    try { salvar() } catch (e) {}
+}
+window.addEventListener('pagehide', _flushSalvarPendente)
+window.addEventListener('beforeunload', _flushSalvarPendente)
+document.getElementById('btn-voltar-grupo')?.addEventListener('click', _flushSalvarPendente)
 
 /* ────────────────────────────────────────────────────────────────
    3. UNDO / REDO
@@ -235,17 +159,21 @@ window.renderPericias = function (sp) {
         const attrCls = 'attr-' + p.attr.toLowerCase()
         const isProf = !!sp[sid]
         const isExp = isProf && ls.get('exp-' + sid) === '1'
-        return `<div class="skill-row" onclick="rolarPericia('${p.nome}','${sid}')" title="Clique para rolar ${p.nome}">
+        return `<div class="skill-item">
+        <div class="skill-row" onclick="rolarPericia('${p.nome}','${sid}')" title="Clique para rolar ${p.nome}">
           <input type="checkbox" class="skill-check" id="${sid}" ${isProf ? 'checked' : ''}
             onchange="onSkillChange('${sid}')" onclick="event.stopPropagation()">
           <span class="exp-toggle-btn ${isExp ? 'exp-on' : ''} ${isProf ? '' : 'exp-oculto'}"
             id="exp-${sid}" onclick="event.stopPropagation(); toggleExpertise('${sid}')"
             title="Expertise — dobro de proficiência${isExp ? ' (ATIVO)' : ''}">◈</span>
           <span class="skill-name">${p.nome}</span>
+          <button type="button" class="skill-desc-toggle" onclick="toggleSkillDesc('${sid}', event)" title="Mostrar descrição" aria-label="Mostrar descrição de ${p.nome}">▸</button>
           <span class="skill-attr ${attrCls}">${p.attr.toUpperCase()}</span>
           <span class="skill-val" id="${sid}-bonus">+0</span>
           <span class="roll-hint">🎲</span>
-        </div>`
+        </div>
+        <div class="skill-desc" id="${sid}-desc">${p.desc}</div>
+      </div>`
     }).join('')
 }
 
