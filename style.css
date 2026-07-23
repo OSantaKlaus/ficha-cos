@@ -1,0 +1,6164 @@
+/* ============================================================
+   FICHA DE D&D 5e — style.css  (Redesign Moderno-Medieval)
+============================================================ */
+
+/* ── 1. VARIÁVEIS ── */
+:root {
+    /* ── Tema Strahd — padrão da campanha ── */
+    --page:         #080305;
+    /* Fundo — negro absoluto com toque bordô-carmesim */
+    --parch:        #140610;
+    /* Cards — negro profundo */
+    --parch-mid:    #200c18;
+    /* Inputs — tom vinho-escuro */
+    --parch-deep:   #301020;
+    /* Hover / seleções */
+    --parch-border: #7a1520;
+    /* Bordas — vermelho sangue coagulado */
+
+    /* Acento carmesim */
+    --gold:         #c82040;
+    --gold-light:   #e0304e;
+    --gold-pale:    #f07080;
+
+    /* Tinta — texto claro sobre fundo escuro */
+    --ink:          #f0dce0;
+    /* texto principal: branco envelhecido rosado */
+    --ink-mid:      #d4b0b8;
+    --ink-light:    #a07880;
+    --ink-muted:    #604850;
+    /* placeholders, detalhes sutis */
+
+    /* Header */
+    --header-top:   #1e0810;
+    --header-mid:   #140508;
+    --header-bot:   #080305;
+
+    /* Abas */
+    --tabs-top:     #060102;
+    --tabs-bot:     #030001;
+    --tabs-txt-off:   rgba(190,110,130,0.45);
+    --tabs-txt-hover: rgba(230,160,175,0.75);
+
+    /* Barra inferior */
+    --bar-bg:       rgba(4,1,3,0.97);
+
+    /* Status */
+    --red: #c82040;
+    --green: #1a8a4a;
+
+    /* Atributos — cores com contraste reforçado */
+    --for-color: #a82418;
+    --des-color: #1e8a4a;
+    --con-color: #b86010;
+    --int-color: #1a6898;
+    --sab-color: #6e2e9a;
+    --car-color: #9a7c00;
+
+    /* Fontes */
+    --font-title: 'Cinzel Decorative', Luminari, 'Philosopher', fantasy;
+    --font-heading: Luminari, 'Cinzel', 'Philosopher', fantasy;
+    --font-body: 'Crimson Pro', 'IM Fell English', serif;
+    /* Crimson Pro primeiro: mais legível para texto */
+    --font-number: 'Crimson Pro', 'Georgia', serif;
+    /* fonte limpa e legível para valores numéricos */
+
+    /* Sombras e raios */
+    --shadow-sm: 0 2px 8px rgba(120, 70, 0, 0.14);
+    --shadow-md: 0 5px 18px rgba(120, 70, 0, 0.22);
+    --radius: 10px;
+    --radius-sm: 6px;
+}
+
+/* ── 2. RESET ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--page);
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(220, 180, 80, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(180, 120, 30, 0.15) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    font-family: var(--font-body);
+    font-size: 17px;
+    color: var(--ink);
+    min-height: 100vh;
+}
+
+/* ── 3. CABEÇALHO CINEMATOGRÁFICO ── */
+#header {
+    background: linear-gradient(180deg, var(--header-top) 0%, var(--header-mid) 50%, var(--header-bot) 100%);
+    border-bottom: 3px solid var(--gold);
+    border-top: 4px double var(--gold);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(160, 100, 0, 0.20);
+}
+
+/* Linhas ornamentais de fundo */
+#header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(160, 100, 10, 0.05) 60px, rgba(160, 100, 10, 0.05) 61px);
+    pointer-events: none;
+}
+
+#header-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 2rem 1rem;
+    gap: 1.5rem;
+    position: relative;
+}
+
+#header-ornament-left,
+#header-ornament-right {
+    font-size: 1.8rem;
+    color: var(--gold);
+    opacity: 0.7;
+    flex-shrink: 0;
+    letter-spacing: 8px;
+}
+
+#header-center {
+    text-align: center;
+}
+
+#nome-personagem {
+    font-family: var(--font-title);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--ink-mid);
+    letter-spacing: 5px;
+    outline: none;
+    cursor: text;
+    text-shadow: 0 1px 4px rgba(160, 100, 0, 0.18);
+    transition: text-shadow 0.3s, color 0.2s;
+    display: inline-block;
+    min-width: 180px;
+}
+
+#nome-personagem:focus {
+    color: var(--ink);
+    text-shadow: 0 2px 8px rgba(160, 100, 0, 0.28);
+}
+
+#header-sub {
+    font-family: var(--font-heading);
+    font-size: 0.62rem;
+    letter-spacing: 6px;
+    color: rgba(100, 60, 0, 0.55);
+    margin-top: 3px;
+    text-transform: uppercase;
+}
+
+/* Barra de campos do personagem */
+#header-fields {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    border-top: 1px solid rgba(160, 100, 10, 0.3);
+    background: rgba(200, 150, 30, 0.08);
+    flex-wrap: wrap;
+}
+
+.hfield {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: center;
+    padding: 0.65rem 1.3rem;
+    border-right: 1px solid rgba(180, 120, 20, 0.25);
+    transition: background 0.2s;
+}
+
+.hfield:last-child {
+    border-right: none;
+}
+
+.hfield:hover {
+    background: rgba(160, 100, 10, 0.10);
+}
+
+.hfield label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+}
+
+.hfield input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(160, 100, 10, 0.35);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+    width: 100px;
+    padding: 2px 4px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.hfield input:focus {
+    border-bottom-color: var(--gold);
+    color: var(--ink);
+}
+
+/* ── 4. BARRA DE ABAS ── */
+#tabs {
+    background: linear-gradient(180deg, var(--tabs-top) 0%, var(--tabs-bot) 100%);
+    display: flex;
+    border-bottom: 2px solid var(--gold);
+    padding: 0 1.5rem;
+    justify-content: center;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 0.9rem 1.2rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    color: var(--tabs-txt-off);
+    transition: all 0.2s;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.tab-btn:hover {
+    color: var(--tabs-txt-hover);
+    background: rgba(220, 160, 30, 0.05);
+}
+
+.tab-btn.active {
+    color: var(--gold-pale);
+    border-bottom-color: var(--gold);
+    background: rgba(220, 160, 30, 0.08);
+}
+
+.tab-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* ── 5. CORPO ── */
+#sheet-body {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem 6rem;
+    background: transparent;
+}
+
+/* ── 6. SECTION TITLE ── */
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    letter-spacing: 2px;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+}
+
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--parch-border), transparent);
+    opacity: 0.4;
+}
+
+/* ── 7. CARDS BASE ── */
+.panel {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s;
+}
+
+.panel:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* ── 8. GRID COMBATE ── */
+#combate-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr 270px;
+    gap: 1.5rem;
+}
+
+/* ── 9. ATRIBUTOS EM CARDS ── */
+.attr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 1rem;
+}
+
+.attr-card {
+    background: var(--parch);
+    border: 1.5px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 8px 6px 7px;
+    text-align: center;
+    cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.2s;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.attr-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Faixa colorida no topo do card */
+.attr-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.attr-for::before {
+    background: var(--for-color);
+}
+
+.attr-des::before {
+    background: var(--des-color);
+}
+
+.attr-con::before {
+    background: var(--con-color);
+}
+
+.attr-int::before {
+    background: var(--int-color);
+}
+
+.attr-sab::before {
+    background: var(--sab-color);
+}
+
+.attr-car::before {
+    background: var(--car-color);
+}
+
+/* Ícone gem */
+.attr-gem {
+    font-size: 0.75rem;
+    margin-bottom: 1px;
+}
+
+.attr-for .attr-gem {
+    color: var(--for-color);
+}
+
+.attr-des .attr-gem {
+    color: var(--des-color);
+}
+
+.attr-con .attr-gem {
+    color: var(--con-color);
+}
+
+.attr-int .attr-gem {
+    color: var(--int-color);
+}
+
+.attr-sab .attr-gem {
+    color: var(--sab-color);
+}
+
+.attr-car .attr-gem {
+    color: var(--car-color);
+}
+
+.attr-card label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 3px;
+    font-weight: 400;
+}
+
+.attr-card input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.7rem;
+    font-weight: 700;
+    font-family: var(--font-number);
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    outline: none;
+    -moz-appearance: textfield;
+    line-height: 1.1;
+}
+
+.attr-card input::-webkit-outer-spin-button,
+.attr-card input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.attr-mod {
+    display: block;
+    font-family: var(--font-number);
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.attr-for .attr-mod {
+    color: var(--for-color);
+}
+
+.attr-des .attr-mod {
+    color: var(--des-color);
+}
+
+.attr-con .attr-mod {
+    color: var(--con-color);
+}
+
+.attr-int .attr-mod {
+    color: var(--int-color);
+}
+
+.attr-sab .attr-mod {
+    color: var(--sab-color);
+}
+
+.attr-car .attr-mod {
+    color: var(--car-color);
+}
+
+/* ── 10. PROFICIÊNCIA + INSPIRAÇÃO ── */
+.prof-insp-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.prof-card {
+    flex: 1;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.prof-card label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 3px;
+}
+
+.prof-card input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.55rem;
+    font-weight: 700;
+    font-family: var(--font-number);
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.prof-card input::-webkit-outer-spin-button,
+.prof-card input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.insp-card {
+    flex: 1;
+    background: var(--parch-mid);
+    border: 2px solid rgba(160, 100, 20, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+}
+
+.insp-card:hover {
+    border-color: var(--gold);
+    background: var(--parch);
+}
+
+.insp-card.on {
+    background: var(--gold);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(220, 160, 30, 0.4);
+}
+
+.insp-icon {
+    font-size: 1.3rem;
+    color: var(--ink-light);
+    transition: color 0.2s, transform 0.2s;
+}
+
+.insp-card.on .insp-icon {
+    color: var(--parch);
+    transform: scale(1.2);
+}
+
+.insp-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-top: 2px;
+}
+
+.insp-card.on .insp-label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── 11. TESTES DE RESISTÊNCIA ── */
+#saves-list {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.save-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.1);
+    transition: background 0.15s;
+}
+
+.save-row:last-child {
+    border-bottom: none;
+}
+
+.save-row:hover {
+    background: var(--parch-mid);
+}
+
+.save-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-light);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+
+.save-dot.on {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 6px rgba(220, 160, 30, 0.4);
+}
+
+.save-row span {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 500;
+}
+
+.save-bonus {
+    font-family: var(--font-number);
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-weight: 400;
+    color: var(--gold);
+    min-width: 28px;
+    text-align: right;
+}
+
+/* ── 12. TESTES CONTRA A MORTE ── */
+.death-section-title {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.75rem;
+}
+
+.death-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 12px;
+    background: var(--red);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.death-label-suc {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--green);
+    min-width: 64px;
+}
+
+.death-label-fail {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--red);
+    min-width: 64px;
+}
+
+.dcircle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-block;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.dcircle.suc:checked {
+    background: var(--green);
+    border-color: var(--green);
+    box-shadow: 0 0 6px rgba(30, 88, 40, 0.4);
+}
+
+.dcircle.fail:checked {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 0 6px rgba(144, 24, 24, 0.4);
+}
+
+/* Compat: manter suporte ao .on legado (undo/redo pode restaurar divs) */
+.dcircle.suc.on {
+    background: var(--green);
+    border-color: var(--green);
+    box-shadow: 0 0 6px rgba(30, 88, 40, 0.4);
+}
+
+.dcircle.fail.on {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 0 6px rgba(144, 24, 24, 0.4);
+}
+
+/* ── 13. BIG-NUM ── */
+.big-num {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 6px 5px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+}
+
+.big-num:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.big-num label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 3px;
+    font-weight: 400;
+}
+
+.big-num input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.55rem;
+    font-weight: 700;
+    font-family: var(--font-number);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.2);
+    color: var(--ink);
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border-color 0.2s;
+}
+
+.big-num input:focus {
+    border-bottom-color: var(--gold);
+}
+
+.big-num input::-webkit-outer-spin-button,
+.big-num input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* ── 14. BARRA DE VIDA ── */
+.pv-bar-wrap {
+    position: relative;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 6px 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pv-bar {
+    height: 100%;
+    border-radius: 15px;
+    transition: width 0.4s ease, background 0.6s;
+}
+
+.pv-bar-temp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 15px;
+    background: rgba(200, 170, 20, 0.45);
+    transition: width 0.4s ease;
+    border-right: 2px solid rgba(220, 190, 40, 0.8);
+    pointer-events: none;
+}
+
+.pv-bar-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-number);
+    font-size: 0.85rem;
+    color: white;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    z-index: 2;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.pv-bar.pv-high {
+    background: linear-gradient(90deg, #1a5c1a, #2e8a2e);
+}
+
+.pv-bar.pv-medium {
+    background: linear-gradient(90deg, #7a5400, #b07a00);
+}
+
+.pv-bar.pv-critical {
+    background: linear-gradient(90deg, #6b0f0f, #aa1a1a);
+    animation: pv-pulse 1s ease-in-out infinite;
+}
+
+.pv-bar.pv-dead {
+    background: #2a0a0a;
+    width: 0% !important;
+}
+
+@keyframes pv-pulse {
+
+    0%,
+    100% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: 0.65
+    }
+}
+
+.heart-critical {
+    display: inline-block;
+    animation: pulse-heart 0.65s ease-in-out infinite;
+    color: #c03030;
+    font-size: 0.9em;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+@keyframes pulse-heart {
+
+    0%,
+    100% {
+        transform: scale(1)
+    }
+
+    50% {
+        transform: scale(1.4)
+    }
+}
+
+/* ── 15. ARMADURA ── */
+.armadura-box {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.arm-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    flex-wrap: wrap;
+}
+
+.arm-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.arm-input-text {
+    flex: 1;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 10px;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.arm-input-text:focus {
+    border-color: var(--gold);
+}
+
+.arm-input-num {
+    width: 60px;
+    text-align: center;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 6px;
+    font-family: var(--font-number);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border-color 0.2s;
+}
+
+.arm-input-num:focus {
+    border-color: var(--gold);
+}
+
+.arm-input-num::-webkit-outer-spin-button,
+.arm-input-num::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.arm-select {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.arm-select:focus {
+    border-color: var(--gold);
+}
+
+.arm-check-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: var(--font-body);
+}
+
+/* ── 16. ATAQUES ── */
+.attacks-table,
+.mun-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.attacks-table thead tr,
+.mun-table thead tr {
+    background: var(--ink-mid);
+    color: var(--parch-mid);
+}
+
+.attacks-table th,
+.mun-table th {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 9px 8px;
+    text-align: left;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.attacks-table tbody tr,
+.mun-table tbody tr {
+    border-bottom: 1px solid rgba(160, 100, 20, 0.12);
+    background: var(--parch);
+    transition: background 0.15s;
+}
+
+.attacks-table tbody tr:nth-child(even),
+.mun-table tbody tr:nth-child(even) {
+    background: var(--parch-mid);
+}
+
+.attacks-table tbody tr:hover,
+.mun-table tbody tr:hover {
+    background: #f5e8c8;
+}
+
+.attacks-table td input,
+.mun-table td input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--ink);
+    padding: 6px 7px;
+}
+
+.attacks-table td.rm,
+.mun-table td.rm {
+    width: 28px;
+    text-align: center;
+}
+
+/* ── 17. PERÍCIAS ── */
+.pericias-panel {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.skill-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.08);
+    transition: background 0.15s;
+    font-size: 1.05rem;
+}
+
+.skill-row:last-child {
+    border-bottom: none;
+}
+
+.skill-row:hover {
+    background: var(--parch-mid);
+}
+
+.skill-check {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--gold);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.skill-name {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+/* Tag colorida do atributo */
+.skill-attr {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    padding: 1px 6px;
+    border-radius: 10px;
+    border: 1px solid;
+    min-width: 28px;
+    text-align: center;
+}
+
+.skill-attr.attr-for {
+    color: var(--for-color);
+    border-color: var(--for-color);
+    background: rgba(192, 57, 43, 0.08);
+}
+
+.skill-attr.attr-des {
+    color: var(--des-color);
+    border-color: var(--des-color);
+    background: rgba(39, 174, 96, 0.08);
+}
+
+.skill-attr.attr-con {
+    color: var(--con-color);
+    border-color: var(--con-color);
+    background: rgba(230, 126, 34, 0.08);
+}
+
+.skill-attr.attr-int {
+    color: var(--int-color);
+    border-color: var(--int-color);
+    background: rgba(41, 128, 185, 0.08);
+}
+
+.skill-attr.attr-sab {
+    color: var(--sab-color);
+    border-color: var(--sab-color);
+    background: rgba(142, 68, 173, 0.08);
+}
+
+.skill-attr.attr-car {
+    color: var(--car-color);
+    border-color: var(--car-color);
+    background: rgba(212, 172, 13, 0.10);
+}
+
+.skill-val {
+    font-family: var(--font-number);
+    font-size: 1rem;
+    font-weight: 600;
+    font-weight: 400;
+    color: var(--gold);
+    min-width: 28px;
+    text-align: right;
+}
+
+/* ── 18. BOTÕES ── */
+.btn-add {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--ink-mid);
+    background: none;
+    border: 1px solid rgba(160, 100, 20, 0.35);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s;
+}
+
+.btn-add:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(220, 160, 30, 0.06);
+}
+
+.btn-remove {
+    font-size: 0.95rem;
+    color: var(--red);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 2px 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-remove:hover {
+    border-color: var(--red);
+    background: rgba(144, 24, 24, 0.06);
+}
+
+/* ── 19. TEXTAREA ── */
+textarea.note {
+    width: 100%;
+    min-height: 80px;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+    line-height: 1.65;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea.note:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(220, 160, 30, 0.1);
+}
+
+/* ── 20. CARDS EXPANSÍVEIS ── */
+.exp-card {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+}
+
+.exp-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.exp-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    background: var(--parch-mid);
+    transition: background 0.15s;
+    user-select: none;
+}
+
+.exp-header:hover {
+    background: var(--parch-deep);
+}
+
+.exp-arrow {
+    font-size: 0.65rem;
+    color: var(--ink-light);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.exp-arrow.open {
+    transform: rotate(180deg);
+}
+
+.exp-body {
+    display: none;
+    padding: 10px 12px;
+    border-top: 1px solid rgba(160, 100, 20, 0.15);
+}
+
+.exp-body.open {
+    display: block;
+}
+
+.exp-title-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink-mid);
+    flex: 1;
+    cursor: pointer;
+    min-width: 0;
+}
+
+.exp-title-input:focus {
+    cursor: text;
+}
+
+.spell-level-badge {
+    background: var(--gold);
+    color: var(--parch);
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    border-radius: 4px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+}
+
+.card-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    flex-wrap: wrap;
+}
+
+.card-field label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    white-space: nowrap;
+}
+
+.card-field input[type=text],
+.card-field input[type=number] {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.card-field input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(168,100,0,0.1);
+}
+
+.card-field input[type=number] {
+    width: 65px;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.card-field input[type=number]::-webkit-outer-spin-button,
+.card-field input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.card-field select {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a86400' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 26px;
+}
+.card-field select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(168,100,0,0.1);
+}
+
+.card-sublabel {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* ── 21. HABILIDADES ── */
+.habilidades-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.prof-tag-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+    min-height: 26px;
+}
+
+.prof-tag {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.4);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: var(--ink-mid);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: border-color 0.2s;
+}
+
+.prof-tag:hover {
+    border-color: var(--gold);
+}
+
+.prof-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--red);
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.tag-input-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.prof-tag-input {
+    border: none;
+    border-bottom: 1px solid rgba(160, 100, 20, 0.4);
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    flex: 1;
+    padding: 2px 0;
+    transition: border-color 0.2s;
+}
+
+.prof-tag-input:focus {
+    border-bottom-color: var(--gold);
+}
+
+/* ── 22. MAGIAS ── */
+.spell-slot-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.slot-pill {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    min-width: 68px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.slot-pill:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+}
+
+.slot-pill label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+}
+
+.slot-pill input {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: var(--font-body);
+    -moz-appearance: textfield;
+}
+
+.slot-pill input::-webkit-outer-spin-button,
+.slot-pill input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.magias-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* ── 23. INVENTÁRIO ── */
+.inv-grid {
+    display: grid;
+    grid-template-columns: 1fr 270px;
+    gap: 1.5rem;
+}
+
+.moedas-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.moeda-box {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 8px 4px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.moeda-box:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-md);
+}
+
+.moeda-box label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 3px;
+}
+
+.moeda-box input {
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: var(--font-number);
+    -moz-appearance: textfield;
+}
+
+.moeda-box input::-webkit-outer-spin-button,
+.moeda-box input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* ── 24. DESCRIÇÃO ── */
+.desc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.desc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 0.75rem;
+}
+
+.desc-field label {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+}
+
+.desc-field input {
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.desc-field input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(220, 160, 30, 0.1);
+}
+
+#char-img-wrap {
+    width: 100%;
+    aspect-ratio: 3/4;
+    max-height: 300px;
+    background: var(--parch-mid);
+    border: 2px dashed rgba(160, 100, 20, 0.4);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+#char-img-wrap:hover {
+    border-color: var(--gold);
+}
+
+#char-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+#char-img-input {
+    display: none;
+}
+
+.img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-light);
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+}
+
+.img-placeholder span {
+    font-size: 2rem;
+}
+
+/* ── 25. NOTAS ── */
+.notas-top {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.notas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* ── 26. BARRA INFERIOR ── */
+#bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bar-bg);
+    border-top: 2px solid var(--gold);
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    backdrop-filter: blur(8px);
+    z-index: 200;
+}
+
+#save-status {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--green);
+}
+
+.bottom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ctrl-btn {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: rgba(220, 160, 30, 0.6);
+    background: transparent;
+    border: 1px solid rgba(220, 160, 30, 0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.ctrl-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold-pale);
+    background: rgba(220, 160, 30, 0.08);
+}
+
+.save-btn {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    letter-spacing: 2px;
+    color: var(--ink);
+    background: var(--gold);
+    border: 1px solid var(--gold-light);
+    border-radius: var(--radius-sm);
+    padding: 9px 26px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 400;
+}
+
+.save-btn:hover {
+    background: var(--gold-light);
+    box-shadow: 0 0 16px rgba(220, 160, 30, 0.35);
+}
+
+/* Botões de descanso */
+.rest-btn {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--ink-muted);
+    background: transparent;
+    border: 1px solid rgba(160,100,20,0.25);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.rest-btn:hover {
+    background: rgba(160,100,20,0.1);
+    border-color: var(--gold);
+    color: var(--ink);
+}
+
+/* Modificador de atributo clicável — tooltip */
+.attr-mod[onclick]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%; left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--parch);
+    font-size: 0.65rem;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0.9;
+    margin-bottom: 4px;
+}
+.attr-card { position: relative; }
+
+/* Tabelas de Ataques e Munições — mobile */
+@media (max-width: 480px) {
+    #attacks-body tr {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid rgba(160,100,20,0.15);
+        padding: 0.4rem 0;
+        gap: 4px;
+    }
+    #attacks-body td {
+        display: block;
+        border: none;
+        padding: 2px 4px;
+    }
+    #attacks-body td:first-child { width: 100%; }
+    #attacks-body td input { width: 100%; min-width: 0; }
+
+    .ammo-row { flex-direction: column !important; }
+}
+
+/* ── 27. IMPRESSÃO ── */
+@media print {
+
+    #tabs,
+    #bottom-bar {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        font-size: 11px;
+    }
+
+    #sheet-body {
+        max-width: 100% !important;
+        padding: 0.5rem !important;
+    }
+
+    .tab-panel {
+        display: block !important;
+        page-break-before: always;
+    }
+
+    .tab-panel:first-child {
+        page-break-before: auto;
+    }
+
+    .panel,
+    .attr-card,
+    .big-num {
+        break-inside: avoid;
+    }
+
+    .pv-bar {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .heart-critical {
+        animation: none !important;
+    }
+}
+
+/* ── PALETAS ALTERNATIVAS (copie para o :root acima) ──────────
+
+OPÇÃO A — Tinta de Sangue (bordô + pergaminho escuro):
+    --parch:#fdf5f5; --parch-mid:#f0e0e0; --parch-deep:#c87878; --parch-border:#882020;
+    --ink:#180505; --ink-mid:#300808; --ink-light:#7a2020;
+    --gold:#882020; --gold-light:#aa3030; --gold-pale:#d08080;
+    --red:#5a0a0a; --green:#285028; --page:#7a3030;
+
+OPÇÃO B — Arcano Profundo (índigo + prata):
+    --parch:#f0f0f8; --parch-mid:#e0e0f0; --parch-deep:#8080c0; --parch-border:#404090;
+    --ink:#080818; --ink-mid:#181840; --ink-light:#404080;
+    --gold:#9060d0; --gold-light:#a878e0; --gold-pale:#c8b0f0;
+    --red:#a02020; --green:#207040; --page:#282860;
+
+OPÇÃO C — Floresta Élfica (verde musgo + ouro âmbar):
+    --parch:#f2f7f0; --parch-mid:#e0eed8; --parch-deep:#90b870; --parch-border:#3a6820;
+    --ink:#080f04; --ink-mid:#142808; --ink-light:#2e5818;
+    --gold:#886010; --gold-light:#a88020; --gold-pale:#c8b060;
+    --red:#882020; --green:#1e6020; --page:#3a5820;
+*/
+
+/* ══ VISÃO NO ESCURO ══ */
+.visao-check-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+    color: var(--ink-light);
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.visao-escuro-icon {
+    font-size: 1rem;
+    animation: pulse-moon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-moon {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* ══ RESISTÊNCIAS & VULNERABILIDADES ══ */
+.resv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    background: var(--parch);
+    border: 1px solid rgba(160, 100, 20, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.resv-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.resv-col-title {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    font-weight: 400;
+    margin-bottom: 2px;
+}
+
+.res-title {
+    color: #1a5020;
+}
+
+.vul-title {
+    color: #8b1010;
+}
+
+.imn-title {
+    color: #6a4000;
+}
+
+.resv-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-height: 22px;
+}
+
+.resv-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+}
+
+.resv-tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+/* ══ CARGAS no header da habilidade ══ */
+.cargas-badge {
+    font-family: var(--font-number);
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: var(--gold-pale);
+    color: var(--ink-mid);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 2px 10px;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cargas-badge.cargas-esgotadas {
+    background: #f0d0d0;
+    color: var(--red);
+    border-color: var(--red);
+}
+
+/* ══ SLOTS USADOS ══ */
+.spell-slots-usado-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+    margin-bottom: 0.75rem;
+    justify-content: center;
+}
+
+.slot-usado-pill {
+    text-align: center;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160, 100, 20, 0.25);
+    border-radius: 20px;
+    padding: 4px 10px;
+    min-width: 68px;
+    transition: border-color 0.2s;
+}
+
+.slot-usado-pill label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    margin-bottom: 2px;
+}
+
+.slot-usado-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: var(--font-number);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.slot-usado-btns button {
+    background: none;
+    border: 1px solid rgba(160, 100, 20, 0.3);
+    border-radius: 4px;
+    width: 18px;
+    height: 18px;
+    line-height: 1;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--ink-light);
+    transition: all 0.15s;
+    padding: 0;
+}
+
+.slot-usado-btns button:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.slot-usado-pill.slot-esgotado {
+    border-color: var(--red);
+    background: #f8e8e8;
+}
+
+.slot-usado-pill.slot-esgotado label,
+.slot-usado-pill.slot-esgotado .slot-usado-btns {
+    color: var(--red);
+}
+
+/* ══ SISTEMA DE PONTOS DE MAGIA ══ */
+
+#sp-mode-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.sp-toggle-btn {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 7px 18px;
+    border: 1.5px solid rgba(160, 100, 20, 0.4);
+    border-radius: var(--radius-sm);
+    background: var(--parch-mid);
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.sp-toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--parch);
+}
+.sp-toggle-btn.sp-toggle-ativo {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(200,140,20,0.28);
+}
+
+.sp-mode-hint {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    font-style: italic;
+}
+
+/* Config row */
+.sp-config-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+.sp-tipo-wrap select {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    background: var(--parch-mid);
+    border: 1px solid rgba(160,100,20,0.3);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    padding: 4px 8px;
+    cursor: pointer;
+    outline: none;
+    max-width: 360px;
+}
+.sp-nivel-conj-wrap {
+    display: flex;
+    gap: 0.6rem;
+}
+.sp-stat-box {
+    text-align: center;
+    background: var(--parch);
+    border: 1px solid rgba(160,100,20,0.2);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    min-width: 80px;
+}
+.sp-stat-label {
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.sp-stat-val {
+    font-family: var(--font-number);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+/* Pool card */
+.sp-pool-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--parch);
+    border: 2px solid rgba(160,100,20,0.25);
+    border-radius: var(--radius);
+    padding: 0.75rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
+    transition: border-color 0.3s, background 0.3s;
+}
+.sp-pool-card.sp-pool-low      { border-color: #b86010; background: #fff8ec; }
+.sp-pool-card.sp-pool-critical { border-color: var(--red); background: #fff0f0; }
+.sp-pool-card.sp-pool-empty    { border-color: #888; background: #f5f5f5; }
+
+.sp-pool-label {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+.sp-pool-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.sp-pool-nums {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+.sp-atual-val {
+    font-family: var(--font-number);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 48px;
+    text-align: right;
+}
+.sp-pool-sep {
+    font-family: var(--font-number);
+    font-size: 1.4rem;
+    color: var(--ink-muted);
+}
+.sp-max-val {
+    font-family: var(--font-number);
+    font-size: 1.4rem;
+    color: var(--ink-light);
+    min-width: 36px;
+}
+.sp-adj-btn {
+    width: 32px; height: 32px;
+    border: 1.5px solid rgba(160,100,20,0.35);
+    border-radius: 50%;
+    background: var(--parch-mid);
+    color: var(--ink-light);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1;
+    padding: 0;
+}
+.sp-adj-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--parch); }
+
+.sp-rest-btn {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 7px 16px;
+    border: 1.5px solid rgba(50,30,100,0.35);
+    border-radius: var(--radius-sm);
+    background: #e8e0f8;
+    color: #3c2870;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.sp-rest-btn:hover { background: #d4c8f0; border-color: #6040b0; }
+
+/* Botões de criar espaço */
+.sp-create-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.sp-create-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 14px;
+    background: var(--parch-mid);
+    border: 1.5px solid rgba(160,100,20,0.3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 70px;
+}
+.sp-create-btn:hover:not(.sp-btn-disabled) {
+    background: var(--parch-deep);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+.sp-create-btn.sp-btn-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+}
+.sp-create-btn.sp-btn-alto {
+    border-color: rgba(100,50,150,0.35);
+    background: #f0ecf8;
+}
+.sp-create-btn.sp-btn-alto:hover:not(.sp-btn-disabled) {
+    border-color: #7040c0;
+    background: #e4dcf4;
+}
+.sp-btn-level {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: var(--ink);
+}
+.sp-btn-cost {
+    font-family: var(--font-number);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gold);
+}
+.sp-btn-used {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--red);
+}
+
+/* Restrição alto nível */
+.sp-alto-row {
+    background: #f8f0ff;
+    border: 1px solid rgba(120,60,180,0.25);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    margin-bottom: 0.75rem;
+}
+.sp-alto-title {
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    color: #5a3090;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+.sp-alto-checks {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.sp-alto-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 12px;
+    border: 1px solid rgba(120,60,180,0.3);
+    border-radius: var(--radius-sm);
+    background: #f0e8ff;
+    min-width: 60px;
+    transition: all 0.2s;
+}
+.sp-alto-item.sp-alto-usado {
+    background: #f8d8d8;
+    border-color: var(--red);
+}
+.sp-alto-nv {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: var(--ink-light);
+}
+.sp-alto-status {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: #5a3090;
+}
+.sp-alto-item.sp-alto-usado .sp-alto-status { color: var(--red); }
+
+/* Slot ativo (tem espaços criados) */
+.slot-usado-pill.sp-slot-ativo {
+    border-color: var(--gold);
+    background: #fdf5d8;
+}
+
+/* ══ SISTEMA DE PONTOS DE MAGIA — fim ══ */
+
+.attacks-table th:first-child {
+    width: 22%;
+}
+/* ============================================================
+   MOBILE RESPONSIVE — max-width: 768px
+   ── Layout adaptado para telas pequenas (celular).
+      As abas ficam deslizáveis, o grid vira uma coluna.
+============================================================ */
+@media (max-width: 768px) {
+
+    /* ── Cabeçalho compacto ── */
+    #header-fields {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.4rem !important;
+        padding: 0.6rem 0.75rem !important;
+    }
+    #nome-personagem { font-size: clamp(1.2rem, 5vw, 1.8rem) !important; }
+    #header-hero { padding: 0.75rem 1rem 0.5rem !important; }
+
+    /* ── Abas deslizáveis ── */
+    #tabs {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        gap: 0.2rem !important;
+        padding: 0.4rem 0.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+    #tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+        flex-shrink: 0 !important;
+        font-size: 0.72rem !important;
+        padding: 0.45rem 0.7rem !important;
+    }
+    .tab-label { display: none !important; }
+    .tab-icon { font-size: 1.1rem !important; margin: 0 !important; }
+
+    /* ── Sheet body sem padding excessivo ── */
+    #sheet-body { padding: 0.9rem 0.75rem 5rem !important; }
+
+    /* ── Grid combate em coluna única ── */
+    #combate-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── Atributos: 3 colunas mas menores ── */
+    .attr-card { padding: 6px 4px !important; }
+    .attr-card label { font-size: 0.65rem !important; }
+    .attr-card input { font-size: 1.2rem !important; }
+    .attr-mod { font-size: 1rem !important; }
+
+    /* ── Combate: linha de números menores ── */
+    .big-num input { font-size: 1rem !important; }
+    .big-num label { font-size: 0.6rem !important; }
+
+    /* ── Deslocamentos compactos no mobile ── */
+    .speed-multi { gap: 3px !important; }
+    .speed-item { min-width: 48px !important; padding: 2px 4px !important; }
+    .speed-input { font-size: 0.8rem !important; }
+
+    /* ── Saves/perícias em 2 colunas ── */
+    #pericias-lista { columns: 2 !important; column-gap: 0.5rem !important; }
+    .skill-row { break-inside: avoid !important; }
+
+    /* ── Notas e textareas ── */
+    .note { min-height: 80px !important; }
+
+    /* ── Barra inferior mais compacta ── */
+    #bottom-bar { padding: 0.6rem 0.75rem !important; gap: 0.5rem !important; }
+    .save-btn { font-size: 0.78rem !important; padding: 0.45rem 0.9rem !important; }
+
+    /* ── Botão de tema reposicionado ── */
+    #btn-tema { bottom: 4.5rem !important; right: 0.75rem !important; }
+    #tema-panel { right: 0.75rem !important; bottom: 7rem !important; }
+
+    /* ── PV bar compacta ── */
+    #pv-section { flex-direction: column !important; gap: 0.5rem !important; }
+
+    /* ── Inventário/magias em coluna ── */
+    .inv-grid, .magias-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+    /* Cabeçalho ainda mais compacto */
+    #header-fields { grid-template-columns: 1fr 1fr !important; }
+    .hfield label { font-size: 0.58rem !important; }
+    .hfield input { font-size: 0.82rem !important; }
+
+    /* Combate: campos em 2 por linha */
+    #combate-grid > div > div[style*="flex"] {
+        flex-wrap: wrap !important;
+    }
+
+    /* Atributos em 2 colunas */
+    .attr-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ============================================================
+   CORREÇÕES DE TEXTO CORTADO (todas as telas)
+============================================================ */
+/* Labels e campos com overflow */
+.hfield label,
+.big-num label,
+.arm-label,
+.section-title,
+.save-row span,
+.skill-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+/* Evita corte nos cards de ataque */
+#attacks-body td input { min-width: 0; }
+
+/* Garante que moedas não transbordam */
+.moeda-box { overflow: hidden; }
+.moeda-box label { white-space: nowrap; font-size: 0.7rem; }
+
+/* Bottom bar sem corte */
+#bottom-bar {
+    overflow: hidden;
+    flex-wrap: wrap;
+}
+#save-status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+/* ── 1. BARRA DE PV COM COR DINÂMICA ── */
+.pv-bar-fill {
+    transition: width 0.6s cubic-bezier(.4,0,.2,1),
+                background-color 0.6s ease !important;
+}
+.pv-saude-boa    .pv-bar-fill { background: var(--green) !important; }
+.pv-saude-media  .pv-bar-fill { background: #c8a000 !important; }
+.pv-saude-baixa  .pv-bar-fill { background: #c84020 !important; }
+.pv-saude-critica .pv-bar-fill {
+    background: #c84020 !important;
+    animation: pvPulse 1.2s ease-in-out infinite !important;
+}
+@keyframes pvPulse {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50%       { opacity: 0.55; filter: brightness(1.3); }
+}
+
+/* ── 2. TRANSIÇÃO SUAVE ENTRE ABAS ── */
+.tab-panel.active {
+    display: block !important;
+    animation: tabFadeIn 0.2s ease-out forwards !important;
+}
+@keyframes tabFadeIn {
+    from { opacity: 0.2; transform: translateY(6px); }
+    to   { opacity: 1;   transform: translateY(0); }
+}
+
+/* ── 3. TOAST DE NOTIFICAÇÃO ── */
+#toast-container {
+    position: fixed;
+    top: 1rem; right: 1.2rem;
+    z-index: 500;
+    display: flex; flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+.toast {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: var(--parch);
+    border: 1.5px solid var(--parch-border);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-mid);
+    min-width: 200px; max-width: 320px;
+    pointer-events: auto;
+    animation: toastIn 0.28s cubic-bezier(.17,.67,.35,1.15) both;
+}
+.toast.saindo { animation: toastOut 0.25s ease-in forwards; }
+.toast.tipo-sucesso { border-left-color: var(--green); }
+.toast.tipo-aviso   { border-left-color: #c8a000; }
+.toast.tipo-erro    { border-left-color: var(--red); }
+.toast.tipo-descanso-curto { border-left-color: #6080c0; }
+.toast.tipo-descanso-longo { border-left-color: #c08020; }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-msg  { flex: 1; line-height: 1.3; }
+@keyframes toastIn  {
+    from { opacity: 0; transform: translateX(30px) scale(0.92); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); max-height: 80px; margin-bottom: 0; }
+    to   { opacity: 0; transform: translateX(30px); max-height: 0; margin-bottom: -8px; }
+}
+
+/* ── 4. FLASH DE ATRIBUTO ── */
+@keyframes attrFlash {
+    0%   { background: var(--parch-mid); }
+    30%  { background: color-mix(in srgb, var(--attr-color, var(--gold)) 22%, var(--parch-mid)); }
+    100% { background: var(--parch-mid); }
+}
+.attr-card.atualizando { animation: attrFlash 0.5s ease-out; }
+
+/* ── 5. SCROLLBAR CUSTOMIZADA ── */
+* { scrollbar-width: thin; scrollbar-color: var(--parch-border) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--parch-deep);
+    border-radius: 3px;
+    transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--parch-border); }
+
+/* ── 6. SEPARADORES ORNAMENTAIS ── */
+.section-title {
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.section-title::before,
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--parch-border), transparent);
+    opacity: 0.6;
+}
+.section-title::before { max-width: 18px; }
+
+/* ── 7. CONDIÇÕES — badges nos cards e painel na ficha ── */
+.condicoes-grid {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    margin-top: 0.3rem;
+}
+.cond-btn {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--parch-mid);
+    border: 1.5px solid rgba(160,100,20,0.18);
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+}
+.cond-btn:hover { border-color: var(--gold); color: var(--ink); }
+.cond-btn.ativa {
+    background: rgba(180,40,40,0.12);
+    border-color: var(--red);
+    color: var(--red);
+    font-weight: 600;
+}
+.cond-btn.ativa.cond-positiva {
+    background: rgba(30,140,50,0.12);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+/* Badges de condição nos cards do grupo */
+.card-condicoes {
+    display: flex; flex-wrap: wrap; gap: 3px;
+    justify-content: center;
+    margin-bottom: 0.6rem; min-height: 0;
+}
+.cond-badge {
+    font-size: 0.9rem;
+    filter: grayscale(0.2);
+    animation: badgeIn 0.2s ease-out;
+    cursor: default;
+}
+@keyframes badgeIn {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ── 8. CARD COM FOTO DO PERSONAGEM ── */
+.card-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 0.6rem;
+    background: var(--parch-mid);
+    border: 2px solid var(--parch-border);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.card-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+.char-card:hover .card-avatar { border-color: var(--gold); }
+
+/* ── SISTEMA DE ESPAÇAMENTO (base 4px) ── */
+:root {
+    --sp-xs:  4px;
+    --sp-sm:  8px;
+    --sp-md:  12px;
+    --sp-lg:  16px;
+    --sp-xl:  24px;
+    --sp-xxl: 32px;
+}
+
+/* ── HIERARQUIA VISUAL ── */
+/* Nível 1 — elementos críticos (PV, atributos principais) */
+.card-lvl1 {
+    border: 2px solid var(--parch-border) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12) !important;
+}
+/* Nível 2 — cards comuns */
+.card-lvl2 {
+    border: 1px solid rgba(160,100,20,0.18) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+}
+/* Nível 3 — elementos neutros (rows, inner) */
+.card-lvl3 {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* ── REDUÇÃO DE DENSIDADE: skills e saves ── */
+/* Remove bordas entre linhas, usa background alternado + hover claro */
+.skill-row {
+    border-bottom: none !important;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.skill-row:nth-child(even) { background: rgba(160,100,20,0.04); }
+.skill-row:hover { background: var(--parch-mid) !important; }
+
+.save-row {
+    border-bottom: none !important;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.save-row:nth-child(even) { background: rgba(160,100,20,0.04); }
+.save-row:hover { background: var(--parch-mid) !important; }
+
+/* Ícone de dado — aparece no hover */
+.roll-hint {
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.15s, transform 0.15s;
+    transform: scale(0.7);
+    pointer-events: none;
+    margin-left: 2px;
+}
+.skill-row:hover .roll-hint,
+.save-row:hover  .roll-hint {
+    opacity: 0.7;
+    transform: scale(1);
+}
+
+/* ── INPUTS MELHORADOS ── */
+/* Estado de foco cinematográfico */
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(160,100,20,0.18), 0 1px 6px rgba(160,100,20,0.12) !important;
+    transition: box-shadow 0.2s, border-color 0.2s !important;
+}
+
+/* Inputs numéricos inline — underline em vez de caixa */
+.big-num input {
+    border: none !important;
+    border-bottom: 2px solid rgba(160,100,20,0.25) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    transition: border-color 0.2s !important;
+}
+.big-num input:focus {
+    border-bottom-color: var(--gold) !important;
+    box-shadow: none !important;
+}
+
+/* ── TABS IMERSIVAS ── */
+/* Ícones maiores, separadores ornamentais, indicador animado */
+.tab-btn {
+    padding: 1rem 1.3rem !important;
+    gap: 8px !important;
+    position: relative !important;
+    border-bottom: 3px solid transparent !important;
+    transition: color 0.2s, background 0.2s !important;
+}
+.tab-icon {
+    font-size: 1.25rem !important;
+    transition: transform 0.2s !important;
+}
+.tab-btn:hover .tab-icon { transform: scale(1.2) !important; }
+.tab-btn.active .tab-icon { transform: scale(1.15) !important; }
+
+/* Indicador deslizante animado */
+#tab-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 2px 2px 0 0;
+    transition: left 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    box-shadow: 0 0 8px rgba(200,150,10,0.5);
+}
+
+/* Separador ornamental entre tabs */
+.tab-btn + .tab-btn::before {
+    content: '✦';
+    position: absolute;
+    left: -4px;
+    font-size: 0.4rem;
+    color: rgba(200,150,10,0.25);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ── RECURSOS DE CLASSE ── */
+.recursos-empty {
+    font-size: 0.82rem; color: var(--ink-muted);
+    font-style: italic; text-align: center;
+    padding: 0.5rem 0;
+}
+
+.recurso-item {
+    background: var(--parch-mid);
+    border: 1px solid rgba(160,100,20,0.18);
+    border-radius: 9px;
+    padding: var(--sp-md);
+    margin-bottom: var(--sp-sm);
+    transition: border-color 0.2s;
+}
+.recurso-item:hover { border-color: rgba(160,100,20,0.35); }
+
+.recurso-topo {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 6px;
+    margin-bottom: 8px; min-width: 0;
+}
+.recurso-nome-input {
+    flex: 1; min-width: 0; background: transparent;
+    border: none !important; border-bottom: 1px solid rgba(160,100,20,0.2) !important;
+    border-radius: 0 !important; box-shadow: none !important;
+    font-family: var(--font-heading); font-size: 0.88rem;
+    font-weight: 600; color: var(--ink);
+    padding: 2px 0; overflow: hidden; text-overflow: ellipsis;
+}
+.recurso-controles { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.recurso-recarga-tag {
+    font-size: 0.68rem; font-family: var(--font-heading);
+    color: var(--ink-muted); letter-spacing: 0.05em;
+    background: var(--parch); border-radius: 4px;
+    padding: 1px 5px; border: 1px solid rgba(160,100,20,0.15);
+}
+.recurso-dado-btn {
+    background: transparent; border: 1px solid rgba(160,100,20,0.2);
+    border-radius: 5px; padding: 2px 6px;
+    font-size: 0.72rem; color: var(--gold);
+    cursor: pointer; transition: all 0.15s;
+}
+.recurso-dado-btn:hover { background: rgba(160,100,20,0.1); }
+.recurso-del {
+    background: none; border: none;
+    color: rgba(180,40,40,0.4); cursor: pointer;
+    font-size: 0.85rem; padding: 2px 4px;
+    transition: color 0.15s; border-radius: 4px;
+}
+.recurso-del:hover { color: var(--red); background: rgba(180,40,40,0.08); }
+
+.recurso-usos {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+}
+.uso-btn {
+    width: 22px; height: 22px;
+    background: var(--parch); border: 1px solid rgba(160,100,20,0.25);
+    border-radius: 50%; font-size: 1rem; line-height: 1;
+    color: var(--ink-muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+}
+.uso-btn:hover { background: var(--parch-deep); border-color: var(--gold); color: var(--ink); }
+.uso-pips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+.uso-pip {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: transparent; border: 1.5px solid rgba(160,100,20,0.3);
+    cursor: pointer; transition: all 0.15s; padding: 0;
+}
+/* Variante retangular para recursos */
+.uso-pip-rect {
+    width: 22px !important; height: 18px !important;
+    border-radius: 4px !important;
+}
+.uso-pip.cheio { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 4px rgba(200,150,10,0.35); }
+.uso-pip:hover { border-color: var(--gold); transform: scale(1.1); }
+.uso-label {
+    font-family: var(--font-heading); font-size: 0.78rem;
+    color: var(--ink-muted); white-space: nowrap;
+}
+.recurso-max-wrap {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; color: var(--ink-muted);
+    font-family: var(--font-heading);
+}
+.recurso-max-input {
+    width: 38px !important; text-align: center;
+    font-size: 0.78rem !important;
+    padding: 1px 3px !important;
+}
+/* Linha com Máx + Dado + Recarga */
+.recurso-mid-wrap {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px; flex-wrap: wrap;
+}
+.recurso-dado-wrap {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; color: var(--ink-muted);
+    font-family: var(--font-heading);
+}
+.recurso-recarga-wrap {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; color: var(--ink-muted);
+    font-family: var(--font-heading);
+}
+.recurso-recarga-wrap label,
+.recurso-dado-wrap label,
+.recurso-max-wrap label {
+    font-size: 0.68rem; white-space: nowrap;
+}
+.recurso-dado-input {
+    width: 50px !important; text-align: center;
+    font-size: 0.78rem !important;
+    padding: 1px 4px !important;
+    background: var(--parch) !important;
+    border: 1px solid rgba(160,100,20,0.2) !important;
+    border-radius: 4px !important;
+    color: var(--ink) !important;
+}
+/* Select de recarga embutido */
+.recurso-recarga-select {
+    font-size: 0.72rem; font-family: var(--font-heading);
+    font-weight: 600; letter-spacing: 0.04em;
+    color: var(--ink-mid);
+    background: var(--parch-mid);
+    border-radius: 5px;
+    padding: 3px 22px 3px 7px;
+    border: 1px solid rgba(160,100,20,0.25);
+    cursor: pointer; outline: none;
+    /* Remove aparência nativa do browser */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Seta customizada usando SVG inline */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a86400' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    transition: border-color 0.15s, background-color 0.15s;
+    min-width: 72px;
+}
+.recurso-recarga-select:hover { border-color: rgba(160,100,20,0.5); background-color: var(--parch-deep); }
+.recurso-recarga-select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(168,100,0,0.12); }
+/* Descrição do recurso */
+.recurso-desc-wrap { margin-top: 4px; }
+.recurso-desc {
+    width: 100%; min-height: 44px; resize: vertical;
+    background: var(--parch) !important;
+    border: 1px solid rgba(160,100,20,0.15) !important;
+    border-left: 2px solid rgba(160,100,20,0.25) !important;
+    border-radius: 0 4px 4px 0 !important;
+    font-family: var(--font-body); font-size: 0.82rem;
+    color: var(--ink); padding: 5px 8px;
+    line-height: 1.5; transition: border-color 0.2s;
+}
+.recurso-desc:focus { border-left-color: var(--gold) !important; outline: none; }
+
+.btn-add-recurso {
+    display: flex; align-items: center; gap: 5px;
+    width: 100%; margin-top: 6px;
+    background: transparent;
+    border: 1px dashed rgba(160,100,20,0.3);
+    border-radius: 7px; padding: 0.45rem;
+    font-family: var(--font-heading); font-size: 0.78rem;
+    color: var(--ink-muted); cursor: pointer;
+    transition: all 0.18s; justify-content: center;
+}
+.btn-add-recurso:hover { border-color: var(--gold); color: var(--ink); background: rgba(160,100,20,0.05); }
+
+/* ════ CORREÇÕES: RECURSOS, IMAGEM E SÍMBOLOS ════ */
+
+/* Faixa de recursos abaixo do grid de combate */
+.recursos-faixa {
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(160,100,20,0.15);
+}
+.recursos-faixa #recursos-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.75rem;
+}
+.recursos-faixa .recurso-item { margin-bottom: 0; }
+
+/* Imagem do personagem — estilos base sem !important
+   para não conflitar com os seletores específicos de modo
+   (.modo-retrato e .modo-token) que têm regras próprias */
+#char-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+
+/* Símbolo no placeholder da imagem */
+.img-icon {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--parch-border);
+    line-height: 1;
+}
+
+/* Símbolos medievais — tamanho consistente */
+.tab-icon {
+    font-style: normal !important;
+    font-size: 1.15rem !important;
+    font-family: var(--font-heading), serif !important;
+    line-height: 1 !important;
+}
+
+/* Condições com símbolos — garantir legibilidade */
+.cond-btn {
+    font-family: var(--font-body), serif !important;
+    letter-spacing: 0.02em !important;
+}
+
+/* Speed icon com símbolos Unicode */
+.speed-icon {
+    font-family: var(--font-heading), serif;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    min-width: 14px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Botão do dado — símbolo ⚄ */
+#btn-rolar-dado { letter-spacing: 0.12em; }
+
+/* Botão de dados flutuante com símbolo */
+#btn-dados { font-family: var(--font-heading), serif; }
+
+/* Botão de rolar dentro da tabela de ataques */
+.btn-rolar-ataque {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    border: none;
+    border-radius: 6px;
+    color: var(--parch);
+    font-size: 0.85rem;
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 2px 6px rgba(160,100,0,0.2);
+    padding: 0;
+}
+.btn-rolar-ataque:hover {
+    transform: scale(1.15) rotate(-10deg);
+    box-shadow: 0 3px 12px rgba(160,100,0,0.38);
+}
+.btn-rolar-ataque:active { transform: scale(0.92); }
+
+/* Flash de linha ao rolar */
+.ataque-animado td {
+    animation: ataqueFlash 0.55s ease-out;
+}
+@keyframes ataqueFlash {
+    0%   { background: rgba(200,150,10,0); }
+    25%  { background: rgba(200,150,10,0.22); }
+    100% { background: rgba(200,150,10,0); }
+}
+
+/* ── HP DANO — shake + flash vermelho ── */
+.anim-dano {
+    animation: pvShake 0.55s ease-out, pvDanoFlash 0.55s ease-out !important;
+}
+@keyframes pvShake {
+    0%,100% { transform: translateX(0); }
+    15%     { transform: translateX(-7px); }
+    30%     { transform: translateX(7px); }
+    45%     { transform: translateX(-4px); }
+    60%     { transform: translateX(4px); }
+    75%     { transform: translateX(-2px); }
+    90%     { transform: translateX(2px); }
+}
+@keyframes pvDanoFlash {
+    0%   { box-shadow: inset 0 0 0 rgba(200,40,40,0); }
+    25%  { box-shadow: inset 0 0 28px rgba(200,40,40,0.55); }
+    100% { box-shadow: inset 0 0 0 rgba(200,40,40,0); }
+}
+
+/* ── HP CURA — glow verde ── */
+.anim-cura {
+    animation: pvCuraGlow 0.9s ease-out !important;
+}
+@keyframes pvCuraGlow {
+    0%   { box-shadow: inset 0 0 0 rgba(30,150,60,0); }
+    25%  { box-shadow: inset 0 0 30px rgba(30,150,60,0.50); }
+    100% { box-shadow: inset 0 0 0 rgba(30,150,60,0); }
+}
+
+/* ── FLASH GLOBAL (crítico / falha) ── */
+.anim-flash {
+    position: fixed; inset: 0;
+    z-index: 998; pointer-events: none;
+    opacity: 0;
+    border-radius: 0;
+}
+.anim-flash.ativo {
+    animation: globalFlash 0.75s ease-out forwards;
+}
+@keyframes globalFlash {
+    0%   { opacity: 0; transform: scale(0.6); }
+    20%  { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.6); }
+}
+
+/* ── 1. FIX DEFINITIVO DA COR DAS ABAS ── */
+/* Garante texto legível em qualquer tema */
+.tab-btn {
+    color: rgba(220,160,30,0.55) !important;
+}
+.tab-btn:hover {
+    color: rgba(220,160,30,0.88) !important;
+    background: rgba(220,160,30,0.06) !important;
+}
+.tab-btn.active {
+    color: #f0d070 !important;
+    text-shadow: 0 0 12px rgba(220,170,30,0.5), 0 1px 3px rgba(0,0,0,0.6) !important;
+    background: rgba(220,160,30,0.1) !important;
+    font-weight: 600 !important;
+}
+.tab-btn.active .tab-icon {
+    filter: drop-shadow(0 0 4px rgba(220,170,30,0.6)) !important;
+}
+
+/* ── 2. TOGGLE DE MODO DA IMAGEM ── */
+.section-title:has(.img-mode-toggle) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.img-mode-toggle {
+    display: flex;
+    gap: 4px;
+}
+.img-mode-btn {
+    background: transparent;
+    border: 1px solid rgba(160,100,20,0.2);
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.img-mode-btn:hover  { border-color: var(--gold); color: var(--ink); }
+.img-mode-btn.active { border-color: var(--gold); background: rgba(160,100,20,0.12); color: var(--ink); }
+
+/* ── 3. CONTAINER DE IMAGEM UNIFICADO ── */
+/* BASE — sempre position:relative para ser contexto de filhos absolutos */
+#char-img-outer {
+    position: relative !important;
+    margin: 0 auto 1rem !important;
+}
+
+/* ── MODO RETRATO ── */
+#char-img-outer.modo-retrato {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+}
+#char-img-outer.modo-retrato #char-img-wrap {
+    position: relative !important;
+    width: 100% !important;
+    max-height: 360px !important;
+    border-radius: 8px !important;
+    border: 2px dashed rgba(160,100,20,0.35) !important;
+    overflow: hidden !important;
+    background: var(--parch-mid) !important;
+    cursor: pointer !important;
+    transition: border-color 0.2s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+#char-img-outer.modo-retrato #char-img-wrap:hover { border-color: var(--gold) !important; }
+#char-img-outer.modo-retrato #char-img-wrap img {
+    max-width: 100% !important;
+    max-height: 360px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+#char-img-outer.modo-retrato .token-ring { display: none !important; }
+
+/* ── MODO TOKEN ── */
+#char-img-outer.modo-token {
+    width: 220px !important;
+    height: 220px !important;
+    max-width: 220px !important;
+    display: block !important; /* NÃO flex — filhos usam position:absolute */
+}
+#char-img-outer.modo-token #char-img-wrap {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    width: 200px !important;
+    height: 200px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    background: var(--parch-mid) !important;
+    cursor: pointer !important;
+    z-index: 1 !important;
+    display: block !important;
+}
+#char-img-outer.modo-token #char-img-wrap img {
+    width: 100% !important; height: 100% !important;
+    object-fit: cover !important; object-position: top center !important;
+    display: block !important;
+}
+#char-img-outer.modo-token .img-placeholder {
+    width: 100% !important; height: 100% !important;
+    display: flex; /* sem !important: JS pode sobrescrever com display:none */
+    align-items: center !important; justify-content: center !important;
+    flex-direction: column !important; gap: 6px !important;
+    text-align: center !important; padding: 1.5rem !important;
+    font-size: 0.72rem !important; line-height: 1.5 !important;
+    color: var(--gold) !important;
+    border: none !important;
+    background: radial-gradient(circle at center, rgba(160,100,20,0.08) 0%, transparent 70%) !important;
+}
+#char-img-outer.modo-token .token-ring {
+    position: absolute !important;
+    top: 0 !important; left: 0 !important;
+    width: 220px !important; height: 220px !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+    display: block !important;
+    filter: drop-shadow(0 2px 8px rgba(160,100,0,0.5)) !important;
+}
+
+/* ── 4. POLIMENTO VISUAL GERAL ── */
+
+/* Background do conteúdo principal — textura sutil */
+#sheet-body {
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 23px,
+            rgba(160,100,20,0.025) 24px
+        ) !important;
+}
+
+/* Section titles mais ornamentais */
+.section-title {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.22em !important;
+    color: var(--ink-light) !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 0.6rem !important;
+}
+.section-title::before { max-width: 24px !important; }
+
+/* Cards de atributo — hierarquia clara */
+.attr-card {
+    border: 1.5px solid rgba(160,100,20,0.22) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+    transition: transform 0.15s, border-color 0.18s, box-shadow 0.18s !important;
+}
+.attr-card:hover {
+    border-color: rgba(160,100,20,0.45) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Perícias e saves — área de respiração */
+.skill-row, .save-row { padding: 5px 6px !important; }
+
+/* Barra inferior mais refinada */
+#bottom-bar {
+    backdrop-filter: blur(12px) !important;
+    border-top: 1.5px solid var(--gold) !important;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.25) !important;
+}
+
+/* Cards de magias e habilidades — sombra reduzida */
+.exp-card {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* Header hero — gradiente mais suave */
+#header-hero {
+    border-bottom: 1px solid rgba(160,100,20,0.2) !important;
+}
+
+/* Inputs de texto geral — foco mais cinematográfico */
+.note:focus {
+    outline: none !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(160,100,20,0.15) !important;
+}
+
+/* Mobile: token centralizado */
+@media (max-width: 480px) {
+    #char-img-outer { max-width: 220px; }
+    #char-img-outer.modo-retrato #char-img-wrap { max-height: 240px; }
+}
+
+/* ── SISTEMA DE CORES POR ATRIBUTO ── */
+:root {
+    --for-color: #c84030;
+    --des-color: #38a858;
+    --con-color: #d07830;
+    --int-color: #3878c8;
+    --sab-color: #8838c8;
+    --car-color: #c8a020;
+}
+
+/* Acento colorido no topo de cada card de atributo */
+.attr-card[data-attr="for"] { border-top: 3px solid var(--for-color) !important; }
+.attr-card[data-attr="des"] { border-top: 3px solid var(--des-color) !important; }
+.attr-card[data-attr="con"] { border-top: 3px solid var(--con-color) !important; }
+.attr-card[data-attr="int"] { border-top: 3px solid var(--int-color) !important; }
+.attr-card[data-attr="sab"] { border-top: 3px solid var(--sab-color) !important; }
+.attr-card[data-attr="car"] { border-top: 3px solid var(--car-color) !important; }
+
+/* Dot colorido já existente — reforçar cor */
+.attr-dot.for { background: var(--for-color) !important; }
+.attr-dot.des { background: var(--des-color) !important; }
+.attr-dot.con { background: var(--con-color) !important; }
+.attr-dot.int { background: var(--int-color) !important; }
+.attr-dot.sab { background: var(--sab-color) !important; }
+.attr-dot.car { background: var(--car-color) !important; }
+
+/* Cor do modificador de atributo ao fazer hover no rolador */
+.attr-card[data-attr="for"]:hover .attr-mod { color: var(--for-color) !important; }
+.attr-card[data-attr="des"]:hover .attr-mod { color: var(--des-color) !important; }
+.attr-card[data-attr="con"]:hover .attr-mod { color: var(--con-color) !important; }
+.attr-card[data-attr="int"]:hover .attr-mod { color: var(--int-color) !important; }
+.attr-card[data-attr="sab"]:hover .attr-mod { color: var(--sab-color) !important; }
+.attr-card[data-attr="car"]:hover .attr-mod { color: var(--car-color) !important; }
+
+/* Pill colorida nos saves pela attr */
+.save-row .attr-for { color: var(--for-color) !important; }
+.save-row .attr-des { color: var(--des-color) !important; }
+.save-row .attr-con { color: var(--con-color) !important; }
+.save-row .attr-int { color: var(--int-color) !important; }
+.save-row .attr-sab { color: var(--sab-color) !important; }
+.save-row .attr-car { color: var(--car-color) !important; }
+
+/* ── SEÇÃO DE PV — mais proeminente ── */
+.pv-section, #pv-section {
+    background: linear-gradient(135deg, var(--parch) 0%, var(--parch-mid) 100%);
+    border-radius: var(--radius) !important;
+    border: 1.5px solid rgba(160,100,20,0.25) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.1) !important;
+    overflow: hidden;
+}
+
+/* ── HEADER HERO — borda superior colorida por classe ── */
+#header {
+    border-top: 3px solid var(--gold) !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 1px 0 rgba(200,150,10,0.2) !important;
+}
+
+/* ── SHEET BODY — separação clara entre painéis ── */
+.tab-panel > div:first-child {
+    gap: 1.4rem !important;
+}
+
+/* ── SECTION TITLES — tratamento de capítulo ── */
+.section-title {
+    position: relative !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 0.8rem !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.28em !important;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--parch-border), transparent);
+    opacity: 0.5;
+}
+
+/* ── COMBATE: fundo alternado nas colunas ── */
+#combate-grid > div:nth-child(2) {
+    background: transparent !important;
+}
+
+/* ── NOTAS — textarea mais elegante ── */
+.note {
+    background: var(--parch-mid) !important;
+    border: 1px solid rgba(160,100,20,0.15) !important;
+    border-left: 3px solid rgba(160,100,20,0.3) !important;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+    line-height: 1.6 !important;
+    font-size: 0.92rem !important;
+}
+.note:focus {
+    border-left-color: var(--gold) !important;
+}
+
+/* ── BARRA DE HP — altura maior e mais expressiva ── */
+#pv-bar {
+    height: 14px !important;
+    border-radius: 7px !important;
+    overflow: hidden !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.15) !important;
+}
+#pv-bar-fill, .pv-bar-fill {
+    border-radius: 7px !important;
+    background: var(--green) !important;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1), background 0.6s ease !important;
+    position: relative;
+}
+#pv-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: rgba(255,255,255,0.15);
+    border-radius: 7px 7px 0 0;
+}
+
+/* ── ANIMAÇÃO DE CARD APPEAR melhorada ── */
+.attr-card {
+    animation: attrCardIn 0.3s ease-out both;
+}
+@keyframes attrCardIn {
+    from { opacity:0; transform: scale(0.92) translateY(8px); }
+    to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+/* ── HABILIDADES / MAGIAS — cards mais elegantes ── */
+.exp-card {
+    border-left: 3px solid rgba(160,100,20,0.25) !important;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+    transition: border-left-color 0.2s, box-shadow 0.2s !important;
+}
+.exp-card:hover {
+    border-left-color: var(--gold) !important;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.1) !important;
+}
+.exp-card.expandido {
+    border-left-color: var(--gold) !important;
+}
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS — v2 (identidade, quick-stats, fonte, paleta)
+═══════════════════════════════════════════════════════════ */
+
+/* ── FONTE VARIÁVEIS EXTRAS ── */
+:root {
+  --font-size-base: 17px;
+
+  /* Cores de atributos (personalizáveis) */
+  --pv-bar-color:   #185818;
+  --pv-bar-low:     #c87800;
+  --pv-bar-crit:    #881010;
+
+  /* Tabs text colors */
+  --tabs-txt-off:   rgba(220,190,100,0.65);
+  --tabs-txt-hover: rgba(240,210,130,0.9);
+}
+
+body {
+  font-size: var(--font-size-base);
+}
+
+/* ── BARRA DE STATS RÁPIDOS ── */
+#quick-stats {
+  position: sticky;
+  top: 52px;
+  background: var(--parch);
+  border-bottom: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 5px 16px;
+  z-index: 99;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 3px 12px rgba(120,70,0,0.12);
+  flex-wrap: wrap;
+}
+
+.qs-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  cursor: default;
+  transition: background 0.15s;
+  border-radius: 6px;
+}
+
+.qs-item:hover {
+  background: rgba(160,100,20,0.06);
+}
+
+.qs-sep {
+  color: var(--parch-border);
+  opacity: 0.4;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.qs-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.qs-label {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.qs-val {
+  font-family: var(--font-number);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.qs-val.pv-low  { color: var(--pv-bar-low); }
+.qs-val.pv-crit { color: var(--pv-bar-crit); animation: pvPulse 1.2s ease-in-out infinite; }
+
+@keyframes pvPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (max-width: 480px) {
+  #quick-stats { gap: 0; padding: 4px 8px; top: 46px; }
+  .qs-item { padding: 0 8px; }
+  .qs-label { display: none; }
+}
+
+/* ── CAMPO DE IDENTIDADE PERSONALIZADA ── */
+.hfield-custom {
+  background: rgba(160,100,20,0.05);
+  border-left: 2px solid var(--gold);
+}
+
+/* ── PAINEL DE TEMA: SELETOR DE FONTE ── */
+.cp-font-select {
+  background: var(--parch-mid);
+  border: 1px solid rgba(160,100,20,0.25);
+  border-radius: 7px;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--ink);
+  cursor: pointer;
+  max-width: 160px;
+}
+
+.cp-font-select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* ── PAINEL DE TEMA: TOGGLE E INPUT DE TEXTO ── */
+.cp-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+
+.cp-toggle-label input[type="checkbox"] {
+  accent-color: var(--gold);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.cp-custom-input {
+  width: 100%;
+  background: var(--parch-mid);
+  border: 1px solid rgba(160,100,20,0.25);
+  border-radius: 7px;
+  padding: 0.35rem 0.55rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+  transition: border-color 0.2s;
+}
+
+.cp-custom-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* ── SECTION TITLE — tamanhos melhorados ── */
+.section-title {
+  font-size: 1rem !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ── LABELS GERAIS — mais legíveis ── */
+.hfield label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1.2px !important;
+}
+
+/* ── ATTR CARDS — texto maior e mais respirável ── */
+.attr-card label {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+}
+
+.attr-card input[type="number"] {
+  font-size: 1.6rem;
+}
+
+.attr-mod {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── PERICIAS — texto mais legível ── */
+.skill-name {
+  font-size: 0.88rem !important;
+}
+
+.skill-val {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── SAVES — texto maior ── */
+.save-nome {
+  font-size: 0.88rem !important;
+}
+
+.save-bonus {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── BIG-NUM labels ── */
+.big-num label {
+  font-size: 0.65rem !important;
+  letter-spacing: 1.5px !important;
+}
+
+.big-num input {
+  font-size: 1.5rem !important;
+}
+
+/* ── NOME DO PERSONAGEM — mais expressivo ── */
+#nome-personagem {
+  font-size: clamp(2rem, 5vw, 3.2rem) !important;
+}
+
+/* ── FONTE PRESET: Legível ── */
+body.font-readable {
+  --font-title:   'Inter', 'Segoe UI', sans-serif;
+  --font-heading: 'Inter', 'Segoe UI', sans-serif;
+  --font-body:    'Inter', 'Segoe UI', sans-serif;
+  --font-number:  'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ── FONTE PRESET: Clássica ── */
+body.font-classic {
+  --font-title:   'Cinzel Decorative', serif;
+  --font-heading: 'Cinzel', serif;
+  --font-body:    'Crimson Pro', serif;
+  --font-number:  'Crimson Pro', serif;
+}
+
+/* ── FONTE PRESET: Fantasia ── */
+body.font-fantasy {
+  --font-title:   'MedievalSharp', 'Cinzel Decorative', fantasy;
+  --font-heading: 'Philosopher', 'Cinzel', fantasy;
+  --font-body:    'IM Fell English', serif;
+  --font-number:  'IM Fell English', serif;
+}
+
+/* ── FONTE PRESET: Tinta ── */
+body.font-ink {
+  --font-title:   'UnifrakturMaguntia', cursive;
+  --font-heading: 'Philosopher', serif;
+  --font-body:    'Crimson Pro', serif;
+  --font-number:  'Crimson Pro', serif;
+}
+
+/* ── PV BAR — cor personalizável via variável ── */
+.pv-bar.pv-high  { background: var(--pv-bar-color)  !important; }
+.pv-mid   { background: var(--pv-bar-low)    !important; }
+.pv-bar.pv-low   { background: var(--pv-bar-crit)   !important; }
+.pv-bar.pv-crit  { background: var(--pv-bar-crit)   !important; }
+
+/* ── ATRIBUTOS — cores aplicadas ao modificador ── */
+.attr-for .attr-mod { color: var(--for-color) !important; }
+.attr-des .attr-mod { color: var(--des-color) !important; }
+.attr-con .attr-mod { color: var(--con-color) !important; }
+.attr-int .attr-mod { color: var(--int-color) !important; }
+.attr-sab .attr-mod { color: var(--sab-color) !important; }
+.attr-car .attr-mod { color: var(--car-color) !important; }
+
+/* ── INSPIRAÇÃO — brilho pulsante quando ativa ── */
+.insp-card.on {
+  animation: inspiraPulse 2s ease-in-out infinite !important;
+}
+
+@keyframes inspiraPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(160,100,20,0); }
+  50%       { box-shadow: 0 0 18px 4px rgba(200,140,10,0.4); }
+}
+
+/* ── TABS: foco visível para acessibilidade ── */
+.tab-btn:focus-visible {
+  outline: 2px solid var(--gold-pale);
+  outline-offset: -2px;
+}
+
+/* ── BUTTONS: tamanho mínimo de toque ── */
+button, .btn-add, .save-btn, .rest-btn, .tab-btn, .cond-btn, .uso-pip {
+  min-height: 38px;
+}
+
+/* ── RIPPLE em botões de ação ── */
+.btn-add, .save-btn, .rest-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-add:active::after,
+.save-btn:active::after,
+.rest-btn:active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.35) 10%, transparent 80%);
+  animation: rippleEffect 0.4s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  from { transform: scale(0.3); opacity: 1; }
+  to   { transform: scale(2.5); opacity: 0; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   REVISÃO TIPOGRÁFICA v3 — tamanhos, contraste, hierarquia
+   Substitui os valores anteriores com !important cirúrgico
+═══════════════════════════════════════════════════════════ */
+
+/* ── VARIÁVEIS: contraste melhorado ── */
+:root {
+  --ink-light:  #4a2408;   /* era #5c3010 — mais escuro, mais legível */
+  --ink-muted:  #7a4a18;   /* era #9a6828 — ratio ~4.5:1 sobre fundo claro */
+  --ink-mid:    #251000;   /* era #2e1400 — mais denso */
+}
+
+/* ── BASE: tamanho de raiz levemente maior ── */
+html { font-size: 17px; }
+
+/* ─────────────────────────────────────────────
+   TÍTULOS DE SEÇÃO — mais altos e com mais peso
+───────────────────────────────────────────── */
+.section-title {
+  font-size: 1.05rem !important;
+  letter-spacing: 2.5px !important;
+  color: var(--ink) !important;
+  font-weight: 600 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Barra lateral mais alta e destaque mais vivo */
+.section-title::before {
+  width: 4px !important;
+  height: 17px !important;
+  background: var(--gold) !important;
+  box-shadow: 0 0 6px rgba(168, 100, 0, 0.35) !important;
+}
+
+/* Linha após o título — mais visível */
+.section-title::after {
+  opacity: 0.6 !important;
+  background: linear-gradient(to right, var(--parch-border), transparent) !important;
+}
+
+/* ─────────────────────────────────────────────
+   CABEÇALHO — nome e sub-campos
+───────────────────────────────────────────── */
+#nome-personagem {
+  font-size: clamp(2.2rem, 5vw, 3.4rem) !important;
+  color: var(--ink) !important;
+  text-shadow: 0 1px 6px rgba(160, 100, 0, 0.2) !important;
+}
+
+#header-sub {
+  font-size: 0.7rem !important;
+  letter-spacing: 7px !important;
+  color: rgba(80, 40, 0, 0.65) !important;
+}
+
+.hfield label {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.4px !important;
+  color: var(--ink-light) !important;
+  font-weight: 600 !important;
+}
+
+.hfield input {
+  font-size: 1.15rem !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   ABAS
+───────────────────────────────────────────── */
+.tab-btn {
+  font-size: 0.9rem !important;
+  letter-spacing: 1.2px !important;
+}
+
+.tab-btn.active {
+  font-weight: 700 !important;
+  color: #f5d97a !important;    /* dourado mais brilhante na aba ativa */
+}
+
+.tab-icon {
+  font-size: 1.1rem !important;
+}
+
+/* ─────────────────────────────────────────────
+   ATRIBUTOS — cards
+───────────────────────────────────────────── */
+.attr-card label {
+  font-size: 0.78rem !important;
+  letter-spacing: 2px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.attr-card input[type="number"] {
+  font-size: 1.75rem !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+.attr-mod {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   SAVES (Testes de Resistência)
+───────────────────────────────────────────── */
+.save-nome {
+  font-size: 0.95rem !important;
+  color: var(--ink) !important;
+}
+
+.save-bonus {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   PERÍCIAS
+───────────────────────────────────────────── */
+.skill-name {
+  font-size: 1.05rem !important;
+  color: var(--ink) !important;
+  font-weight: 500 !important;
+}
+
+.skill-val {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: var(--gold) !important;
+  min-width: 32px !important;
+}
+
+.skill-attr {
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* ─────────────────────────────────────────────
+   BIG-NUM (CA, PV, Iniciativa, etc.)
+───────────────────────────────────────────── */
+.big-num label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1.6px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.big-num input {
+  font-size: 1.65rem !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+/* CA total em dourado e maior */
+#ca-total {
+  font-size: 2rem !important;
+  color: var(--gold) !important;
+}
+
+/* ─────────────────────────────────────────────
+   LABELS GERAIS DE ARMADURA, CONDIÇÕES, ETC.
+───────────────────────────────────────────── */
+.arm-label {
+  font-size: 0.8rem !important;
+  color: var(--ink-light) !important;
+  font-weight: 600 !important;
+}
+
+.death-section-title {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+.death-label-suc,
+.death-label-fail {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   PROFICIÊNCIA & INSPIRAÇÃO
+───────────────────────────────────────────── */
+.prof-card label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  color: var(--ink-light) !important;
+}
+
+.insp-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+/* ─────────────────────────────────────────────
+   BARRA DE PV — labels e texto
+───────────────────────────────────────────── */
+.pv-bar-text {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   TABELA DE ATAQUES
+───────────────────────────────────────────── */
+.attacks-table th {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.2px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.attacks-table td input {
+  font-size: 0.95rem !important;
+}
+
+/* ─────────────────────────────────────────────
+   MAGIAS — badge de nível e labels
+───────────────────────────────────────────── */
+.spell-level-badge {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+}
+
+/* Alto nível (6–9): brilho dourado */
+.spell-level-badge[data-level="6"],
+.spell-level-badge[data-level="7"],
+.spell-level-badge[data-level="8"],
+.spell-level-badge[data-level="9"] {
+  background: linear-gradient(135deg, #b87800, #e8b020) !important;
+  box-shadow: 0 0 5px rgba(200, 150, 10, 0.45) !important;
+  color: #fff !important;
+}
+
+/* ─────────────────────────────────────────────
+   RECURSOS DE CLASSE
+───────────────────────────────────────────── */
+.recurso-nome {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   NOTAS / TEXTAREAS
+───────────────────────────────────────────── */
+.note {
+  font-size: 1rem !important;
+  color: var(--ink) !important;
+  line-height: 1.65 !important;
+}
+
+/* ─────────────────────────────────────────────
+   BARRA INFERIOR — botões e status
+───────────────────────────────────────────── */
+.save-btn {
+  font-size: 0.85rem !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+}
+
+.rest-btn {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+}
+
+#save-status {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   QUICK-STATS BAR — tamanhos revisados
+───────────────────────────────────────────── */
+.qs-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  color: var(--ink-muted) !important;
+}
+
+.qs-val {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   RESV (Resistências / Vuln / Imun) — títulos
+───────────────────────────────────────────── */
+.resv-col-title {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+}
+
+/* ─────────────────────────────────────────────
+   CONDIÇOES — botões
+───────────────────────────────────────────── */
+.cond-btn {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+}
+
+/* ─────────────────────────────────────────────
+   DESLOCAMENTO — labels
+───────────────────────────────────────────── */
+.deslocamento-label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  color: var(--ink-light) !important;
+}
+
+.desl-label {
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-muted) !important;
+}
+
+.desl-input {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE — ajustes de legibilidade
+───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+
+  .section-title { font-size: 0.98rem !important; }
+  .skill-name    { font-size: 0.98rem !important; }
+  .attr-mod      { font-size: 1.25rem !important; }
+  .big-num input { font-size: 1.4rem !important; }
+  #nome-personagem { font-size: 2rem !important; }
+
+  .tab-btn {
+    font-size: 0.78rem !important;
+    padding: 0.75rem 0.6rem !important;
+  }
+}
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS v3 — Ripple, Badges Alto Nível, Colapsáveis, Toast Undo
+═══════════════════════════════════════════════════════════ */
+
+/* ── 1. EFEITO RIPPLE NOS BOTÕES ─────────────────────────── */
+.btn-add,
+.save-btn,
+.rest-btn,
+.btn-rolar-ataque,
+.btn-remove,
+.tab-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes ripple-anim {
+  0%   { transform: scale(0); opacity: 0.55; }
+  60%  { transform: scale(2.5); opacity: 0.2; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ripple-anim 0.45s ease-out forwards;
+  transform-origin: center;
+  width: 80px;
+  height: 80px;
+  margin-left: -40px;
+  margin-top: -40px;
+}
+
+/* ── 2. BADGES DE MAGIA ALTO NÍVEL (6–9) ─────────────────── */
+.spell-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Estrela de alto nível */
+.spell-level-badge .spell-star {
+  font-size: 0.65em;
+  animation: star-pulse 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes star-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 1;   transform: scale(1.25) rotate(20deg); }
+}
+
+.spell-level-badge[data-level="6"] {
+  background: linear-gradient(135deg, #16a085, #1abc9c) !important;
+  box-shadow: 0 0 7px rgba(22,160,133,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="7"] {
+  background: linear-gradient(135deg, #1a6eb5, #2980b9) !important;
+  box-shadow: 0 0 7px rgba(41,128,185,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="8"] {
+  background: linear-gradient(135deg, #6c3483, #8e44ad) !important;
+  box-shadow: 0 0 7px rgba(142,68,173,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="9"] {
+  background: linear-gradient(135deg, #7c4a00, #d4af37, #ffd966) !important;
+  box-shadow: 0 0 10px rgba(212,175,55,0.65) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,220,80,0.5) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+}
+
+/* ── 3. SEÇÕES COLAPSÁVEIS ───────────────────────────────── */
+.section-title {
+  cursor: default;
+}
+
+/* Botão de colapso */
+.section-collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gold);
+  font-size: 0.8rem;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 3px;
+  transition: background 0.15s, color 0.15s, transform 0.2s;
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.section-collapse-btn:hover {
+  background: rgba(160,100,10,0.12);
+  color: var(--ink);
+}
+
+.section-collapse-btn.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Container colapsável */
+.collapsible-section {
+  overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.collapsible-section.collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Linha separadora quando colapsado */
+.section-title.has-collapse {
+  cursor: default;
+}
+
+/* ── 4. TOAST COM BOTÃO UNDO ─────────────────────────────── */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.toast-undo-btn {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  font-family: var(--font-body);
+  min-width: 48px;
+  min-height: 26px;
+}
+
+.toast-undo-btn:hover {
+  background: rgba(255,255,255,0.32);
+}
+
+/* Barra de progresso do toast */
+.toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 0 0 8px 8px;
+  animation: toast-timer var(--toast-dur, 3s) linear forwards;
+  width: 100%;
+}
+
+@keyframes toast-timer {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TEMA NOTURNO — ajustes que vão além das variáveis CSS
+   Ativado quando o tema "Noturno" é aplicado via JS
+   (mapeado em DARK_TEMAS; fallback detecta --page = #0e1014)
+═══════════════════════════════════════════════════════════ */
+
+/* Classe auxiliar adicionada pelo JS ao ativar o tema Noturno */
+body.tema-noturno {
+    /* Remove a textura de ruído clara — fica estranha no escuro */
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(180,140,30,0.06) 0%, transparent 55%);
+}
+
+/* ── Inputs: fundo escuro + texto claro ── */
+body.tema-noturno input,
+body.tema-noturno textarea,
+body.tema-noturno select {
+    background: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(184,146,42,0.35) !important;
+}
+
+body.tema-noturno input:focus,
+body.tema-noturno textarea:focus,
+body.tema-noturno select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(212,175,55,0.18) !important;
+}
+
+body.tema-noturno input::placeholder,
+body.tema-noturno textarea::placeholder {
+    color: var(--ink-muted) !important;
+    opacity: 0.7;
+}
+
+/* ── Painéis flutuantes (dados, tema) ── */
+body.tema-noturno #dados-panel,
+body.tema-noturno #tema-panel {
+    background: var(--parch) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.65) !important;
+}
+
+/* ── Sombras dos cards: mais dramáticas no escuro ── */
+body.tema-noturno .panel,
+body.tema-noturno .exp-card,
+body.tema-noturno .attr-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ── exp-card internos: header, body e campos ── */
+body.tema-noturno .exp-header {
+    background: var(--parch-mid) !important;
+}
+body.tema-noturno .exp-header:hover {
+    background: var(--parch-deep) !important;
+}
+body.tema-noturno .exp-body {
+    background: var(--parch) !important;
+    border-top-color: rgba(212,175,55,0.15) !important;
+}
+body.tema-noturno .recurso-recarga-select {
+    background-color: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+}
+body.tema-noturno .recurso-recarga-select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* ── Ornamento do cabeçalho ── */
+body.tema-noturno #header-ornament-left,
+body.tema-noturno #header-ornament-right {
+    color: var(--gold) !important;
+    opacity: 0.5;
+}
+
+/* ── Scrollbar escura ── */
+body.tema-noturno ::-webkit-scrollbar-track {
+    background: #0f1117;
+}
+body.tema-noturno ::-webkit-scrollbar-thumb {
+    background: #303448;
+    border-color: #0f1117;
+}
+body.tema-noturno ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+/* ── Botões flutuantes (paleta + dado) — Noturno ── */
+body.tema-noturno #btn-tema {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-pale) !important;
+    color: #0f1117 !important;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-noturno #btn-tema:hover {
+    background: var(--gold-pale) !important;
+    box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+    transform: scale(1.1) !important;
+}
+
+/* ── Toasts no tema escuro ── */
+body.tema-noturno #toast-container .toast {
+    background: var(--parch-mid) !important;
+    border-color: rgba(212,175,55,0.35) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.55) !important;
+}
+
+/* ── Quick-stats bar ── */
+body.tema-noturno #quick-stats {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(26,29,38,0.92) !important;
+    border-bottom-color: rgba(212,175,55,0.4) !important;
+}
+
+/* ── Barra de PV no escuro ── */
+body.tema-noturno .pv-bar-wrap {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(212,175,55,0.2) !important;
+}
+
+/* ── Seção de condições ── */
+body.tema-noturno .cond-btn {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.3) !important;
+    color: var(--ink) !important;
+}
+body.tema-noturno .cond-btn:hover,
+body.tema-noturno .cond-btn.ativa {
+    background: rgba(212,175,55,0.15) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold-pale) !important;
+}
+
+/* ── Tags de proficiência / línguas ── */
+body.tema-noturno .prof-tag {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.35) !important;
+    color: var(--ink) !important;
+}
+
+/* ── Tabela de ataques ── */
+body.tema-noturno .attacks-table th {
+    background: rgba(212,175,55,0.08) !important;
+}
+body.tema-noturno .attacks-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+
+/* ── Badges de nível de magia — mantém cores próprias ── */
+/* (não precisa sobrescrever — as cores dos badges já têm contraste) */
+
+/* ── Attr cards: borda superior colorida mais visível ── */
+body.tema-noturno .attr-card {
+    background: var(--parch) !important;
+}
+
+/* ── Select elements ── */
+body.tema-noturno select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* ── Botão de dados flutuante — Noturno ── */
+body.tema-noturno #btn-dados {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-pale) !important;
+    color: #0f1117 !important;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-noturno #btn-dados:hover {
+    background: var(--gold-pale) !important;
+    box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+
+/* ── Death circles ── */
+body.tema-noturno .dcircle {
+    background: var(--parch-mid) !important;
+}
+
+/* ── Cargas de habilidades — legibilidade ── */
+body.tema-noturno .card-field input[type=number],
+body.tema-noturno .card-field input[type=text],
+body.tema-noturno .card-field select {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+}
+body.tema-noturno .card-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+}
+body.tema-noturno .card-field label {
+    color: var(--ink-light) !important;
+}
+body.tema-noturno .cargas-badge {
+    background: rgba(212,175,55,0.25) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.5) !important;
+}
+body.tema-noturno .recurso-recarga-select,
+body.tema-noturno .recurso-dado-input,
+body.tema-noturno .recurso-desc {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.25) !important;
+}
+body.tema-noturno .armadura-box {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ── Inspiração card ── */
+body.tema-noturno .insp-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.3) !important;
+}
+body.tema-noturno .insp-card.on {
+    background: rgba(212,175,55,0.2) !important;
+    border-color: var(--gold) !important;
+}
+
+/* ── Proficiência card ── */
+body.tema-noturno .prof-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CORREÇÕES v3.1 + TEMA CURSE OF STRAHD
+═══════════════════════════════════════════════════════════ */
+
+/* ── FIX 1: Tabela de Ataques — contraste igual ao de Munições ──
+   O problema: inputs da tabela de ataques herdavam cor do tema
+   escuro mas sem o background correto, ficando "apagados".
+   Solução: forçar color:var(--ink) em todos os inputs das tabelas,
+   e garantir que o thead use a mesma paleta escura das duas tabelas.
+────────────────────────────────────────────────────────────── */
+.attacks-table td input,
+.mun-table td input {
+    color: var(--ink) !important;
+    background: transparent !important;
+}
+
+/* thead igual entre as duas tabelas */
+.attacks-table thead tr,
+.mun-table thead tr {
+    background: var(--ink-mid) !important;
+}
+
+.attacks-table th,
+.mun-table th {
+    color: var(--parch-mid) !important;
+    opacity: 1 !important;
+}
+
+/* Hover das linhas usa variável em vez de cor fixa */
+.attacks-table tbody tr:hover,
+.mun-table tbody tr:hover {
+    background: var(--parch-deep) !important;
+}
+
+/* No tema escuro especificamente */
+body.tema-noturno .attacks-table td input,
+body.tema-noturno .mun-table td input,
+body.tema-strahd .attacks-table td input,
+body.tema-strahd .mun-table td input {
+    color: var(--ink) !important;
+}
+
+/* ── FIX 2: Linhas no topo do header ──
+   border-top: 4px double cria linhas duplas que ficam estranhas
+   nos temas escuros. Substituímos por uma linha simples mais elegante
+   com pseudo-elemento que respeita o tema.
+────────────────────────────────────────────────────────────── */
+#header {
+    border-top: none !important;  /* remove o double problemático */
+    border-bottom: 2px solid var(--gold) !important;
+}
+
+/* Linha superior ornamental via pseudo-elemento — mais controlável */
+#header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--gold) 20%,
+        var(--gold-pale) 50%,
+        var(--gold) 80%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+/* ── FIX 3: Campo "PERSONAGEM" / header-sub visível ──
+   Antes usava rgba(100,60,0,0.55) — hardcoded, invisível no escuro.
+   Agora usa variável de tema com opacidade adequada.
+────────────────────────────────────────────────────────────── */
+#header-sub {
+    color: var(--ink-muted) !important;
+    opacity: 0.85;
+    font-size: 0.68rem !important;
+    letter-spacing: 7px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEMA CURSE OF STRAHD
+   ── Inspirado na ficha do Adam: bordô profundo, vermelho
+      sangue, névoa violeta. Atmosfera gótica de Barovia.
+════════════════════════════════════════════════════════════ */
+body.tema-strahd {
+    background-image:
+        radial-gradient(ellipse at 30% 10%, rgba(180,20,40,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 90%, rgba(100,0,20,0.10) 0%, transparent 50%);
+}
+
+/* Inputs */
+body.tema-strahd input,
+body.tema-strahd textarea,
+body.tema-strahd select {
+    background: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd input:focus,
+body.tema-strahd textarea:focus,
+body.tema-strahd select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(200,30,50,0.2) !important;
+}
+
+body.tema-strahd input::placeholder,
+body.tema-strahd textarea::placeholder {
+    color: var(--ink-muted) !important;
+    opacity: 0.65;
+}
+
+/* Cards e painéis */
+body.tema-strahd .panel,
+body.tema-strahd .exp-card,
+body.tema-strahd .attr-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+    border-color: rgba(180,40,60,0.22) !important;
+}
+
+/* ── exp-card internos: header, body e campos ── */
+body.tema-strahd .exp-header {
+    background: var(--parch-mid) !important;
+}
+body.tema-strahd .exp-header:hover {
+    background: var(--parch-deep) !important;
+}
+body.tema-strahd .exp-body {
+    background: var(--parch) !important;
+    border-top-color: rgba(180,40,60,0.18) !important;
+}
+body.tema-strahd .recurso-recarga-select {
+    background-color: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+}
+body.tema-strahd .recurso-recarga-select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* Quick-stats */
+body.tema-strahd #quick-stats {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(30,8,12,0.92) !important;
+    border-bottom-color: rgba(200,30,50,0.5) !important;
+}
+
+/* Painéis flutuantes */
+body.tema-strahd #dados-panel,
+body.tema-strahd #tema-panel {
+    background: var(--parch) !important;
+    border-color: rgba(200,30,50,0.3) !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.7) !important;
+}
+
+/* Btn de tema e dados — Strahd: vermelho vivo */
+body.tema-strahd #btn-tema,
+body.tema-strahd #btn-dados {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-light) !important;
+    color: #f0e0e4 !important;
+    box-shadow: 0 4px 20px rgba(200,32,58,0.6), 0 2px 8px rgba(0,0,0,0.7) !important;
+}
+body.tema-strahd #btn-tema:hover,
+body.tema-strahd #btn-dados:hover {
+    background: var(--gold-light) !important;
+    box-shadow: 0 6px 28px rgba(200,32,58,0.8), 0 2px 8px rgba(0,0,0,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+/* Scrollbar */
+body.tema-strahd ::-webkit-scrollbar-track { background: #0d0508; }
+body.tema-strahd ::-webkit-scrollbar-thumb { background: #3a1018; border-color: #0d0508; }
+body.tema-strahd ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Condições */
+body.tema-strahd .cond-btn {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    color: var(--ink) !important;
+}
+body.tema-strahd .cond-btn:hover,
+body.tema-strahd .cond-btn.ativa {
+    background: rgba(200,30,50,0.18) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold-pale) !important;
+}
+
+/* Tags */
+body.tema-strahd .prof-tag {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    color: var(--ink) !important;
+}
+
+/* Armadura box */
+body.tema-strahd .armadura-box {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.2) !important;
+}
+
+/* Inspiração */
+body.tema-strahd .insp-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+body.tema-strahd .insp-card.on {
+    background: rgba(200,30,50,0.2) !important;
+    border-color: var(--gold) !important;
+}
+
+/* Proficiência */
+body.tema-strahd .prof-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.22) !important;
+}
+
+/* PV bar wrap */
+body.tema-strahd .pv-bar-wrap {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: rgba(200,30,50,0.2) !important;
+}
+
+/* Toasts */
+body.tema-strahd #toast-container .toast {
+    background: var(--parch-mid) !important;
+    border-color: rgba(200,30,50,0.35) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
+/* Ornamentos do header mais suaves */
+body.tema-strahd #header-ornament-left,
+body.tema-strahd #header-ornament-right {
+    color: var(--gold) !important;
+    opacity: 0.45;
+}
+
+/* Select options */
+body.tema-strahd select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* Death circles */
+body.tema-strahd .dcircle {
+    background: var(--parch-mid) !important;
+}
+
+/* ── Cargas de habilidades — legibilidade ── */
+body.tema-strahd .card-field input[type=number],
+body.tema-strahd .card-field input[type=text],
+body.tema-strahd .card-field select {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+body.tema-strahd .card-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+}
+body.tema-strahd .card-field label {
+    color: var(--ink-light) !important;
+}
+body.tema-strahd .cargas-badge {
+    background: rgba(200,30,50,0.18) !important;
+    color: var(--ink) !important;
+    border-color: rgba(200,60,80,0.45) !important;
+}
+body.tema-strahd .recurso-recarga-select,
+body.tema-strahd .recurso-dado-input,
+body.tema-strahd .recurso-desc {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.25) !important;
+}
+
+/* Attr cards */
+body.tema-strahd .attr-card {
+    background: var(--parch) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   STRAHD REWORK — Identidade Visual Refinada
+   ── Carregado APÓS style.css: sobrescreve com especificidade
+   ── Objetivo: gótico cinematográfico, hierarquia clara,
+      menos borders, mais profundidade e sombra.
+════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. VARIÁVEIS GLOBAIS REFINADAS (base Pergaminho — herança)
+   ── Usadas em todos os temas; temas dark sobrescrevem
+────────────────────────────────────────────────────────────── */
+:root {
+  /* Sombras premium — substituem as flats */
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.10);
+  --shadow-md:  0 6px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
+  --shadow-lg:  0 16px 56px rgba(0,0,0,0.30), 0 4px 12px rgba(0,0,0,0.15);
+
+  /* Raios ligeiramente aumentados para sensação premium */
+  --radius:    12px;
+  --radius-sm:  8px;
+
+  /* Easing cinematográfico */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. TEMA STRAHD — Variáveis Sobrescritas (via script.js já faz
+      isso com TEMAS['Strahd'], aqui reforçamos body.tema-strahd)
+   Paleta refinada: menos roxo-abordo, mais carmesim e névoa
+────────────────────────────────────────────────────────────── */
+
+/* Quando o tema Strahd está ativo, aplicamos variáveis extras */
+body.tema-strahd {
+  /* Paleta de fundo com mais profundidade — camadas visíveis */
+  --shadow-sm:  0 2px 16px rgba(0,0,0,0.55), 0 1px 4px rgba(180,20,40,0.12);
+  --shadow-md:  0 6px 36px rgba(0,0,0,0.65), 0 2px 8px rgba(180,20,40,0.18);
+  --shadow-lg:  0 16px 72px rgba(0,0,0,0.75), 0 4px 16px rgba(180,20,40,0.22);
+
+  /* Glow vermelho para elementos em destaque */
+  --glow-blood: 0 0 18px rgba(200,30,50,0.35), 0 0 40px rgba(180,20,40,0.15);
+  --glow-gold:  0 0 12px rgba(200,140,40,0.30), 0 0 28px rgba(180,120,20,0.12);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3. CORPO / PÁGINA
+   ── Névoa de Barovia mais imersiva no tema escuro
+────────────────────────────────────────────────────────────── */
+body.tema-strahd {
+  background-image:
+    /* Névoa de topo: vinheta carmesim */
+    radial-gradient(ellipse 80% 35% at 50% 0%,   rgba(140,15,30,0.22) 0%, transparent 70%),
+    /* Canto inferior esquerdo: sombra violeta-bordô */
+    radial-gradient(ellipse 45% 50% at 0% 100%,   rgba(80,5,20,0.28) 0%, transparent 65%),
+    /* Canto inferior direito: espelho */
+    radial-gradient(ellipse 45% 50% at 100% 100%, rgba(80,5,20,0.28) 0%, transparent 65%),
+    /* Textura sutil de ruído — grimório envelhecido */
+    url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. HEADER CINEMATOGRÁFICO
+   ── Linha superior com gradiente dourado → vermelho
+   ── Sombra dramática para separar do conteúdo
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #header {
+  background: linear-gradient(
+    180deg,
+    #2a0a14 0%,
+    #1c0610 40%,
+    #120408 80%,
+    #0d0508 100%
+  ) !important;
+  border-bottom: 1px solid rgba(180,30,50,0.4) !important;
+  box-shadow:
+    0 4px 40px rgba(0,0,0,0.7),
+    0 1px 0 rgba(180,30,50,0.2),
+    inset 0 -1px 0 rgba(200,60,80,0.08) !important;
+}
+
+/* Faixa superior ornamental mais visível */
+body.tema-strahd #header::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(160,20,40,0.5) 15%,
+    rgba(200,140,40,0.6) 40%,
+    rgba(240,100,120,0.7) 50%,
+    rgba(200,140,40,0.6) 60%,
+    rgba(160,20,40,0.5) 85%,
+    transparent 100%
+  ) !important;
+  height: 2px !important;
+}
+
+/* Linhas de fundo do header: veias de névoa */
+body.tema-strahd #header::before {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(180,30,50,0.04) 80px,
+      rgba(180,30,50,0.04) 81px
+    ) !important;
+}
+
+/* Nome do personagem: texto que brilha levemente */
+body.tema-strahd #nome-personagem {
+  color: #f0dce0 !important;
+  text-shadow:
+    0 0 40px rgba(200,60,80,0.25),
+    0 2px 8px rgba(0,0,0,0.8) !important;
+  letter-spacing: 6px !important;
+}
+
+body.tema-strahd #nome-personagem:focus {
+  text-shadow:
+    0 0 60px rgba(200,60,80,0.4),
+    0 0 20px rgba(200,60,80,0.2),
+    0 2px 8px rgba(0,0,0,0.9) !important;
+}
+
+/* Subtítulo PERSONAGEM */
+body.tema-strahd #header-sub {
+  color: rgba(200,140,160,0.45) !important;
+  letter-spacing: 8px !important;
+  opacity: 1 !important;
+}
+
+/* Ornamentos laterais */
+body.tema-strahd #header-ornament-left,
+body.tema-strahd #header-ornament-right {
+  color: rgba(180,40,60,0.5) !important;
+  text-shadow: 0 0 12px rgba(200,30,50,0.3) !important;
+  opacity: 1 !important;
+}
+
+/* Barra de campos do header */
+body.tema-strahd #header-fields {
+  background: rgba(180,20,40,0.06) !important;
+  border-top-color: rgba(180,30,50,0.2) !important;
+}
+
+body.tema-strahd .hfield {
+  border-right-color: rgba(180,30,50,0.15) !important;
+}
+
+body.tema-strahd .hfield:hover {
+  background: rgba(180,20,40,0.10) !important;
+}
+
+body.tema-strahd .hfield label {
+  color: rgba(200,140,160,0.65) !important;
+}
+
+body.tema-strahd .hfield input {
+  color: #f0dce0 !important;
+  border-bottom-color: rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd .hfield input:focus {
+  border-bottom-color: rgba(200,80,100,0.6) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   5. BARRA DE ABAS — Grimório Lateral
+   ── Menos borda inferior, mais blur e sombra
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #tabs {
+  background: linear-gradient(
+    180deg,
+    #0a0204 0%,
+    #060102 100%
+  ) !important;
+  border-bottom: 1px solid rgba(180,30,50,0.3) !important;
+  box-shadow:
+    0 4px 32px rgba(0,0,0,0.7),
+    0 1px 0 rgba(180,30,50,0.15) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body.tema-strahd .tab-btn {
+  color: rgba(200,140,160,0.45) !important;
+  border-bottom: 2px solid transparent !important;
+  transition:
+    color var(--ease-out) 0.2s,
+    border-color var(--ease-out) 0.2s,
+    background var(--ease-out) 0.2s !important;
+}
+
+body.tema-strahd .tab-btn:hover {
+  color: rgba(240,180,190,0.75) !important;
+  background: rgba(180,20,40,0.08) !important;
+}
+
+body.tema-strahd .tab-btn.active {
+  color: #f07080 !important;
+  border-bottom-color: #c82040 !important;
+  background: rgba(180,20,40,0.12) !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 20px rgba(200,40,60,0.4) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. CARDS E PAINÉIS — Hierarquia via Sombra, não Border
+   ── Redução drástica de borders; profundidade via shadow
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .panel {
+  background: linear-gradient(
+    145deg,
+    rgba(30,8,16,0.95) 0%,
+    rgba(22,5,12,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  border-radius: var(--radius) !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.55),
+    0 1px 0 rgba(200,60,80,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+  transition:
+    box-shadow var(--ease-out) 0.25s,
+    border-color var(--ease-out) 0.25s !important;
+}
+
+body.tema-strahd .panel:hover {
+  border-color: rgba(180,30,50,0.22) !important;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.65),
+    0 1px 0 rgba(200,60,80,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. CARDS DE ATRIBUTOS — Gemas do Grimório
+   ── Cada atributo com sua gema e brilho único
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .attr-card {
+  background: linear-gradient(
+    160deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+  transition:
+    transform var(--ease-out) 0.2s,
+    box-shadow var(--ease-out) 0.2s,
+    border-color var(--ease-out) 0.2s !important;
+}
+
+body.tema-strahd .attr-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(200,40,60,0.3) !important;
+  box-shadow:
+    0 10px 36px rgba(0,0,0,0.65),
+    0 0 0 1px rgba(200,40,60,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+/* Faixas coloridas por atributo — mais vívidas no dark */
+body.tema-strahd .attr-for::before { background: linear-gradient(90deg, #b02020, #e04040) !important; box-shadow: 0 0 8px rgba(200,40,40,0.5); }
+body.tema-strahd .attr-des::before { background: linear-gradient(90deg, #1a7840, #28aa58) !important; box-shadow: 0 0 8px rgba(40,170,80,0.4); }
+body.tema-strahd .attr-con::before { background: linear-gradient(90deg, #a06010, #d08020) !important; box-shadow: 0 0 8px rgba(200,130,20,0.4); }
+body.tema-strahd .attr-int::before { background: linear-gradient(90deg, #1860a0, #2888d0) !important; box-shadow: 0 0 8px rgba(40,130,210,0.4); }
+body.tema-strahd .attr-sab::before { background: linear-gradient(90deg, #702890, #9840c0) !important; box-shadow: 0 0 8px rgba(150,60,190,0.4); }
+body.tema-strahd .attr-car::before { background: linear-gradient(90deg, #b8860b, #d4af37) !important; box-shadow: 0 0 8px rgba(200,160,30,0.4); }
+
+/* Labels e valores dos atributos */
+body.tema-strahd .attr-card label {
+  color: rgba(200,140,160,0.6) !important;
+}
+
+body.tema-strahd .attr-card input[type="number"] {
+  color: #f0dce0 !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+}
+
+/* Modificadores com cor do atributo mais vibrante */
+body.tema-strahd .attr-for .attr-mod { color: #e04040 !important; text-shadow: 0 0 12px rgba(220,60,60,0.5) !important; }
+body.tema-strahd .attr-des .attr-mod { color: #28aa58 !important; text-shadow: 0 0 12px rgba(40,170,80,0.4) !important; }
+body.tema-strahd .attr-con .attr-mod { color: #d08020 !important; text-shadow: 0 0 12px rgba(200,130,20,0.4) !important; }
+body.tema-strahd .attr-int .attr-mod { color: #2888d0 !important; text-shadow: 0 0 12px rgba(40,130,210,0.4) !important; }
+body.tema-strahd .attr-sab .attr-mod { color: #9840c0 !important; text-shadow: 0 0 12px rgba(150,60,190,0.4) !important; }
+body.tema-strahd .attr-car .attr-mod { color: #d4af37 !important; text-shadow: 0 0 12px rgba(200,160,30,0.4) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   8. TÍTULOS DE SEÇÃO — Linha e Brilho Gótico
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .section-title {
+  color: rgba(240,180,190,0.9) !important;
+  letter-spacing: 3px !important;
+}
+
+body.tema-strahd .section-title::before {
+  background: linear-gradient(180deg, #c82040, #8b1020) !important;
+  box-shadow: 0 0 8px rgba(200,30,60,0.6) !important;
+}
+
+body.tema-strahd .section-title::after {
+  background: linear-gradient(
+    to right,
+    rgba(180,30,50,0.4),
+    transparent
+  ) !important;
+  opacity: 1 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   9. SAVES E PERÍCIAS — Pontos de Sangue
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #saves-list {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .save-row {
+  border-bottom-color: rgba(180,30,50,0.08) !important;
+}
+
+body.tema-strahd .save-row:hover {
+  background: rgba(180,20,40,0.10) !important;
+}
+
+body.tema-strahd .save-dot {
+  border-color: rgba(180,80,100,0.4) !important;
+}
+
+body.tema-strahd .save-dot.on {
+  background: #c82040 !important;
+  border-color: #e03050 !important;
+  box-shadow: 0 0 8px rgba(200,30,60,0.6) !important;
+}
+
+body.tema-strahd .save-bonus {
+  color: #c82040 !important;
+  text-shadow: 0 0 8px rgba(200,30,60,0.4) !important;
+}
+
+/* Perícias */
+body.tema-strahd .pericias-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .skill-row {
+  border-bottom-color: rgba(180,30,50,0.07) !important;
+}
+
+body.tema-strahd .skill-row:hover {
+  background: rgba(180,20,40,0.10) !important;
+}
+
+body.tema-strahd .skill-check {
+  accent-color: #c82040 !important;
+}
+
+body.tema-strahd .skill-val {
+  color: #c82040 !important;
+  text-shadow: 0 0 8px rgba(200,30,60,0.35) !important;
+}
+
+/* Tags coloridas de atributo nas perícias — mais vibrantes */
+body.tema-strahd .skill-attr.attr-for { color: #e04040 !important; border-color: rgba(224,64,64,0.3) !important; background: rgba(200,40,40,0.10) !important; }
+body.tema-strahd .skill-attr.attr-des { color: #28aa58 !important; border-color: rgba(40,170,80,0.3) !important; background: rgba(40,170,80,0.10) !important; }
+body.tema-strahd .skill-attr.attr-con { color: #d08020 !important; border-color: rgba(200,130,20,0.3) !important; background: rgba(200,130,20,0.10) !important; }
+body.tema-strahd .skill-attr.attr-int { color: #2888d0 !important; border-color: rgba(40,130,210,0.3) !important; background: rgba(40,130,210,0.10) !important; }
+body.tema-strahd .skill-attr.attr-sab { color: #9840c0 !important; border-color: rgba(150,60,190,0.3) !important; background: rgba(150,60,190,0.10) !important; }
+body.tema-strahd .skill-attr.attr-car { color: #d4af37 !important; border-color: rgba(200,160,30,0.3) !important; background: rgba(200,160,30,0.10) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   10. COMBATE — CA, PV e Stats Principais
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .big-num {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .big-num:hover {
+  border-color: rgba(200,40,60,0.28) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+body.tema-strahd .big-num label {
+  color: rgba(200,130,150,0.6) !important;
+}
+
+body.tema-strahd .big-num input {
+  color: #f0dce0 !important;
+  border-bottom-color: rgba(180,40,60,0.2) !important;
+}
+
+body.tema-strahd .big-num input:focus {
+  border-bottom-color: rgba(200,50,70,0.6) !important;
+}
+
+/* CA em destaque máximo */
+body.tema-strahd #ca-total {
+  color: #f07080 !important;
+  text-shadow: 0 0 20px rgba(200,50,80,0.5), 0 0 40px rgba(180,30,60,0.2) !important;
+}
+
+/* Barra de vida */
+body.tema-strahd .pv-bar-wrap {
+  background: rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(180,30,50,0.15) !important;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .pv-bar.pv-high {
+  background: linear-gradient(90deg, #0d3d14, #145a1e, #1c7a28) !important;
+  box-shadow: 0 0 12px rgba(20,90,30,0.4) !important;
+}
+
+body.tema-strahd .pv-bar.pv-medium {
+  background: linear-gradient(90deg, #4a2a00, #7a4a00, #a86000) !important;
+  box-shadow: 0 0 12px rgba(160,90,0,0.4) !important;
+}
+
+body.tema-strahd .pv-bar.pv-critical {
+  background: linear-gradient(90deg, #3d0808, #6b0f0f, #a81818) !important;
+  box-shadow: 0 0 16px rgba(180,20,20,0.6) !important;
+}
+
+body.tema-strahd .pv-bar-text {
+  color: rgba(255,255,255,0.92) !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9) !important;
+  font-weight: 700 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   11. PROFICIÊNCIA E INSPIRAÇÃO
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .prof-card {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .prof-card input {
+  color: #f07080 !important;
+  text-shadow: 0 0 12px rgba(200,50,80,0.4) !important;
+}
+
+body.tema-strahd .insp-card {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 2px solid rgba(180,30,50,0.18) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+  transition: all var(--ease-out) 0.22s !important;
+}
+
+body.tema-strahd .insp-card:hover {
+  border-color: rgba(200,50,70,0.45) !important;
+  background: rgba(180,20,40,0.15) !important;
+}
+
+body.tema-strahd .insp-card.on {
+  background: linear-gradient(
+    135deg,
+    rgba(160,20,40,0.8),
+    rgba(100,10,25,0.9)
+  ) !important;
+  border-color: #c82040 !important;
+  box-shadow: 0 0 0 2px rgba(200,30,60,0.2), var(--glow-blood) !important;
+  animation: insp-strahd-pulse 2.5s ease-in-out infinite !important;
+}
+
+@keyframes insp-strahd-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(200,30,60,0.2), 0 0 20px rgba(200,30,50,0.35); }
+  50%       { box-shadow: 0 0 0 3px rgba(200,30,60,0.4), 0 0 36px rgba(200,30,50,0.55); }
+}
+
+body.tema-strahd .insp-card.on .insp-icon {
+  color: #f07080 !important;
+  filter: drop-shadow(0 0 6px rgba(240,80,100,0.7)) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   12. ARMADURA
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .armadura-box {
+  background: linear-gradient(
+    145deg,
+    rgba(28,8,14,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .arm-input-text,
+body.tema-strahd .arm-input-num,
+body.tema-strahd .arm-select {
+  background: rgba(180,20,40,0.08) !important;
+  border-color: rgba(180,40,60,0.25) !important;
+  color: #f0dce0 !important;
+}
+
+body.tema-strahd .arm-input-text:focus,
+body.tema-strahd .arm-input-num:focus,
+body.tema-strahd .arm-select:focus {
+  border-color: rgba(200,50,70,0.55) !important;
+  box-shadow: 0 0 0 2px rgba(200,40,60,0.15) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   13. TABELA DE ATAQUES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .attacks-table thead tr,
+body.tema-strahd .mun-table thead tr {
+  background: rgba(12,3,6,0.95) !important;
+  border-bottom: 1px solid rgba(180,30,50,0.3) !important;
+}
+
+body.tema-strahd .attacks-table th,
+body.tema-strahd .mun-table th {
+  color: rgba(200,120,140,0.75) !important;
+  letter-spacing: 2px !important;
+}
+
+body.tema-strahd .attacks-table tbody tr,
+body.tema-strahd .mun-table tbody tr {
+  background: rgba(20,6,12,0.6) !important;
+  border-bottom-color: rgba(180,30,50,0.07) !important;
+}
+
+body.tema-strahd .attacks-table tbody tr:nth-child(even),
+body.tema-strahd .mun-table tbody tr:nth-child(even) {
+  background: rgba(26,8,16,0.8) !important;
+}
+
+body.tema-strahd .attacks-table tbody tr:hover,
+body.tema-strahd .mun-table tbody tr:hover {
+  background: rgba(180,20,40,0.14) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   14. CARDS EXPANSÍVEIS (Habilidades, Magias)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .exp-card {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.12) !important;
+  box-shadow:
+    0 3px 16px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.015) !important;
+  transition:
+    box-shadow var(--ease-out) 0.22s,
+    border-color var(--ease-out) 0.22s !important;
+}
+
+body.tema-strahd .exp-card:hover {
+  border-color: rgba(180,30,50,0.22) !important;
+  box-shadow:
+    0 6px 28px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.02) !important;
+}
+
+body.tema-strahd .exp-header {
+  background: rgba(180,20,40,0.06) !important;
+}
+
+body.tema-strahd .exp-header:hover {
+  background: rgba(180,20,40,0.14) !important;
+}
+
+body.tema-strahd .exp-body {
+  background: rgba(14,4,8,0.5) !important;
+  border-top-color: rgba(180,30,50,0.12) !important;
+}
+
+body.tema-strahd .exp-title-input {
+  color: #f0d0d8 !important;
+}
+
+/* Badge de nível de magia */
+body.tema-strahd .spell-level-badge {
+  background: linear-gradient(135deg, #6a0f1e, #8b1a28) !important;
+  color: rgba(240,180,190,0.9) !important;
+  border: 1px solid rgba(180,40,60,0.3) !important;
+}
+
+/* Slots de magia */
+body.tema-strahd .slot-pill {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.18) !important;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .slot-pill:hover {
+  border-color: rgba(200,40,60,0.38) !important;
+  box-shadow: 0 0 0 1px rgba(200,40,60,0.1), 0 4px 20px rgba(0,0,0,0.6) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   15. INPUTS, TEXTAREAS, SELECTS — Tema Global Strahd
+────────────────────────────────────────────────────────────── */
+body.tema-strahd input:not([type="checkbox"]):not([type="radio"]),
+body.tema-strahd textarea,
+body.tema-strahd select {
+  background: rgba(180,20,40,0.06) !important;
+  border-color: rgba(180,40,60,0.22) !important;
+  color: #f0dce0 !important;
+  transition:
+    border-color var(--ease-out) 0.2s,
+    box-shadow var(--ease-out) 0.2s !important;
+}
+
+body.tema-strahd input:focus,
+body.tema-strahd textarea:focus,
+body.tema-strahd select:focus {
+  border-color: rgba(200,50,70,0.55) !important;
+  box-shadow: 0 0 0 3px rgba(200,40,60,0.10) !important;
+  outline: none !important;
+}
+
+body.tema-strahd input::placeholder,
+body.tema-strahd textarea::placeholder {
+  color: rgba(180,100,120,0.35) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   16. BOTÕES DE AÇÃO
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .btn-add {
+  border-color: rgba(180,30,50,0.3) !important;
+  color: rgba(200,120,140,0.8) !important;
+  background: transparent !important;
+}
+
+body.tema-strahd .btn-add:hover {
+  border-color: rgba(200,50,70,0.55) !important;
+  color: #f07080 !important;
+  background: rgba(180,20,40,0.10) !important;
+  box-shadow: 0 0 12px rgba(200,30,60,0.2) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   17. TESTES CONTRA A MORTE
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .dcircle {
+  background: rgba(14,4,8,0.7) !important;
+  border-color: rgba(180,50,70,0.3) !important;
+}
+
+body.tema-strahd .dcircle.suc.on {
+  background: #145a1e !important;
+  border-color: #1c7a28 !important;
+  box-shadow: 0 0 8px rgba(28,120,40,0.5) !important;
+}
+
+body.tema-strahd .dcircle.suc:checked {
+  background: #145a1e !important;
+  border-color: #1c7a28 !important;
+  box-shadow: 0 0 8px rgba(28,120,40,0.5) !important;
+}
+
+body.tema-strahd .dcircle.fail.on {
+  background: #6b0f0f !important;
+  border-color: #a81818 !important;
+  box-shadow: 0 0 8px rgba(180,20,20,0.6) !important;
+}
+
+body.tema-strahd .dcircle.fail:checked {
+  background: #6b0f0f !important;
+  border-color: #a81818 !important;
+  box-shadow: 0 0 8px rgba(180,20,20,0.6) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   18. MOEDAS E INVENTÁRIO
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .moeda-box {
+  background: linear-gradient(
+    145deg,
+    rgba(26,8,16,0.95) 0%,
+    rgba(18,5,10,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180,30,50,0.14) !important;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.5) !important;
+}
+
+body.tema-strahd .moeda-box:hover {
+  border-color: rgba(200,40,60,0.3) !important;
+}
+
+body.tema-strahd .moeda-box label {
+  color: rgba(200,100,120,0.7) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   19. TAGS (Línguas, Talentos, Proficiências)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .prof-tag {
+  background: rgba(180,20,40,0.10) !important;
+  border-color: rgba(180,40,60,0.28) !important;
+  color: rgba(240,180,190,0.85) !important;
+  transition: all var(--ease-out) 0.18s !important;
+}
+
+body.tema-strahd .prof-tag:hover {
+  border-color: rgba(200,50,70,0.5) !important;
+  background: rgba(180,20,40,0.18) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   20. CONDIÇÕES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .cond-btn {
+  background: rgba(20,6,12,0.7) !important;
+  border-color: rgba(180,40,60,0.2) !important;
+  color: rgba(200,130,150,0.7) !important;
+  transition: all var(--ease-out) 0.18s !important;
+}
+
+body.tema-strahd .cond-btn:hover {
+  background: rgba(180,20,40,0.14) !important;
+  border-color: rgba(200,50,70,0.42) !important;
+  color: #f07080 !important;
+}
+
+body.tema-strahd .cond-btn.ativa {
+  background: rgba(160,20,40,0.3) !important;
+  border-color: #c82040 !important;
+  color: #f07080 !important;
+  box-shadow: 0 0 10px rgba(200,30,60,0.3) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   21. BARRA INFERIOR (Quick Stats / Bottom Bar)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #quick-stats {
+  background: rgba(6,1,4,0.95) !important;
+  border-top: 1px solid rgba(180,30,50,0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.6) !important;
+}
+
+body.tema-strahd .qs-label {
+  color: rgba(180,100,120,0.55) !important;
+}
+
+body.tema-strahd .qs-val {
+  color: #f0dce0 !important;
+}
+
+body.tema-strahd .qs-sep {
+  background: rgba(180,30,50,0.25) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   22. PAINEL DE DADOS E TEMA (Flutuantes)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #dados-panel,
+body.tema-strahd #tema-panel {
+  background: linear-gradient(
+    160deg,
+    rgba(26,8,16,0.98) 0%,
+    rgba(14,4,8,0.99) 100%
+  ) !important;
+  border: 1px solid rgba(180,40,60,0.25) !important;
+  box-shadow:
+    0 16px 64px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(180,30,50,0.1) !important;
+}
+
+/* Botões de dado */
+body.tema-strahd .dado-btn {
+  background: rgba(180,20,40,0.12) !important;
+  border-color: rgba(180,40,60,0.3) !important;
+  color: rgba(240,160,175,0.8) !important;
+  transition: all var(--ease-out) 0.18s !important;
+}
+
+body.tema-strahd .dado-btn:hover,
+body.tema-strahd .dado-btn.ativo {
+  background: rgba(180,20,40,0.28) !important;
+  border-color: rgba(200,50,70,0.55) !important;
+  color: #f07080 !important;
+  box-shadow: 0 0 10px rgba(200,30,60,0.25) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   23. BOTÕES FLUTUANTES (Dados, Tema)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #btn-dados,
+body.tema-strahd #btn-tema {
+  background: linear-gradient(135deg, #8b1020, #5a0813) !important;
+  border: 1.5px solid rgba(200,40,60,0.5) !important;
+  color: rgba(240,180,190,0.9) !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(200,30,50,0.15),
+    0 0 20px rgba(180,20,40,0.3) !important;
+  transition: all var(--ease-out) 0.22s !important;
+}
+
+body.tema-strahd #btn-dados:hover,
+body.tema-strahd #btn-tema:hover {
+  background: linear-gradient(135deg, #a01828, #700a18) !important;
+  box-shadow:
+    0 6px 32px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(200,40,60,0.25),
+    0 0 36px rgba(180,20,40,0.5) !important;
+  transform: scale(1.08) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   24. TEXTAREA DE NOTAS
+────────────────────────────────────────────────────────────── */
+body.tema-strahd textarea.note {
+  background: rgba(14,4,8,0.6) !important;
+  border-color: rgba(180,40,60,0.2) !important;
+  color: rgba(240,210,218,0.9) !important;
+  line-height: 1.7 !important;
+}
+
+body.tema-strahd textarea.note:focus {
+  border-color: rgba(200,50,70,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(200,40,60,0.08) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   25. TOAST / NOTIFICAÇÕES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #toast-container .toast {
+  background: linear-gradient(135deg, rgba(40,10,20,0.97), rgba(26,6,12,0.98)) !important;
+  border: 1px solid rgba(180,40,60,0.35) !important;
+  color: rgba(240,190,200,0.9) !important;
+  box-shadow:
+    0 6px 32px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(200,30,50,0.1) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   26. SCROLLBAR PERSONALIZADA
+────────────────────────────────────────────────────────────── */
+body.tema-strahd ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+body.tema-strahd ::-webkit-scrollbar-track {
+  background: #060102;
+}
+
+body.tema-strahd ::-webkit-scrollbar-thumb {
+  background: rgba(140,20,35,0.5);
+  border-radius: 3px;
+}
+
+body.tema-strahd ::-webkit-scrollbar-thumb:hover {
+  background: rgba(200,40,60,0.7);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   27. ANIMAÇÕES GLOBAIS REFINADAS
+   ── Transições mais suaves com easing cinematográfico
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .panel,
+body.tema-strahd .attr-card,
+body.tema-strahd .exp-card,
+body.tema-strahd .big-num,
+body.tema-strahd .slot-pill,
+body.tema-strahd .moeda-box {
+  transition:
+    transform var(--ease-out) 0.22s,
+    box-shadow var(--ease-out) 0.22s,
+    border-color var(--ease-out) 0.22s !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   28. RECURSOS DE CLASSE
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .cargas-badge {
+  background: rgba(180,20,40,0.22) !important;
+  border-color: rgba(200,50,70,0.4) !important;
+  color: #f07080 !important;
+}
+
+body.tema-strahd .uso-pip {
+  border-color: rgba(180,40,60,0.4) !important;
+}
+
+body.tema-strahd .uso-pip.usado {
+  background: #c82040 !important;
+  box-shadow: 0 0 6px rgba(200,30,60,0.5) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   29. SELECT OPTIONS (abertas no navegador)
+────────────────────────────────────────────────────────────── */
+body.tema-strahd select option {
+  background: #1a0810 !important;
+  color: #f0dce0 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   30. SEÇÕES COLAPSÁVEIS — Botão com cor Strahd
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .section-collapse-btn {
+  color: rgba(200,80,100,0.6) !important;
+}
+
+body.tema-strahd .section-collapse-btn:hover {
+  background: rgba(180,20,40,0.15) !important;
+  color: #f07080 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   31. DEATH SAVES
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .death-section-title {
+  color: rgba(200,130,150,0.8) !important;
+}
+
+body.tema-strahd .death-section-title::before {
+  background: #8b0f0f !important;
+  box-shadow: 0 0 6px rgba(180,15,15,0.6) !important;
+}
+
+body.tema-strahd .death-label-suc { color: #1c7a28 !important; }
+body.tema-strahd .death-label-fail { color: #a81818 !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   32. IMAGEM DO PERSONAGEM
+────────────────────────────────────────────────────────────── */
+body.tema-strahd #char-img-wrap {
+  background: rgba(14,4,8,0.7) !important;
+  border: 2px dashed rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd #char-img-wrap:hover {
+  border-color: rgba(200,50,70,0.55) !important;
+  box-shadow: 0 0 20px rgba(180,20,40,0.2) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   33. REFINAMENTOS TIPOGRÁFICOS NO TEMA STRAHD
+────────────────────────────────────────────────────────────── */
+body.tema-strahd .section-title {
+  font-weight: 600 !important;
+  letter-spacing: 3px !important;
+}
+
+body.tema-strahd .skill-name,
+body.tema-strahd .save-row span {
+  color: rgba(240,210,218,0.88) !important;
+}
+
+body.tema-strahd .arm-label,
+body.tema-strahd .prof-card label,
+body.tema-strahd .insp-label {
+  color: rgba(180,100,120,0.65) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   34. INDEX.HTML — Cards de Personagem (tela inicial)
+   ── Estilo refinado para o .char-card no index
+────────────────────────────────────────────────────────────── */
+
+/* Sombra do wizard/overlay mais dramática */
+.wizard-box {
+  box-shadow:
+    0 24px 96px rgba(0,0,0,0.85),
+    0 0 0 1px rgba(200,150,10,0.10) !important;
+}
+
+.char-card {
+  transition:
+    transform var(--ease-out) 0.25s,
+    box-shadow var(--ease-out) 0.25s,
+    border-color var(--ease-out) 0.25s !important;
+}
+
+.char-card:hover {
+  box-shadow:
+    0 14px 56px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(200,150,10,0.14),
+    inset 0 1px 0 rgba(200,150,10,0.08) !important;
+}
+/* ═══════════════════════════════════════════════════════════════
+   PAINÉIS FLUTUANTES — Dados & Tema
+   (Consolidado do inline HTML para este arquivo)
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Botões flutuantes ── */
+#btn-tema, #btn-dados {
+  position: fixed; z-index: 200;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--parch); border: 2px solid var(--gold);
+  box-shadow: 0 4px 18px rgba(120,70,0,0.28);
+  font-size: 1.4rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#btn-dados { bottom: 1.4rem; left: 1.4rem; }
+#btn-tema  { bottom: 1.4rem; right: 1.4rem; }
+#btn-tema:hover, #btn-dados:hover { transform: scale(1.1) rotate(-15deg); box-shadow: 0 6px 24px rgba(120,70,0,0.38); }
+#btn-dados.rolando { animation: dadoSpin 0.5s ease-out; }
+@keyframes dadoSpin { 0%{transform:rotate(0)} 50%{transform:rotate(-30deg) scale(1.15)} 100%{transform:rotate(0)} }
+
+/* ── Painéis ── */
+#tema-panel, #dados-panel {
+  display: none; position: fixed; z-index: 201;
+  background: var(--parch); border: 1.5px solid var(--parch-border);
+  border-radius: 14px; box-shadow: 0 12px 48px rgba(0,0,0,0.55);
+  width: 300px; max-height: calc(100vh - 8rem);
+  overflow: hidden; flex-direction: column;
+}
+#dados-panel { bottom: 4.5rem; left: 1.4rem; }
+#tema-panel  { bottom: 4.5rem; right: 1.4rem; }
+#tema-panel.open, #dados-panel.open { display: flex; animation: temaIn 0.22s ease-out; }
+@keyframes temaIn { from{opacity:0;transform:scale(0.95) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+/* ── Headers e scroll ── */
+.cp-header, .dados-head { display:flex; align-items:center; justify-content:space-between; padding:.9rem 1.1rem .75rem; border-bottom:1px solid rgba(160,100,20,.18); flex-shrink:0; }
+.cp-title, .dados-head-title { font-family:var(--font-heading); font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-mid); }
+.cp-close { background:none; border:none; color:var(--ink-muted); font-size:1.1rem; cursor:pointer; padding:2px 6px; border-radius:5px; transition:all .15s; }
+.cp-close:hover { background:rgba(160,100,20,.1); color:var(--ink); }
+.cp-scroll, .dados-scroll { overflow-y:auto; flex:1; padding:.9rem; scrollbar-width:thin; }
+.cp-section-label { font-family:var(--font-heading); font-size:.65rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-muted); border-bottom:1px solid rgba(160,100,20,.12); padding-bottom:4px; margin-bottom:9px; margin-top:12px; }
+.cp-section-label:first-child { margin-top:0; }
+.cp-row { display:flex; align-items:center; justify-content:space-between; padding:5px 0; }
+.cp-row-label { font-family:var(--font-body); font-size:1rem; color:var(--ink); }
+.cp-row-hint  { font-family:var(--font-heading); font-size:.65rem; color:var(--ink-muted); }
+.cp-presets { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+.cp-preset { display:flex; align-items:center; gap:5px; font-family:var(--font-heading); font-size:.68rem; padding:4px 10px; border-radius:6px; border:1px solid rgba(160,100,20,.2); color:var(--ink-muted); cursor:pointer; transition:all .15s; background:none; }
+.cp-preset:hover, .cp-preset.ativo { border-color:var(--gold); color:var(--ink); background:rgba(160,100,20,.1); }
+.cp-preset-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; border:1px solid rgba(0,0,0,.12); }
+.cp-color-wrap { display:flex; align-items:center; gap:8px; border:1px solid rgba(160,100,20,.2); border-radius:7px; padding:5px 9px; }
+.cp-color-input { width:28px; height:28px; border:none; background:none; cursor:pointer; padding:0; }
+.cp-import-textarea { width:100%; font-family:var(--font-heading); font-size:.72rem; color:var(--ink); border:1px solid rgba(160,100,20,.2); border-radius:6px; padding:6px 9px; background:rgba(255,255,255,.03); resize:vertical; min-height:65px; margin-bottom:7px; }
+.cp-btn-share, .cp-btn-reset, .cp-btn-import { width:100%; padding:.5rem; font-family:var(--font-heading); font-size:.72rem; letter-spacing:.1em; border-radius:7px; cursor:pointer; transition:all .15s; margin-bottom:5px; display:block; text-align:center; border:1px solid; }
+.cp-btn-share { border-color:rgba(160,100,20,.2); color:var(--ink-mid); }
+.cp-btn-share:hover { border-color:var(--gold); color:var(--ink); background:rgba(160,100,20,.08); }
+.cp-btn-reset { border-color:rgba(160,100,20,.15); color:var(--ink-muted); }
+.cp-btn-reset:hover { border-color:var(--red); color:var(--red); }
+.cp-footer { border-top:1px solid rgba(160,100,20,.15); padding:.75rem .9rem; flex-shrink:0; }
+.cp-import-wrap { margin-top:.5rem; display:none; }
+.cp-import-wrap.open { display:block; }
+.cp-feedback { text-align:center; font-size:.78rem; color:var(--gold); font-style:italic; height:0; overflow:hidden; transition:height .2s; }
+.cp-feedback.show { height:1.2em; }
+
+/* ── Rolador ── */
+.dados-tipos { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:.75rem; }
+.dado-btn { background:rgba(255,255,255,.03); border:1.5px solid rgba(160,100,20,.18); border-radius:7px; padding:.45rem 0; font-family:var(--font-heading); font-size:.75rem; color:var(--ink-mid); cursor:pointer; transition:all .15s; text-align:center; }
+.dado-btn:hover { border-color:var(--gold); color:var(--ink); }
+.dado-btn.ativo { background:var(--gold); border-color:var(--gold-light); color:#fff; font-weight:700; }
+.dados-config { display:flex; gap:.5rem; align-items:center; margin-bottom:.75rem; }
+.dados-qty-wrap, .dados-mod-wrap { display:flex; align-items:center; gap:5px; background:rgba(255,255,255,.03); border:1px solid rgba(160,100,20,.18); border-radius:8px; padding:.4rem .65rem; }
+.dados-qty-wrap { flex:1; }
+.dados-qty-wrap span, .dados-mod-wrap label { font-family:var(--font-heading); font-size:.78rem; color:var(--ink-mid); }
+.dados-qty-num { font-size:1.15rem; font-weight:700; color:var(--ink); min-width:1.4rem; text-align:center; background:transparent; border:none; }
+.qty-btn { background:none; border:1px solid rgba(160,100,20,.22); border-radius:5px; width:24px; height:24px; font-size:1rem; color:var(--ink-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+.qty-btn:hover { border-color:var(--gold); color:var(--ink); }
+#dados-mod-input { width:50px; background:transparent; border:none; font-family:var(--font-heading); font-size:1.1rem; font-weight:700; color:var(--ink); text-align:center; outline:none; }
+.dados-vant { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-bottom:.75rem; }
+.vant-btn { background:rgba(255,255,255,.03); border:1.5px solid rgba(160,100,20,.18); border-radius:7px; padding:.4rem .2rem; font-family:var(--font-heading); font-size:.72rem; color:var(--ink-muted); cursor:pointer; transition:all .15s; text-align:center; }
+.vant-btn:hover { border-color:var(--gold); color:var(--ink); }
+.vant-btn.ativo { border-color:var(--gold); color:var(--ink); font-weight:700; }
+#btn-rolar-dado { width:100%; background:linear-gradient(135deg, var(--gold-light), var(--gold)); border:none; border-radius:9px; padding:.75rem; font-family:var(--font-heading); font-size:1rem; font-weight:700; letter-spacing:.15em; color:#fff; cursor:pointer; transition:all .18s; box-shadow:0 3px 12px rgba(0,0,0,.35); margin-bottom:.75rem; }
+#btn-rolar-dado:hover { filter:brightness(1.1); transform:translateY(-1px); }
+#dados-resultado { text-align:center; padding:.75rem .5rem; background:rgba(255,255,255,.03); border-radius:10px; margin-bottom:.75rem; min-height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1.5px solid rgba(160,100,20,.18); }
+#dados-res-num    { font-family:var(--font-heading); font-size:3rem; font-weight:700; color:var(--ink); line-height:1; }
+#dados-res-label  { font-family:var(--font-heading); font-size:.7rem; letter-spacing:.15em; color:var(--ink-muted); text-transform:uppercase; margin-bottom:2px; }
+#dados-res-detalhe{ font-family:var(--font-body); font-size:.88rem; color:var(--ink-muted); margin-top:5px; }
+.dados-atalhos-label, .dados-hist-label { font-family:var(--font-heading); font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:.4rem; }
+.dados-atalhos, .dados-historico { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:.75rem; }
+.atalho-btn { background:rgba(255,255,255,.03); border:1px solid rgba(160,100,20,.18); border-radius:6px; padding:.35rem .7rem; font-family:var(--font-heading); font-size:.75rem; color:var(--ink-mid); cursor:pointer; transition:all .15s; white-space:nowrap; }
+.atalho-btn:hover { border-color:var(--gold); color:var(--ink); }
+.hist-row { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.03); border-radius:6px; padding:.38rem .65rem; gap:.5rem; }
+.hist-expr { font-family:var(--font-heading); color:var(--ink-muted); font-size:.75rem; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hist-val  { font-family:var(--font-heading); font-weight:700; color:var(--ink); font-size:1.05rem; }
+.hist-detail { font-size:.75rem; color:var(--ink-muted); white-space:nowrap; }
+.hist-ts { font-size:.65rem; color:rgba(160,100,20,.4); }
+
+/* ── Ripple & Voltar ── */
+.ripple-circle { position:absolute; width:6px; height:6px; border-radius:50%; background:rgba(160,100,20,.35); transform:translate(-50%,-50%) scale(0); animation:rippleAnim .45s ease-out forwards; pointer-events:none; }
+@keyframes rippleAnim { to { transform:translate(-50%,-50%) scale(28); opacity:0; } }
+
+#btn-voltar-grupo {
+  position:absolute; top:10px; left:14px; z-index:10;
+  font-family:var(--font-heading); font-size:.78rem; letter-spacing:.08em;
+  color:var(--gold); text-decoration:none; opacity:.7;
+  transition:opacity .2s, letter-spacing .2s;
+}
+#btn-voltar-grupo:hover { opacity:1; letter-spacing:.12em; }
+
+/* ── Deslocamento grid ── */
+.deslocamento-row { background:var(--parch); border:1px solid rgba(160,100,20,.14); border-radius:8px; padding:.55rem .85rem; margin-bottom:1rem; }
+.deslocamento-label { font-family:var(--font-heading); font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:.45rem; }
+.deslocamento-items { display:grid; grid-template-columns:repeat(auto-fit,minmax(62px,1fr)); gap:6px; }
+.desl-item { display:flex; flex-direction:column; align-items:center; gap:2px; padding:5px 6px 4px; border:1px solid rgba(160,100,20,.12); border-radius:7px; background:rgba(255,255,255,.03); transition:border-color .15s; }
+.desl-item:focus-within { border-color:rgba(160,100,20,.3); }
+.desl-input { font-family:var(--font-number); font-size:1.1rem; font-weight:700; text-align:center; color:var(--ink); width:100%; background:transparent; border:none; padding:0; min-width:0; }
+.desl-input:focus { color:var(--gold); outline:none; }
+.desl-label { font-family:var(--font-heading); font-size:.58rem; letter-spacing:.08em; color:var(--ink-muted); white-space:nowrap; }
+
+/* ── Quick stats base ── */
+#quick-stats { position:sticky; top:52px; border-bottom:2px solid var(--gold); display:flex; align-items:center; justify-content:center; gap:0; padding:5px 16px; z-index:99; flex-wrap:wrap; }
+.qs-item { display:flex; align-items:center; gap:4px; padding:0 14px; cursor:default; transition:background .15s; border-radius:6px; }
+.qs-item:hover { background:rgba(160,100,20,.06); }
+.qs-sep { color:var(--parch-border); opacity:.4; font-size:1rem; user-select:none; }
+.qs-icon { font-size:.85rem; line-height:1; }
+.qs-label { font-family:var(--font-heading); font-size:.58rem; letter-spacing:.18em; color:var(--ink-muted); text-transform:uppercase; }
+.qs-val { font-family:var(--font-number); font-size:1.1rem; font-weight:700; color:var(--ink); min-width:1.8rem; text-align:center; }
+
+
+/* ── Dados de Vida — indicador visual de restantes ── */
+#dado-vida-rest::-webkit-inner-spin-button,
+#dado-vida-total::-webkit-inner-spin-button { opacity: 0.5; }
+#dado-vida-rest[value="0"] { color: var(--red) !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTÕES FLUTUANTES — Temas não-Strahd / não-Noturno
+   Todos os temas escuros adicionais precisam sobrescrever
+   o estilo base (que usa --parch como background, ficando
+   invisível em fundos escuros).
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Arcano ── */
+body.tema-arcano #btn-tema,
+body.tema-arcano #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #0a0418 !important;
+  box-shadow: 0 4px 20px rgba(128,64,208,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-arcano #btn-tema:hover,
+body.tema-arcano #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(128,64,208,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ── Floresta ── */
+body.tema-floresta #btn-tema,
+body.tema-floresta #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #020e04 !important;
+  box-shadow: 0 4px 20px rgba(58,112,32,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-floresta #btn-tema:hover,
+body.tema-floresta #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(58,112,32,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ── Glacial ── */
+body.tema-glacial #btn-tema,
+body.tema-glacial #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #020810 !important;
+  box-shadow: 0 4px 20px rgba(40,120,192,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-glacial #btn-tema:hover,
+body.tema-glacial #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(40,120,192,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ── Outono ── */
+body.tema-outono #btn-tema,
+body.tema-outono #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #100402 !important;
+  box-shadow: 0 4px 20px rgba(176,96,32,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-outono #btn-tema:hover,
+body.tema-outono #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(176,96,32,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ── Inferno ── */
+body.tema-inferno #btn-tema,
+body.tema-inferno #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #100402 !important;
+  box-shadow: 0 4px 20px rgba(192,80,32,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-inferno #btn-tema:hover,
+body.tema-inferno #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(192,80,32,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ── Pergaminho ── */
+body.tema-pergaminho #btn-tema,
+body.tema-pergaminho #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #060209 !important;
+  box-shadow: 0 4px 20px rgba(200,150,10,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-pergaminho #btn-tema:hover,
+body.tema-pergaminho #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(200,150,10,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ── Forja (caso exista) ── */
+body.tema-forja #btn-tema,
+body.tema-forja #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: #0a0402 !important;
+  box-shadow: 0 4px 20px rgba(180,90,20,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-forja #btn-tema:hover,
+body.tema-forja #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(180,90,20,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CORREÇÕES DE LAYOUT — Títulos e Imagem
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Coluna esquerda do combate (250px): só reduz letter-spacing
+      para evitar corte em "TESTES DE RESISTÊNCIA" e similares.
+      font-size mantido igual ao restante para consistência. ── */
+#combate-grid > div:first-child .section-title,
+#combate-grid > div:first-child .death-section-title {
+  letter-spacing: 1px !important;
+}
+
+/* ── Imagem do personagem — modo retrato ──
+      Remove max-width fixo (260px) para fluir com a coluna do
+      desc-grid. A imagem agora ocupa 100% da coluna, sem
+      transbordar nem quebrar o layout ao lado. ── */
+#char-img-outer.modo-retrato {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+#char-img-outer.modo-retrato #char-img-wrap {
+  max-height: 360px !important;
+}
+
+/* ── Placeholder de imagem: centraliza texto e ícone ── */
+/* NOTA: display sem !important para que o JS possa ocultar com display:none */
+.img-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+/* ── Ícone e texto do placeholder de imagem ── */
+.img-placeholder .img-icon,
+.img-placeholder span {
+  font-size: 2rem;
+  display: block;
+  text-align: center;
+}
+
+.img-placeholder > div {
+  text-align: center;
+  width: 100%;
+}
+
+/* ── Garante que TODOS os .section-title no combate tenham o marcador ::before
+      mesmo que o JS ainda não tenha adicionado has-collapse ── */
+#combate-grid .section-title::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 16px !important;
+  background: var(--gold) !important;
+  border-radius: 2px !important;
+  flex-shrink: 0 !important;
+  opacity: 1 !important;
+}
+body.tema-strahd #combate-grid .section-title::before {
+  background: linear-gradient(180deg, #c82040, #8b1020) !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   CORREÇÕES DEFINITIVAS v6
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. Barra lateral dos section-title: impede que flex-grow
+      expanda o ::before de 4px para um "quadrado".
+      flex: 0 0 4px garante tamanho fixo. ── */
+.section-title::before {
+  flex: 0 0 4px !important;
+  width: 4px !important;
+  min-width: 4px !important;
+  max-width: 4px !important;
+  height: 17px !important;
+  background: var(--gold) !important;
+  border-radius: 2px !important;
+  flex-shrink: 0 !important;
+  align-self: center !important;
+  display: block !important;
+}
+body.tema-strahd .section-title::before {
+  background: linear-gradient(180deg, #c82040, #8b1020) !important;
+  box-shadow: 0 0 6px rgba(200,30,60,0.5) !important;
+}
+
+/* ── section-bar injetado via JS: escondido (::before resolve) ── */
+.section-title .section-bar {
+  display: none !important;
+}
+
+/* ── 2. Coluna esquerda do combate (250px)
+      Zera letter-spacing para caber "TESTES DE RESISTÊNCIA".
+      Botão de colapso absolutamente posicionado. ── */
+#combate-grid > div:first-child .section-title {
+  letter-spacing: 0px !important;
+  padding-right: 30px !important;
+}
+#combate-grid > div:first-child .section-title .section-collapse-btn {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-left: 0 !important;
+}
+
+/* ── 3. Imagem — modo retrato: flex centraliza quando
+      placeholder está oculto via .has-image ── */
+#char-img-outer.modo-retrato #char-img-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  max-height: 400px !important;
+  min-height: 80px !important;
+}
+#char-img-outer.modo-retrato #char-img-wrap img {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 400px !important;
+  object-fit: contain !important;
+  position: static !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+#char-img-wrap.has-image #img-placeholder {
+  display: none !important;
+}
+
+/* ── 4. Modo retrato OCULTADO — só Token disponível ── */
+#btn-modo-retrato {
+  display: none !important;
+}
+
+/* ── 5. PV no quick-stats: garante texto visível mesmo
+      quando qs-val recebe pv-low/pv-crit (cor no texto,
+      sem background colorido — esse só vai para .pv-bar). ── */
+.qs-val.pv-low,
+.qs-val.pv-crit {
+  background: transparent !important;
+}
+.qs-val.pv-low  { color: var(--pv-bar-low)  !important; }
+.qs-val.pv-crit { color: var(--pv-bar-crit) !important; }
+
+/* ── 6. Tema noturno: quick-stats usa var(--parch) do
+      próprio tema, evitando cor de fundo inconsistente. ── */
+body.tema-noturno #quick-stats {
+  background: var(--parch) !important;
+  border-bottom-color: var(--gold) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.35) !important;
+}
+body.tema-noturno .qs-item:hover {
+  background: rgba(212,175,55,0.08) !important;
+}
+body.tema-noturno .qs-val {
+  color: var(--ink) !important;
+}
