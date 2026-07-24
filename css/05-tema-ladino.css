@@ -1,0 +1,231 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   TEMA NOTURNO — ajustes que vão além das variáveis CSS
+   Ativado quando o tema "Noturno" é aplicado via JS
+   (mapeado em DARK_TEMAS; fallback detecta --page = #0e1014)
+═══════════════════════════════════════════════════════════ */
+
+/* Classe auxiliar adicionada pelo JS ao ativar o tema Noturno */
+body.tema-ladino {
+    /* Remove a textura de ruído clara — fica estranha no escuro */
+    background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(180,140,30,0.06) 0%, transparent 55%);
+}
+
+/* ── Inputs: fundo escuro + texto claro ── */
+body.tema-ladino input,
+body.tema-ladino textarea,
+body.tema-ladino select {
+    background: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(184,146,42,0.35) !important;
+}
+
+body.tema-ladino input:focus,
+body.tema-ladino textarea:focus,
+body.tema-ladino select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(212,175,55,0.18) !important;
+}
+
+body.tema-ladino input::placeholder,
+body.tema-ladino textarea::placeholder {
+    color: var(--ink-muted) !important;
+    opacity: 0.7;
+}
+
+/* ── Painéis flutuantes (dados, tema) ── */
+body.tema-ladino #dados-panel,
+body.tema-ladino #tema-panel {
+    background: var(--parch) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.65) !important;
+}
+
+/* ── Sombras dos cards: mais dramáticas no escuro ── */
+body.tema-ladino .panel,
+body.tema-ladino .exp-card,
+body.tema-ladino .attr-card {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ── exp-card internos: header, body e campos ── */
+body.tema-ladino .exp-header {
+    background: var(--parch-mid) !important;
+}
+body.tema-ladino .exp-header:hover {
+    background: var(--parch-deep) !important;
+}
+body.tema-ladino .exp-body {
+    background: var(--parch) !important;
+    border-top-color: rgba(212,175,55,0.15) !important;
+}
+body.tema-ladino .recurso-recarga-select {
+    background-color: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.3) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+}
+body.tema-ladino .recurso-recarga-select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* ── Ornamento do cabeçalho ── */
+body.tema-ladino #header-ornament-left,
+body.tema-ladino #header-ornament-right {
+    color: var(--gold) !important;
+    opacity: 0.5;
+}
+
+/* ── Scrollbar escura ── */
+body.tema-ladino ::-webkit-scrollbar-track {
+    background: #0f1117;
+}
+body.tema-ladino ::-webkit-scrollbar-thumb {
+    background: #303448;
+    border-color: #0f1117;
+}
+body.tema-ladino ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+/* ── Botões flutuantes (paleta + dado) — Noturno ── */
+body.tema-ladino #btn-tema {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-pale) !important;
+    color: #0f1117 !important;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-ladino #btn-tema:hover {
+    background: var(--gold-pale) !important;
+    box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+    transform: scale(1.1) !important;
+}
+
+/* ── Toasts no tema escuro ── */
+body.tema-ladino #toast-container .toast {
+    background: var(--parch-mid) !important;
+    border-color: rgba(212,175,55,0.35) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.55) !important;
+}
+
+/* ── Quick-stats bar ── */
+body.tema-ladino #quick-stats {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(26,29,38,0.92) !important;
+    border-bottom-color: rgba(212,175,55,0.4) !important;
+}
+
+/* ── Barra de PV no escuro ── */
+/* (fundo da barra de PV padronizado — transparente, ver css/01-base.css) */
+
+/* ── Seção de condições ── */
+body.tema-ladino .cond-btn {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.3) !important;
+    color: var(--ink) !important;
+}
+body.tema-ladino .cond-btn:hover,
+body.tema-ladino .cond-btn.ativa {
+    background: rgba(212,175,55,0.15) !important;
+    border-color: var(--gold) !important;
+    color: var(--gold-pale) !important;
+}
+
+/* ── Tags de proficiência / línguas ── */
+body.tema-ladino .prof-tag {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.35) !important;
+    color: var(--ink) !important;
+}
+
+/* ── Tabela de ataques ── */
+body.tema-ladino .attacks-table th {
+    background: rgba(212,175,55,0.08) !important;
+}
+body.tema-ladino .attacks-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+
+/* ── Badges de nível de magia — mantém cores próprias ── */
+/* (não precisa sobrescrever — as cores dos badges já têm contraste) */
+
+/* ── Attr cards: borda superior colorida mais visível ── */
+body.tema-ladino .attr-card {
+    background: var(--parch) !important;
+}
+
+/* ── Select elements ── */
+body.tema-ladino select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* ── Botão de dados flutuante — Noturno ── */
+body.tema-ladino #btn-dados {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-pale) !important;
+    color: #0f1117 !important;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body.tema-ladino #btn-dados:hover {
+    background: var(--gold-pale) !important;
+    box-shadow: 0 6px 28px rgba(212,175,55,0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+
+/* ── Death circles ── */
+body.tema-ladino .dcircle {
+    background: var(--parch-mid) !important;
+}
+
+/* ── Cargas de habilidades: legibilidade agora universal (ver .card-field em css/01-base-v3.css) ── */
+body.tema-ladino .card-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+}
+body.tema-ladino .card-field label {
+    color: var(--ink-light) !important;
+}
+/* .cargas-badge legibilidade agora universal (ver css/01-base-v3.css) */
+body.tema-ladino .recurso-recarga-select,
+body.tema-ladino .recurso-dado-input,
+body.tema-ladino .recurso-desc {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(212,175,55,0.25) !important;
+}
+body.tema-ladino .armadura-box {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+
+/* ── Inspiração card ── */
+body.tema-ladino .insp-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.3) !important;
+}
+body.tema-ladino .insp-card.on {
+    background: rgba(212,175,55,0.2) !important;
+    border-color: var(--gold) !important;
+}
+
+/* ── Proficiência card ── */
+body.tema-ladino .prof-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(184,146,42,0.25) !important;
+}
+

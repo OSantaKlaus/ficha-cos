@@ -1,0 +1,38 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTÕES FLUTUANTES — todos os temas de classe
+   ── Regra ÚNICA e genérica via --gold-rgb: qualquer tema novo
+      criado (ou renomeado) ganha o mesmo tratamento automaticamente,
+      sem precisar de um bloco dedicado por nome de tema.
+   ── Umbra e Strahd mantêm seus próprios arquivos com toques
+      extras (mist, glow de nome, etc.), então ficam de fora aqui.
+═══════════════════════════════════════════════════════════════ */
+body[class*="tema-"]:not(.tema-umbra):not(.tema-strahd) #btn-tema,
+body[class*="tema-"]:not(.tema-umbra):not(.tema-strahd) #btn-dados {
+  background: var(--gold) !important;
+  border: 2px solid var(--gold-pale) !important;
+  color: var(--page) !important;
+  box-shadow: 0 4px 20px rgba(var(--gold-rgb, 160,100,20),0.55), 0 2px 8px rgba(0,0,0,0.6) !important;
+}
+body[class*="tema-"]:not(.tema-umbra):not(.tema-strahd) #btn-tema:hover,
+body[class*="tema-"]:not(.tema-umbra):not(.tema-strahd) #btn-dados:hover {
+  background: var(--gold-pale) !important;
+  box-shadow: 0 6px 28px rgba(var(--gold-rgb, 160,100,20),0.75), 0 2px 8px rgba(0,0,0,0.6) !important;
+  transform: scale(1.1) !important;
+}
+
+body.tema-umbra #btn-tema,
+body.tema-umbra #btn-dados {
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5), 0 0 14px rgba(140,144,200,0.22) !important;
+}
+
+body.tema-umbra #btn-tema:hover,
+body.tema-umbra #btn-dados:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6), 0 0 22px rgba(150,154,220,0.35) !important;
+}
