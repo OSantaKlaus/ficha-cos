@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Maldição de Strahd — Ficha de Personagem</title>
+
+  <!-- Fontes medievais do Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Philosopher:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/01-base-v3.css">
+  <link rel="stylesheet" href="css/02-melhorias-v2.css">
+  <link rel="stylesheet" href="css/03-tipografia-v3.css">
+  <link rel="stylesheet" href="css/04-melhorias-v3.css">
+  <link rel="stylesheet" href="css/05-tema-ladino.css">
+  <link rel="stylesheet" href="css/06-strahd-correcoes.css">
+  <!-- css/07-strahd-rework-inline.css removido: 100% redundante com
+       strahd-rework.css (mesmas regras, mesmos valores), que já
+       carrega mais abaixo com prioridade maior na cascata. -->
+  <link rel="stylesheet" href="css/08-paineis-flutuantes.css">
+  <link rel="stylesheet" href="css/09-botoes-flutuantes.css">
+  <link rel="stylesheet" href="css/10-correcoes-layout.css">
+  <link rel="stylesheet" href="css/11-correcoes-v6.css">
+  <link rel="stylesheet" href="css/12-temas-unificados.css">
+  <link rel="stylesheet" href="css/13-identidade-temas.css">
+  <link rel="stylesheet" href="strahd-rework.css">
+  <link rel="stylesheet" href="tema-umbra.css">
+</head>
+
+<body class="tema-strahd">
+
+  <!-- ════ CABEÇALHO CINEMATOGRÁFICO ════ -->
+  <div id="header">
+    <a href="index.html" id="btn-voltar-grupo" title="Voltar à seleção de personagens">← Grupo</a>
+    <div id="header-hero">
+      <div id="header-ornament-left">✦</div>
+      <div id="header-center">
+        <div id="nome-personagem" contenteditable="true" spellcheck="false">Gasphar</div>
+        <div id="header-sub">PERSONAGEM</div>
+      </div>
+      <div id="header-ornament-right">✦</div>
+    </div>
+    <div id="header-fields">
+      <div class="hfield"><label>Classe</label><input id="classe" type="text"></div>
+      <div class="hfield"><label>Nível</label><input id="nivel" type="number" value="1" min="1" max="20"
+          oninput="atualizarTudo()"></div>
+      <div class="hfield"><label>Raça</label><input id="raca" type="text"></div>
+      <div class="hfield"><label>Antecedente</label><input id="antecedente" type="text"></div>
+      <div class="hfield"><label>Alinhamento</label><input id="alinhamento" type="text"></div>
+      <div class="hfield"><label>Jogador(a)</label><input id="jogador" type="text"></div>
+      <div class="hfield hfield-custom" id="hfield-custom-wrap" style="display:none;">
+        <label id="hfield-custom-label">Personalizado</label>
+        <input id="campo-custom" type="text" placeholder="—">
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ BARRA DE STATS RÁPIDOS (sticky) ════ -->
+  <div id="quick-stats">
+    <!-- Preenchido dinamicamente pelo script.js -->
+  </div>
+
+  <!-- ════ BARRA DE ABAS ════ -->
+  <div id="tabs">
+    <div id="tab-indicator"></div>
+    <button class="tab-btn active" onclick="showTab('atributos', this)"><span class="tab-icon">⬟</span><span class="tab-label">Atributos</span></button>
+    <button class="tab-btn" onclick="showTab('ataques', this)"><span class="tab-icon">⚔</span><span class="tab-label">Ataques</span></button>
+    <button class="tab-btn" onclick="showTab('habilidades', this)"><span class="tab-icon">✦</span><span class="tab-label">Habilidades</span></button>
+    <button class="tab-btn" onclick="showTab('magias', this)"><span class="tab-icon">✧</span><span class="tab-label">Magias</span></button>
+    <button class="tab-btn" onclick="showTab('inventario', this)"><span class="tab-icon">◈</span><span class="tab-label">Inventário</span></button>
+    <button class="tab-btn" onclick="showTab('descricao', this)"><span class="tab-icon">❧</span><span class="tab-label">Descrição</span></button>
+    <button class="tab-btn" onclick="showTab('notas', this)"><span class="tab-icon">☰</span><span class="tab-label">Notas</span></button>
+  </div>
+
+  <!-- ════ CONTEÚDO DAS ABAS ════ -->
+  <div id="sheet-body">
+
+    <div id="tab-atributos" class="tab-panel active">
+      <div id="atributos-grid">
+
+        <!-- COL ESQUERDA: Atributos + Saves -->
+        <!-- COL ESQUERDA: Atributos + Saves -->
+        <div>
+          <div class="section-title">Atributos</div>
+          <div class="attr-grid">
+            <div class="attr-card attr-for" data-attr="for">
+              <div class="attr-gem">⬟</div>
+              <label>FOR</label>
+              <input type="number" id="for" value="10" oninput="atualizarTudo()">
+              <span class="attr-mod" id="for-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('for')" style="cursor:pointer">+0</span>
+            </div>
+            <div class="attr-card attr-des" data-attr="des">
+              <div class="attr-gem">⬟</div>
+              <label>DES</label>
+              <input type="number" id="des" value="10" oninput="atualizarTudo()">
+              <span class="attr-mod" id="des-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('des')" style="cursor:pointer">+0</span>
+            </div>
+            <div class="attr-card attr-con" data-attr="con">
+              <div class="attr-gem">⬟</div>
+              <label>CON</label>
+              <input type="number" id="con" value="10" oninput="atualizarTudo()">
+              <span class="attr-mod" id="con-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('con')" style="cursor:pointer">+0</span>
+            </div>
+            <div class="attr-card attr-int" data-attr="int">
+              <div class="attr-gem">⬟</div>
+              <label>INT</label>
+              <input type="number" id="int" value="10" oninput="atualizarTudo()">
+              <span class="attr-mod" id="int-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('int')" style="cursor:pointer">+0</span>
+            </div>
+            <div class="attr-card attr-sab" data-attr="sab">
+              <div class="attr-gem">⬟</div>
+              <label>SAB</label>
+              <input type="number" id="sab" value="10" oninput="atualizarTudo()">
+              <span class="attr-mod" id="sab-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('sab')" style="cursor:pointer">+0</span>
+            </div>
+            <div class="attr-card attr-car" data-attr="car">
+              <div class="attr-gem">⬟</div>
+              <label>CAR</label>
+              <input type="number" id="car" value="10" oninput="atualizarTudo()">
+              <span class="attr-mod" id="car-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('car')" style="cursor:pointer">+0</span>
+            </div>
+          </div>
+
+          <div class="section-title" style="margin-top:1rem;">Salvaguardas</div>
+          <div id="saves-list"></div>
+
+          <div class="prof-insp-row">
+            <div class="prof-card">
+              <label>PROFICIÊNCIA</label>
+              <input type="number" id="proficiencia" value="2" oninput="atualizarTudo()">
+            </div>
+            <div class="insp-card" id="inspiracao" onclick="this.classList.toggle('on')"
+              title="Clique para ativar inspiração">
+              <div class="insp-icon">✦</div>
+              <div class="insp-label">INSPIRAÇÃO</div>
+            </div>
+          </div>
+
+          <div class="death-section-title" style="margin-top:1rem;">Testes Contra a Morte</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="death-label-suc">SUCESSOS</span>
+              <div style="display:flex;gap:5px;">
+                <input type="checkbox" class="dcircle suc death-check" onchange="salvar()">
+                <input type="checkbox" class="dcircle suc death-check" onchange="salvar()">
+                <input type="checkbox" class="dcircle suc death-check" onchange="salvar()">
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="death-label-fail">FALHAS</span>
+              <div style="display:flex;gap:5px;">
+                <input type="checkbox" class="dcircle fail death-check" onchange="salvar()">
+                <input type="checkbox" class="dcircle fail death-check" onchange="salvar()">
+                <input type="checkbox" class="dcircle fail death-check" onchange="salvar()">
+              </div>
+            </div>
+          </div>
+
+          <!-- CONDIÇÕES -->
+          <div class="section-title" style="margin-top:1rem;">Condições</div>
+          <div class="condicoes-grid" id="condicoes-grid">
+            <!-- injetado pelo script -->
+          </div>
+
+        </div>
+
+        <!-- COL DIREITA: Perícias -->
+        <!-- COL DIREITA: Perícias -->
+        <div>
+          <div class="section-title">Perícias</div>
+          <div class="pericias-panel" id="pericias-lista"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="tab-ataques" class="tab-panel">
+      <div id="ataques-grid">
+
+        <!-- COL A: Combate, Armadura, Resistências & Vulnerabilidades -->
+        <div>
+          <div class="section-title">Combate</div>
+          <div style="display:flex;gap:0.75rem;margin-bottom:0.75rem;">
+            <div class="big-num" style="flex:1.2;"><label>DEFESA (CA)</label><input type="text" id="ca-total" readonly
+                style="cursor:default;font-weight:700;color:var(--gold);font-size:1.8rem;"></div>
+            <div class="big-num" style="flex:1;"><label>DEF. TEMPORÁRIA</label><input type="number" id="ca-temp"
+                value="0" oninput="calcularCA()"></div>
+            <div class="big-num" style="flex:1;"><label>INICIATIVA</label><input type="text" id="iniciativa" value="+0">
+            </div>
+          </div>
+
+          <!-- DESLOCAMENTO — linha própria, espaço suficiente para os valores -->
+          <div class="deslocamento-row">
+            <div class="deslocamento-label">DESLOCAMENTO</div>
+            <div class="deslocamento-items">
+              <div class="desl-item">
+                <input type="text" id="deslocamento" value="9m" class="desl-input">
+                <span class="desl-label">⟶ Terra</span>
+              </div>
+              <div class="desl-item">
+                <input type="text" id="deslocamento-voo" placeholder="—" class="desl-input">
+                <span class="desl-label">↑ Voo</span>
+              </div>
+              <div class="desl-item">
+                <input type="text" id="deslocamento-nado" placeholder="—" class="desl-input">
+                <span class="desl-label">≋ Nado</span>
+              </div>
+              <div class="desl-item">
+                <input type="text" id="deslocamento-escala" placeholder="—" class="desl-input">
+                <span class="desl-label">↗ Escalar</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;margin-bottom:1rem;">
+            <div class="big-num" style="flex:1;">
+              <label>VISÃO</label>
+              <div style="display:flex;align-items:center;gap:4px;">
+                <input type="text" id="visao" style="flex:1;">
+                <span id="visao-escuro-icon" class="visao-escuro-icon" title="Visão no Escuro ativa"
+                  style="display:none;">🌙</span>
+              </div>
+              <label class="visao-check-label"><input type="checkbox" class="prof-check" id="visao-escuro" onchange="toggleVisaoEscuro()">
+                V. Escuro</label>
+            </div>
+            <div class="big-num" style="flex:1;"><label>EXAUSTÃO</label><input type="number" id="exaustao" value="0"
+                min="0" max="6"></div>
+            <div class="big-num" style="flex:1;"><label>SAB. PASSIVA</label><input type="text" id="sab-passiva" readonly
+                style="cursor:default;"></div>
+          </div>
+
+          <!-- Armadura -->
+          <div class="section-title">Armadura</div>
+          <div class="armadura-box">
+            <div class="arm-row">
+              <span class="arm-label">Nome</span>
+              <input type="text" class="arm-input-text" id="arm-nome">
+            </div>
+            <div class="arm-row" style="gap:1rem;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">CA Base</span>
+                <input type="number" class="arm-input-num" id="arm-ca" value="10" oninput="calcularCA()">
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">+ Des (limite)</span>
+                <select class="arm-select" id="arm-des-limite" onchange="calcularCA()">
+                  <option value="none">Não soma</option>
+                  <option value="full" selected>Completo</option>
+                  <option value="1">Máx +1</option>
+                  <option value="2">Máx +2</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">+ Atributo</span>
+                <select class="arm-select" id="arm-attr-extra" onchange="calcularCA()">
+                  <option value="none">Nenhum</option>
+                  <option value="for">FOR</option>
+                  <option value="con">CON</option>
+                  <option value="int">INT</option>
+                  <option value="sab">SAB</option>
+                  <option value="car">CAR</option>
+                </select>
+              </div>
+              <label class="arm-check-label">
+                <input type="checkbox" class="prof-check" id="escudo" onchange="calcularCA()">
+                <span>Escudo <span style="color:var(--ink-light);font-size:0.78rem;">(+2)</span></span>
+              </label>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">Bônus Extra</span>
+                <input type="number" class="arm-input-num" id="arm-bonus" value="0" oninput="calcularCA()">
+              </div>
+              <label class="arm-check-label">
+                <input type="checkbox" class="prof-check" id="arm-desv">
+                <span style="font-size:0.85rem;">Desv. Furtividade</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Resistências & Vulnerabilidades -->
+          <div class="section-title" style="margin-top:0.75rem;">Resistências & Vulnerabilidades</div>
+          <div class="resv-grid" id="resv-grid">
+            <div class="resv-col">
+              <div class="resv-col-title res-title">🛡 Resistências</div>
+              <div class="resv-tags" id="res-tags"></div>
+              <div class="tag-input-row">
+                <input type="text" class="prof-tag-input" id="res-input"
+                  onkeydown="if(event.key==='Enter')addResVul('res')">
+                <button class="btn-add" style="margin:0;" onclick="addResVul('res')">+</button>
+              </div>
+            </div>
+            <div class="resv-col">
+              <div class="resv-col-title vul-title">⚡ Vulnerabilidades</div>
+              <div class="resv-tags" id="vul-tags"></div>
+              <div class="tag-input-row">
+                <input type="text" class="prof-tag-input" id="vul-input"
+                  onkeydown="if(event.key==='Enter')addResVul('vul')">
+                <button class="btn-add" style="margin:0;" onclick="addResVul('vul')">+</button>
+              </div>
+            </div>
+            <div class="resv-col">
+              <div class="resv-col-title imn-title">✨ Imunidades</div>
+              <div class="resv-tags" id="imn-tags"></div>
+              <div class="tag-input-row">
+                <input type="text" class="prof-tag-input" id="imn-input"
+                  onkeydown="if(event.key==='Enter')addResVul('imn')">
+                <button class="btn-add" style="margin:0;" onclick="addResVul('imn')">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COL B: Pontos de Vida, Ataques & Magia, Munições -->
+        <div>
+          <!-- PV -->
+          <div class="section-title">
+            Pontos de Vida
+            <span id="pv-heart" class="heart-critical" style="display:none;" title="HP CRÍTICO!">❤</span>
+          </div>
+          <div style="display:flex;gap:0.75rem;margin-bottom:0.5rem;">
+            <div class="big-num" style="flex:1"><label>MÁXIMO</label><input type="number" id="pv-max" value="10"
+                oninput="atualizarPVBar()"></div>
+            <div class="big-num" style="flex:1"><label>ATUAL</label><input type="number" id="pv-atual" value="10"
+                oninput="atualizarPVBar()"></div>
+            <div class="big-num" style="flex:1"><label>TEMPORÁRIO</label><input type="number" id="pv-temp" value="0"
+                oninput="atualizarPVBar()"></div>
+          </div>
+          <div class="pv-bar-wrap">
+            <div class="pv-bar pv-high" id="pv-bar" style="width:100%"><span class="pv-bar-label" id="pv-bar-label">10 / 10</span></div>
+            <div class="pv-bar-temp" id="pv-bar-temp" style="width:0%"><span class="pv-bar-temp-label" id="pv-bar-temp-label"></span></div>
+          </div>
+          <div style="display:flex;gap:0.75rem;margin-top:0.5rem;margin-bottom:1rem;">
+            <div class="big-num" style="flex:1"><label>TIPO DE DADO</label><input type="text" id="dado-vida" placeholder="ex: d8"></div>
+            <div class="big-num" style="flex:0.9"><label>TOTAL</label><input type="number" id="dado-vida-total" min="1" max="20" value="1" oninput="this.dataset.manual='true'; sincronizarDadosVida()"></div>
+            <div class="big-num" style="flex:0.9"><label>RESTANTES</label><input type="number" id="dado-vida-rest" min="0" max="20" value="1"></div>
+          </div>
+
+          <!-- Ataques -->
+          <div class="section-title">Ataques & Magia</div>
+          <table class="attacks-table">
+            <thead>
+              <tr>
+                <th style="width:22%">NOME</th>
+                <th style="width:13%">BÔNUS ATQ.</th>
+                <th style="width:20%">DANO</th>
+                <th style="width:16%">TIPO</th>
+                <th style="width:8%;text-align:center;">⚔</th>
+                <th style="width:6%"></th>
+              </tr>
+            </thead>
+            <tbody id="attacks-body"></tbody>
+          </table>
+          <button class="btn-add" onclick="addAtaqueRow()">+ ADICIONAR ATAQUE</button>
+
+          <!-- Munições -->
+          <div class="section-title" style="margin-top:1rem;">Munições</div>
+          <table class="mun-table">
+            <thead>
+              <tr>
+                <th style="width:60%">TIPO</th>
+                <th style="width:34%">QUANTIDADE</th>
+                <th style="width:6%"></th>
+              </tr>
+            </thead>
+            <tbody id="mun-body"></tbody>
+          </table>
+          <button class="btn-add" onclick="addMunicaoRow()">+ ADICIONAR MUNIÇÃO</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="tab-habilidades" class="tab-panel">
+      <div class="habilidades-grid">
+        <div>
+          <div class="section-title">Características & Habilidades</div>
+          <div id="habilidades-lista"></div>
+          <button class="btn-add" onclick="addHabilidade()">+ NOVA HABILIDADE</button>
+          <div class="recursos-faixa">
+            <div class="section-title" style="margin-bottom:0.75rem;">Recursos de Classe</div>
+            <div id="recursos-lista"></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+              <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecursoPreset()">✦ Recurso da classe</button>
+              <button class="btn-add-recurso" style="flex:1;min-width:180px;" onclick="addRecurso()">+ Personalizado</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title">Proficiências</div>
+          <div style="margin-bottom:1rem;">
+            <div
+              style="font-family:var(--font-title);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink-light);margin-bottom:7px;">
+              ARMADURAS</div>
+            <div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:10px;">
+              <label
+                style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
+                  type="checkbox" class="prof-check" id="prof-leve"> Leve</label>
+              <label
+                style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
+                  type="checkbox" class="prof-check" id="prof-media"> Média</label>
+              <label
+                style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
+                  type="checkbox" class="prof-check" id="prof-pesada"> Pesada</label>
+              <label
+                style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
+                  type="checkbox" class="prof-check" id="prof-escudo"> Escudo</label>
+            </div>
+            <div
+              style="font-family:var(--font-title);font-size:0.6rem;letter-spacing:1.5px;color:var(--ink-light);margin-bottom:7px;">
+              ARMAS</div>
+            <div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:10px;">
+              <label
+                style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
+                  type="checkbox" class="prof-check" id="prof-simples"> Simples</label>
+              <label
+                style="display:flex;align-items:center;gap:5px;font-size:0.95rem;cursor:pointer;font-family:var(--font-body);"><input
+                  type="checkbox" class="prof-check" id="prof-marciais"> Marciais</label>
+            </div>
+          </div>
+          <div class="section-title">Línguas</div>
+          <div id="linguas-tags" class="prof-tag-area"></div>
+          <div class="tag-input-row">
+            <input type="text" class="prof-tag-input" id="lingua-input"
+              onkeydown="if(event.key==='Enter')addTag('lingua')">
+            <button class="btn-add" style="margin:0;" onclick="addTag('lingua')">+</button>
+          </div>
+          <div class="section-title" style="margin-top:1rem;">Talentos</div>
+          <div id="talentos-tags" class="prof-tag-area"></div>
+          <div class="tag-input-row">
+            <input type="text" class="prof-tag-input" id="talento-input"
+              onkeydown="if(event.key==='Enter')addTag('talento')">
+            <button class="btn-add" style="margin:0;" onclick="addTag('talento')">+</button>
+          </div>
+          <div class="section-title" style="margin-top:1rem;">Outras Proficiências & Ferramentas</div>
+          <textarea class="note" id="outras-prof"></textarea>
+          <div class="section-title" style="margin-top:1rem;">Traço do Antecedente</div>
+          <textarea class="note" id="traco-antecedente"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-magias" class="tab-panel">
+      <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;align-items:flex-end;">
+        <div class="big-num" style="min-width:140px;"><label>HAB. DE CONJURAÇÃO</label><input type="text" id="conj-hab">
+        </div>
+        <div class="big-num" style="min-width:90px;"><label>CD DE RESISTÊNCIA</label><input type="text" id="conj-cd">
+        </div>
+        <div class="big-num" style="min-width:90px;"><label>BÔNUS DE ATAQUE</label><input type="text" id="conj-atk">
+        </div>
+      </div>
+      <!-- Toggle de modo -->
+      <div id="sp-mode-toggle-row">
+        <button id="sp-toggle-btn" class="sp-toggle-btn" onclick="toggleSpellPointsMode()">🔮 Ativar Pontos de Magia</button>
+        <span class="sp-mode-hint">Variante opcional (DMG p. 288)</span>
+      </div>
+
+      <!-- ── MODO PADRÃO: Espaços de Magia ── -->
+      <div id="spell-slots-regular">
+        <div class="section-title">Espaços de Magia por Nível</div>
+        <div class="spell-slot-row" id="spell-slots"></div>
+        <div class="spell-slots-usado-row" id="spell-slots-usados"></div>
+      </div>
+
+      <!-- ── MODO ALTERNATIVO: Pontos de Magia ── -->
+      <div id="spell-points-panel" style="display:none">
+
+        <!-- Configuração do tipo de conjurador -->
+        <div class="sp-config-row">
+          <div class="big-num sp-tipo-wrap">
+            <label>TIPO DE CONJURADOR</label>
+            <select id="sp-tipo" onchange="atualizarSpellPoints()">
+              <option value="full">Completo (Bardo, Clérigo, Druida, Feiticeiro, Mago)</option>
+              <option value="half">Metade (Paladino, Patrulheiro)</option>
+              <option value="third">Terço (Cavaleiro Arcano, Trapaceiro Arcano)</option>
+              <option value="artificer">Artificer (homebrew)</option>
+            </select>
+          </div>
+          <div class="sp-nivel-conj-wrap">
+            <div class="sp-stat-box">
+              <div class="sp-stat-label">NÍV. CONJURADOR</div>
+              <div class="sp-stat-val" id="sp-nivel-conj">—</div>
+            </div>
+            <div class="sp-stat-box">
+              <div class="sp-stat-label">NÍV. MÁX. ESPAÇO</div>
+              <div class="sp-stat-val" id="sp-max-level">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pool de pontos -->
+        <div class="section-title" style="margin-top:0.75rem;">Pool de Pontos de Magia</div>
+        <div class="sp-pool-card">
+          <div class="sp-pool-label">PONTOS RESTANTES</div>
+          <div class="sp-pool-controls">
+            <button class="sp-adj-btn" onclick="mudarPontosManual(-1)">−</button>
+            <div class="sp-pool-nums">
+              <span id="sp-atual" class="sp-atual-val">0</span>
+              <span class="sp-pool-sep">/</span>
+              <span id="sp-max" class="sp-max-val">0</span>
+            </div>
+            <button class="sp-adj-btn" onclick="mudarPontosManual(1)">+</button>
+          </div>
+          <button class="sp-rest-btn" onclick="descansarLongoSP()" title="Recupera todos os pontos e libera espaços de alto nível">🌙 Descanso Longo</button>
+        </div>
+
+        <!-- Botões de criar espaços -->
+        <div class="section-title" style="margin-top:0.85rem;">Criar Espaço de Magia</div>
+        <div class="sp-create-row" id="sp-create-buttons"></div>
+
+        <!-- Restrição de espaços de alto nível (6-9) -->
+        <div class="sp-alto-row" id="sp-alto-row">
+          <div class="sp-alto-title">⚠ Espaços de Alto Nível — 1× por Descanso Longo</div>
+          <div class="sp-alto-checks" id="sp-alto-checks"></div>
+        </div>
+
+        <!-- Espaços criados / usados (reutiliza os existentes) -->
+        <div class="section-title" style="margin-top:0.85rem;">Espaços Criados (Usados / Disponíveis)</div>
+        <div class="spell-slots-usado-row" id="spell-slots-usados-sp"></div>
+      </div>
+      <div class="magias-grid" style="margin-top:1rem;">
+        <div>
+          <div class="section-title">Truques (Nível 0)</div>
+          <div id="truques-lista"></div>
+          <button class="btn-add" onclick="addSpellCard('truques-lista',false)">+ TRUQUE</button>
+        </div>
+        <div>
+          <div class="section-title">Magias</div>
+          <div id="spells-lista"></div>
+          <button class="btn-add" onclick="addSpellCard('spells-lista',true)">+ MAGIA</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-inventario" class="tab-panel">
+      <div class="inv-grid">
+        <div>
+          <div class="section-title">Equipamento & Itens</div>
+          <textarea class="note" id="equipamento" style="min-height:200px;"></textarea>
+          <div class="section-title" style="margin-top:1rem;">Itens Mágicos Sintonizados (máx. 3)</div>
+          <textarea class="note" id="itens-magicos"></textarea>
+          <div class="section-title" style="margin-top:1rem;">Consumíveis</div>
+          <textarea class="note" id="consumiveis"></textarea>
+        </div>
+        <div>
+          <div class="section-title">Moedas</div>
+          <div class="moedas-grid">
+            <div class="moeda-box"><label>PC</label><input type="number" id="pc" value="0"></div>
+            <div class="moeda-box"><label>PP</label><input type="number" id="pp" value="0"></div>
+            <div class="moeda-box"><label>PE</label><input type="number" id="pe" value="0"></div>
+            <div class="moeda-box"><label>PO</label><input type="number" id="po" value="0"></div>
+            <div class="moeda-box"><label>PL</label><input type="number" id="pl" value="0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-descricao" class="tab-panel">
+      <div class="desc-grid">
+        <div>
+          <div class="section-title">
+            Imagem do Personagem
+            <div class="img-mode-toggle">
+              <button class="img-mode-btn active" id="btn-modo-retrato" onclick="setImgMode('retrato')" title="Retrato">▭ Retrato</button>
+              <button class="img-mode-btn"         id="btn-modo-token"  onclick="setImgMode('token')"  title="Token circular">◯ Token</button>
+            </div>
+          </div>
+          <div id="char-img-outer" class="modo-retrato">
+            <div id="char-img-wrap" onclick="document.getElementById('char-img-input').click()">
+              <div class="img-placeholder" id="img-placeholder">
+                <span class="img-icon">✦</span>
+                <div>Clique para adicionar imagem</div>
+              </div>
+            </div>
+            <!-- Moldura ornamental do token (visível só no modo token) -->
+            <svg id="token-ring" class="token-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <!-- Anel externo principal -->
+              <circle cx="110" cy="110" r="105" fill="none" stroke="var(--gold)" stroke-width="2.5" opacity="0.95"/>
+              <!-- Anel interno sutil -->
+              <circle cx="110" cy="110" r="98"  fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.45"/>
+              <!-- Losangos cardinais N/S/L/O -->
+              <g fill="var(--gold)" opacity="0.9">
+                <path d="M110,3 L114,10 L110,7 L106,10 Z"/>
+                <path d="M110,217 L114,210 L110,213 L106,210 Z"/>
+                <path d="M3,110 L10,106 L7,110 L10,114 Z"/>
+                <path d="M217,110 L210,106 L213,110 L210,114 Z"/>
+              </g>
+              <!-- Pontos decorativos nas diagonais -->
+              <g fill="var(--gold)" opacity="0.55">
+                <circle cx="36"  cy="36"  r="2.2"/>
+                <circle cx="184" cy="36"  r="2.2"/>
+                <circle cx="36"  cy="184" r="2.2"/>
+                <circle cx="184" cy="184" r="2.2"/>
+              </g>
+              <!-- Pequenos arcos de ornamento nos quadrantes -->
+              <g fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.3">
+                <path d="M50,28 A90,90 0 0,1 80,16"/>
+                <path d="M140,16 A90,90 0 0,1 170,28"/>
+                <path d="M192,50 A90,90 0 0,1 204,80"/>
+                <path d="M204,140 A90,90 0 0,1 192,170"/>
+                <path d="M170,192 A90,90 0 0,1 140,204"/>
+                <path d="M80,204 A90,90 0 0,1 50,192"/>
+                <path d="M28,170 A90,90 0 0,1 16,140"/>
+                <path d="M16,80 A90,90 0 0,1 28,50"/>
+              </g>
+            </svg>
+          </div>
+          <input type="file" id="char-img-input" accept="image/*" onchange="carregarImagem(event)">
+
+          <div class="section-title">Aparência Física</div>
+          <div class="desc-field"><label>Idade</label><input type="text" id="idade"></div>
+          <div class="desc-field"><label>Altura</label><input type="text" id="altura"></div>
+          <div class="desc-field"><label>Peso</label><input type="text" id="peso"></div>
+          <div class="desc-field"><label>Olhos</label><input type="text" id="olhos"></div>
+          <div class="desc-field"><label>Pele</label><input type="text" id="pele"></div>
+          <div class="desc-field"><label>Cabelo</label><input type="text" id="cabelo"></div>
+          <div class="desc-field"><label>Divindade</label><input type="text" id="divindade"></div>
+          <div class="section-title" style="margin-top:0.5rem;">Descrição Física</div>
+          <textarea class="note" id="aparencia" style="min-height:90px;"></textarea>
+        </div>
+        <div>
+          <div class="section-title">Personalidade</div>
+          <div class="desc-field"><label>Traços de Personalidade</label><textarea class="note" id="personalidade"
+              style="min-height:65px;"></textarea></div>
+          <div class="desc-field"><label>Ideais / Dogmas</label><textarea class="note" id="ideais"
+              style="min-height:65px;"></textarea></div>
+          <div class="desc-field"><label>Laços / Vínculos</label><textarea class="note" id="vinculos"
+              style="min-height:65px;"></textarea></div>
+          <div class="desc-field"><label>Falhas & Defeitos</label><textarea class="note" id="falhas"
+              style="min-height:65px;"></textarea></div>
+          <div class="section-title">História</div>
+          <textarea class="note" id="historia" style="min-height:100px;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-notas" class="tab-panel">
+      <div class="notas-top">
+        <div class="big-num" style="min-width:90px;"><label>SESSÃO Nº</label><input type="number" id="sessao-num"
+            value="1" min="1"></div>
+        <div class="big-num" style="min-width:150px;"><label>DATA</label><input type="date" id="sessao-data"></div>
+        <div class="big-num" style="flex:1;"><label>TÍTULO DA SESSÃO</label><input type="text" id="sessao-titulo"></div>
+      </div>
+
+      <div class="notas-grid">
+        <div>
+          <div class="section-title">📖 Eventos da Sessão</div>
+          <textarea class="note" id="notas-eventos" style="min-height:170px;"></textarea>
+
+          <div class="section-title" style="margin-top:1.2rem;">⚔ Combate & Encontros</div>
+          <textarea class="note" id="notas-combate" style="min-height:120px;"></textarea>
+
+          <div class="section-title" style="margin-top:1.2rem;">✨ Momentos Marcantes</div>
+          <textarea class="note" id="notas-momentos" style="min-height:100px;"></textarea>
+        </div>
+        <div>
+          <div class="section-title">🧙 NPCs & Facções</div>
+          <textarea class="note" id="notas-npcs" style="min-height:150px;"></textarea>
+
+          <div class="section-title" style="margin-top:1.2rem;">🔍 Segredos & Pistas</div>
+          <textarea class="note" id="notas-pistas" style="min-height:120px;"></textarea>
+
+          <div class="section-title" style="margin-top:1.2rem;">🎯 Objetivos & Próximos Passos</div>
+          <textarea class="note" id="notas-objetivos" style="min-height:100px;"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- fim sheet-body -->
+
+  <!-- ════ BARRA INFERIOR ════ -->
+  <div id="bottom-bar">
+    <span id="save-status"></span>
+    <div class="bottom-controls">
+      <button class="btn-undo" id="btn-undo" onclick="undoFicha()" disabled title="Desfazer (Ctrl+Z)">↩ Desfazer</button>
+      <button class="btn-redo" id="btn-redo" onclick="redoFicha()" disabled title="Refazer (Ctrl+Y)">↪ Refazer</button>
+      <button class="rest-btn" onclick="descanso('curto')" title="Recupera dados de vida gastos e recursos de descanso curto">☽ Desc. Curto</button>
+      <button class="rest-btn" onclick="descanso('longo')" title="Recupera PV total, slots de magia e recursos de descanso longo">☀ Desc. Longo</button>
+      <button class="save-btn" onclick="salvar()" title="Salvar (Ctrl+S)">SALVAR FICHA</button>
+    </div>
+  </div>
+
+  <!-- ════ TOAST CONTAINER ════ -->
+  <div id="toast-container"></div>
+
+  <!-- ════ ROLADOR DE DADOS ════ -->
+  <button id="btn-dados" onclick="toggleDados()" title="Rolador de dados">⚄</button>
+  <div id="dados-panel">
+    <div class="dados-head">
+      <span class="dados-head-title">🎲 Rolador de Dados</span>
+      <button class="cp-close" onclick="toggleDados()">✕</button>
+    </div>
+    <div class="dados-scroll">
+
+      <!-- Seleção do dado -->
+      <div class="dados-tipos" id="dados-tipos"></div>
+
+      <!-- Qtd + Modificador -->
+      <div class="dados-config">
+        <div class="dados-qty-wrap">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span class="dados-qty-num" id="dados-qty">1</span>
+          <span>d</span>
+          <span id="dados-die-label" style="font-weight:700;color:var(--ink)">20</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <div class="dados-mod-wrap">
+          <label>MOD</label>
+          <input type="number" id="dados-mod-input" value="0">
+        </div>
+      </div>
+
+      <!-- Vantagem / Normal / Desvantagem -->
+      <div class="dados-vant">
+        <button class="vant-btn" data-v="-1" onclick="setVantagem(-1)">▼ Desv.</button>
+        <button class="vant-btn ativo" data-v="0"  onclick="setVantagem(0)">Normal</button>
+        <button class="vant-btn" data-v="1"  onclick="setVantagem(1)">▲ Vant.</button>
+      </div>
+
+      <!-- Botão principal -->
+      <button id="btn-rolar-dado" onclick="rolarDado()">⚄ ROLAR</button>
+
+      <!-- Resultado -->
+      <div id="dados-resultado">
+        <div id="dados-res-label">—</div>
+        <div id="dados-res-num">—</div>
+        <div id="dados-res-detalhe"></div>
+      </div>
+
+      <!-- Atalhos rápidos -->
+      <div class="dados-atalhos-label">Atalhos rápidos</div>
+      <div class="dados-atalhos">
+        <button class="atalho-btn" onclick="atalho('iniciativa')">⚡ Iniciativa</button>
+        <button class="atalho-btn" onclick="atalho('ataque')">⚔ Ataque</button>
+        <button class="atalho-btn" onclick="atalho('4d6drop')">⊕ 4d6↓ Atrib.</button>
+        <button class="atalho-btn" onclick="atalho('percentual')">◌ Percentual</button>
+        <button class="atalho-btn" onclick="atalho('dano-furtivo')">✦ Dano Furtivo</button>
+      </div>
+
+      <!-- Histórico -->
+      <div class="dados-hist-label">
+        <span>Histórico</span>
+        <button class="hist-clear" onclick="limparHistorico()">limpar</button>
+      </div>
+      <div id="dados-historico">
+        <div style="font-size:0.75rem;color:var(--ink-muted);font-style:italic;text-align:center;padding:0.5rem 0;">
+          Nenhuma rolagem ainda.
+        </div>
+      </div>
+
+    </div><!-- fim dados-scroll -->
+  </div>
+
+  <!-- ════ EDITOR DE TEMA ════ -->
+  <button id="btn-tema" onclick="toggleTemaPanel()" title="Personalizar tema da ficha">✦</button>
+  <div id="tema-panel">
+    <!-- Cabeçalho -->
+    <div class="cp-header">
+      <span class="cp-title">✦ Personalizar Tema</span>
+      <button class="cp-close" onclick="toggleTemaPanel()">✕</button>
+    </div>
+
+    <!-- Corpo scrollável -->
+    <div class="cp-scroll">
+
+      <!-- Tema base -->
+      <div class="cp-section">
+        <div class="cp-section-label">Tema da campanha</div>
+        <div id="cp-presets" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.6rem;"></div>
+        <div style="font-size:0.78rem;color:var(--ink-muted);margin-bottom:0.5rem;">
+          Selecione um tema acima ou personalize as cores abaixo. Use ↺ Resetar para voltar ao padrão.
+        </div>
+      </div>
+
+      <!-- Cabeçalho & Abas -->
+      <div class="cp-section">
+        <div class="cp-section-label">Cabeçalho & Abas</div>
+        <div id="cp-group-header"></div>
+      </div>
+
+      <!-- Fundo & Estrutura -->
+      <div class="cp-section">
+        <div class="cp-section-label">Fundo & Estrutura</div>
+        <div id="cp-group-fundo"></div>
+      </div>
+
+      <!-- Destaque & Acento -->
+      <div class="cp-section">
+        <div class="cp-section-label">Destaque & Acento</div>
+        <div id="cp-group-acento"></div>
+      </div>
+
+      <!-- Texto -->
+      <div class="cp-section">
+        <div class="cp-section-label">Texto</div>
+        <div id="cp-group-texto"></div>
+      </div>
+
+      <!-- Fontes -->
+      <div class="cp-section">
+        <div class="cp-section-label">Tipografia</div>
+        <div class="cp-row">
+          <div class="cp-row-info">
+            <div class="cp-row-label">Fonte da ficha</div>
+            <div class="cp-row-hint">Cabeçalhos e títulos</div>
+          </div>
+          <select id="cp-font-select" class="cp-font-select" onchange="onFontChange(this.value)">
+            <option value="medieval">Medieval (padrão)</option>
+            <option value="classic">Clássica (Cinzel)</option>
+            <option value="readable">Legível (Inter)</option>
+            <option value="fantasy">Fantasia (MedievalSharp)</option>
+            <option value="ink">Tinta (Uncial)</option>
+          </select>
+        </div>
+        <div class="cp-row">
+          <div class="cp-row-info">
+            <div class="cp-row-label">Tamanho de texto</div>
+            <div class="cp-row-hint">Base para toda a ficha</div>
+          </div>
+          <select id="cp-size-select" class="cp-font-select" onchange="onSizeChange(this.value)">
+            <option value="15">Pequeno (15px)</option>
+            <option value="17" selected>Normal (17px)</option>
+            <option value="19">Grande (19px)</option>
+            <option value="21">Muito Grande (21px)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Campo de Identidade Personalizado -->
+      <div class="cp-section">
+        <div class="cp-section-label">Identidade (Homebrew)</div>
+        <div class="cp-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;width:100%;">
+            <label class="cp-toggle-label">
+              <input type="checkbox" class="prof-check" id="cp-custom-field-on" onchange="toggleCampoCustom(this.checked)">
+              Ativar campo personalizado
+            </label>
+          </div>
+          <div id="cp-custom-field-config" style="display:none;width:100%;">
+            <input type="text" class="cp-custom-input" id="cp-custom-label-input" placeholder="Nome do campo (ex: Subclasse, Clã...)" maxlength="30" oninput="onCustomLabelChange(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Rápidos -->
+      <div class="cp-section">
+        <div class="cp-section-label">Status Rápidos</div>
+        <div class="cp-row-hint" style="margin-bottom:0.5rem;font-size:0.75rem;color:var(--ink-muted);">Escolha quais itens aparecem na barra de stats rápidos</div>
+        <div id="cp-quickstats-opts"></div>
+      </div>
+
+      <!-- Cores de Atributos -->
+      <div class="cp-section">
+        <div class="cp-section-label">Cores dos Atributos</div>
+        <div id="cp-group-attrs"></div>
+      </div>
+
+      <!-- Import/Export -->
+      <div class="cp-section">
+        <div class="cp-section-label">Compartilhar</div>
+        <div class="cp-import-wrap" id="cp-import-wrap">
+          <textarea class="cp-import-textarea" id="cp-import-ta" placeholder='Cole um tema aqui e clique em Importar...'></textarea>
+          <button class="cp-btn-import" onclick="importarTema()">↓ Importar tema colado</button>
+        </div>
+        <div class="cp-feedback" id="cp-feedback"></div>
+      </div>
+
+    </div><!-- fim cp-scroll -->
+
+    <!-- Rodapé -->
+    <div class="cp-footer">
+      <button class="cp-btn cp-btn-share" onclick="exportarTema()">🔗 Copiar tema</button>
+      <button class="cp-btn cp-btn-share" onclick="toggleImportArea()">📥 Importar</button>
+      <button class="cp-btn cp-btn-reset" onclick="resetarTema()">↺ Resetar</button>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script src="script.js"></script>
+  <script src="patch.js"></script>
+</body>
+
+</html>
