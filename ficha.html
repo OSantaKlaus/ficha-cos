@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Umbra — Ficha de Personagem</title>
+  <title>A Maldição de Strahd — Ficha de Personagem</title>
 
   <!-- Fontes medievais do Google Fonts -->
   <link
@@ -26,12 +26,11 @@
   <link rel="stylesheet" href="css/11-correcoes-v6.css">
   <link rel="stylesheet" href="css/12-temas-unificados.css">
   <link rel="stylesheet" href="css/13-identidade-temas.css">
-  <link rel="stylesheet" href="css/14-alinhamento.css">
   <link rel="stylesheet" href="strahd-rework.css">
   <link rel="stylesheet" href="tema-umbra.css">
 </head>
 
-<body class="tema-umbra">
+<body class="tema-strahd">
 
   <!-- ════ CABEÇALHO CINEMATOGRÁFICO ════ -->
   <div id="header">
@@ -50,9 +49,7 @@
           oninput="atualizarTudo()"></div>
       <div class="hfield"><label>Raça</label><input id="raca" type="text"></div>
       <div class="hfield"><label>Antecedente</label><input id="antecedente" type="text"></div>
-      <div class="hfield"><label>Alinhamento</label><input id="alinhamento-display" type="text" readonly
-          style="cursor:pointer" title="Clique para ajustar em Descrição"
-          onclick="showTab('descricao', document.querySelectorAll('.tab-btn')[5])"></div>
+      <div class="hfield"><label>Alinhamento</label><input id="alinhamento" type="text"></div>
       <div class="hfield"><label>Jogador(a)</label><input id="jogador" type="text"></div>
       <div class="hfield hfield-custom" id="hfield-custom-wrap" style="display:none;">
         <label id="hfield-custom-label">Personalizado</label>
@@ -69,7 +66,7 @@
   <!-- ════ BARRA DE ABAS ════ -->
   <div id="tabs">
     <div id="tab-indicator"></div>
-    <button class="tab-btn active" onclick="showTab('atributos', this)"><span class="tab-icon">⬢</span><span class="tab-label">Atributos</span></button>
+    <button class="tab-btn active" onclick="showTab('atributos', this)"><span class="tab-icon">⬟</span><span class="tab-label">Atributos</span></button>
     <button class="tab-btn" onclick="showTab('ataques', this)"><span class="tab-icon">⚔</span><span class="tab-label">Ataques</span></button>
     <button class="tab-btn" onclick="showTab('habilidades', this)"><span class="tab-icon">✦</span><span class="tab-label">Habilidades</span></button>
     <button class="tab-btn" onclick="showTab('magias', this)"><span class="tab-icon">✧</span><span class="tab-label">Magias</span></button>
@@ -90,37 +87,37 @@
           <div class="section-title">Atributos</div>
           <div class="attr-grid">
             <div class="attr-card attr-for" data-attr="for">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>FOR</label>
               <input type="number" id="for" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="for-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('for')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-des" data-attr="des">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>DES</label>
               <input type="number" id="des" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="des-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('des')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-con" data-attr="con">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>CON</label>
               <input type="number" id="con" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="con-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('con')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-int" data-attr="int">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>INT</label>
               <input type="number" id="int" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="int-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('int')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-sab" data-attr="sab">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>SAB</label>
               <input type="number" id="sab" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="sab-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('sab')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-car" data-attr="car">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>CAR</label>
               <input type="number" id="car" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="car-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('car')" style="cursor:pointer">+0</span>
@@ -623,40 +620,6 @@
           <textarea class="note" id="aparencia" style="min-height:90px;"></textarea>
         </div>
         <div>
-          <div class="section-title">Alinhamento</div>
-          <div class="alin-widget">
-            <span class="frame-corner fc-tl"></span><span class="frame-corner fc-tr"></span>
-            <span class="frame-corner fc-bl"></span><span class="frame-corner fc-br"></span>
-            <div class="alin-nome" id="alinhamento-nome">Neutro</div>
-            <div class="alin-eixo">
-              <div class="alin-labels"><span class="alin-lado alin-lado-leal">Leal</span><span class="alin-lado alin-lado-caotico">Caótico</span></div>
-              <div class="alin-track">
-                <input type="range" class="alin-slider alin-slider-lc" id="alinhamento-lc" min="-100" max="100" value="0" step="20" oninput="atualizarAlinhamento()">
-                <div class="alin-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              </div>
-            </div>
-            <div class="alin-eixo">
-              <div class="alin-labels"><span class="alin-lado alin-lado-bom">Bom</span><span class="alin-lado alin-lado-mau">Mau</span></div>
-              <div class="alin-track">
-                <input type="range" class="alin-slider alin-slider-bm" id="alinhamento-bm" min="-100" max="100" value="0" step="20" oninput="atualizarAlinhamento()">
-                <div class="alin-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="section-title">Corrupção <span class="corr-nivel" id="corrupcao-nivel">Ilesa</span></div>
-          <div class="alin-widget corr-widget">
-            <span class="frame-corner fc-tl"></span><span class="frame-corner fc-tr"></span>
-            <span class="frame-corner fc-bl"></span><span class="frame-corner fc-br"></span>
-            <div class="alin-eixo">
-              <div class="alin-labels"><span class="corr-lado-inicio">Ilesa</span><span class="corr-lado-fim">Consumida</span></div>
-              <div class="alin-track">
-                <input type="range" class="alin-slider corr-slider" id="corrupcao" min="0" max="100" value="0" step="5" oninput="atualizarCorrupcao()">
-                <div class="alin-ticks corr-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-              </div>
-            </div>
-          </div>
-
           <div class="section-title">Personalidade</div>
           <div class="desc-field"><label>Traços de Personalidade</label><textarea class="note" id="personalidade"
               style="min-height:65px;"></textarea></div>
