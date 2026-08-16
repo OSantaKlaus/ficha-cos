@@ -1,0 +1,402 @@
+/* ════════════════════════════════════════════════════════════
+   TEMA UMBRA — Sombria · Elegante · Mística
+   ── Paleta de ardósia profunda, prata lunar e violeta-fumaça.
+   ── Nasce das sombras de Barovia: menos sangue, mais penumbra.
+   ── Segue a mesma estrutura de body.tema-strahd em
+      strahd-rework.css, porém com identidade visual própria.
+════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. VARIÁVEIS REFORÇADAS
+────────────────────────────────────────────────────────────── */
+body.tema-umbra {
+  --shadow-sm: 0 2px 16px rgba(0,0,0,0.55), 0 1px 4px rgba(90,90,150,0.10);
+  --shadow-md: 0 6px 36px rgba(0,0,0,0.65), 0 2px 8px rgba(90,90,150,0.16);
+  --shadow-lg: 0 16px 72px rgba(0,0,0,0.78), 0 4px 16px rgba(90,90,150,0.20);
+
+  /* Glow prateado-violeta para elementos em destaque */
+  --glow-umbra: 0 0 18px rgba(130,130,190,0.32), 0 0 40px rgba(90,90,150,0.16);
+  --glow-silver: 0 0 12px rgba(180,184,224,0.30), 0 0 28px rgba(150,150,200,0.14);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. CORPO / PÁGINA
+   ── Névoa lunar à deriva — leve, contínua, quase imperceptível
+────────────────────────────────────────────────────────────── */
+body.tema-umbra {
+  background-image:
+    radial-gradient(ellipse 70% 30% at 50% 0%,   rgba(120,120,180,0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 55% at 0% 100%,   rgba(50,45,90,0.24) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 100% 100%, rgba(50,45,90,0.24) 0%, transparent 65%),
+    url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  position: relative;
+}
+
+/* Véu de bruma que desliza lentamente sobre a ficha inteira */
+body.tema-umbra::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(140,140,200,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 80% 70%, rgba(100,100,170,0.045) 0%, transparent 60%);
+  animation: umbra-mist-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes umbra-mist-drift {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0.85; }
+  100% { transform: translate(2%, -1.5%) scale(1.06); opacity: 1; }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3. HEADER — Luar sobre pedra
+────────────────────────────────────────────────────────────── */
+body.tema-umbra #header {
+  background: linear-gradient(180deg, #14141e 0%, #0e0e16 40%, #0a0a10 80%, #08080c 100%) !important;
+  border-bottom: 3px solid var(--gold) !important;
+  box-shadow:
+    0 4px 40px rgba(0,0,0,0.7),
+    0 1px 0 rgba(140,144,200,0.2),
+    inset 0 -1px 0 rgba(160,160,220,0.06) !important;
+}
+
+body.tema-umbra #header::after {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(90,90,150,0.4) 15%,
+    rgba(170,175,215,0.55) 40%,
+    rgba(210,214,240,0.65) 50%,
+    rgba(170,175,215,0.55) 60%,
+    rgba(90,90,150,0.4) 85%,
+    transparent 100%) !important;
+  height: 2px !important;
+}
+
+body.tema-umbra #header::before {
+  background-image: repeating-linear-gradient(90deg,
+    transparent, transparent 80px,
+    rgba(120,120,180,0.035) 80px, rgba(120,120,180,0.035) 81px) !important;
+}
+
+/* Nome do personagem: prata fosca, discreta e elegante */
+body.tema-umbra #nome-personagem {
+  color: #e4e4f2 !important;
+  text-shadow:
+    0 0 36px rgba(150,150,210,0.28),
+    0 2px 8px rgba(0,0,0,0.85) !important;
+}
+
+body.tema-umbra #nome-personagem:focus {
+  text-shadow:
+    0 0 56px rgba(160,160,220,0.4),
+    0 0 18px rgba(160,160,220,0.22),
+    0 2px 8px rgba(0,0,0,0.9) !important;
+}
+
+body.tema-umbra #header-sub {
+  color: rgba(160,160,210,0.42) !important;
+  letter-spacing: 7px !important;
+  opacity: 1 !important;
+}
+
+body.tema-umbra #header-ornament-left,
+body.tema-umbra #header-ornament-right {
+  color: rgba(150,150,210,0.55) !important;
+  text-shadow: 0 0 12px rgba(130,130,190,0.35) !important;
+  opacity: 1 !important;
+  animation: umbra-ornament-glow 3.2s ease-in-out infinite;
+}
+
+@keyframes umbra-ornament-glow {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.95; }
+}
+
+body.tema-umbra #header-fields {
+  background: rgba(90,90,150,0.06) !important;
+  border-top-color: rgba(140,144,200,0.32) !important;
+}
+
+body.tema-umbra .hfield { border-right-color: rgba(140,144,200,0.26) !important; }
+body.tema-umbra .hfield:hover { background: rgba(90,90,150,0.08) !important; }
+body.tema-umbra .hfield label { color: rgba(170,170,220,0.6) !important; }
+body.tema-umbra .hfield input { color: #e4e4f2 !important; border-bottom-color: rgba(120,120,180,0.28) !important; }
+body.tema-umbra .hfield input:focus { border-bottom-color: rgba(170,175,220,0.55) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   4. ABAS
+────────────────────────────────────────────────────────────── */
+body.tema-umbra #tabs {
+  background: linear-gradient(180deg, #08080c 0%, #050508 100%) !important;
+  border-bottom: 2px solid var(--gold) !important;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.7), 0 1px 0 rgba(140,144,200,0.2) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body.tema-umbra .tab-btn { color: rgba(170,172,220,0.62) !important; border-bottom: 2px solid transparent !important; }
+body.tema-umbra .tab-btn:hover { color: rgba(210,214,240,0.85) !important; background: rgba(90,90,150,0.08) !important; }
+/* (aba ativa padronizada — mesmo tratamento de todos os temas, ver css/01-base.css) */
+
+/* ──────────────────────────────────────────────────────────────
+   5. PAINÉIS E CARTÕES
+────────────────────────────────────────────────────────────── */
+/* (fundo em gradiente dos cards agora é universal — ver
+   css/12-temas-unificados.css. Removido daqui pra evitar
+   duplicação e garantir consistência entre todos os temas.) */
+
+body.tema-umbra .panel:hover {
+  border-color: rgba(120,120,180,0.22) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.65), 0 1px 0 rgba(150,150,210,0.09), inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+body.tema-umbra .exp-header { background: var(--parch-mid) !important; }
+body.tema-umbra .exp-header:hover { background: var(--parch-deep) !important; }
+body.tema-umbra .exp-body { background: var(--parch) !important; border-top-color: rgba(150,150,210,0.13) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   6. INPUTS
+────────────────────────────────────────────────────────────── */
+body.tema-umbra input:not([type="checkbox"]):not([type="radio"]),
+body.tema-umbra textarea,
+body.tema-umbra select {
+  background: var(--parch-mid) !important;
+  color: var(--ink) !important;
+  border-color: rgba(120,120,180,0.3) !important;
+}
+
+body.tema-umbra input:focus,
+body.tema-umbra textarea:focus,
+body.tema-umbra select:focus {
+  border-color: #8890c0 !important;
+  box-shadow: 0 0 0 2px rgba(140,144,200,0.20) !important;
+}
+
+body.tema-umbra input::placeholder,
+body.tema-umbra textarea::placeholder {
+  color: var(--ink-muted) !important;
+  opacity: 0.7;
+}
+
+body.tema-umbra textarea.note { border-color: rgba(120,120,180,0.22) !important; }
+body.tema-umbra textarea.note:focus { border-color: #8890c0 !important; box-shadow: 0 0 0 2px rgba(140,144,200,0.18) !important; }
+
+body.tema-umbra select option { background: var(--parch-mid); color: var(--ink); }
+
+body.tema-umbra .recurso-recarga-select {
+  background-color: var(--parch-mid) !important;
+  color: var(--ink) !important;
+  border-color: rgba(140,144,200,0.3) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a8b0d8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 6px center !important;
+}
+body.tema-umbra .recurso-recarga-select option { background: var(--parch-mid); color: var(--ink); }
+
+/* ──────────────────────────────────────────────────────────────
+   7. ATRIBUTOS
+   ── Mantém as cores por atributo (legibilidade), com brilho
+      ligeiramente mais frio/prateado no destaque
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .attr-card label { color: var(--ink-light) !important; }
+body.tema-umbra .attr-card input[type="number"] { color: var(--ink) !important; }
+
+/* (barras de atributo com brilho extra removidas — padronizadas com os demais 8 temas) */
+
+body.tema-umbra .attr-for .attr-mod { color: #d8707e !important; text-shadow: 0 0 12px rgba(200,80,100,0.4) !important; }
+body.tema-umbra .attr-des .attr-mod { color: #4cbf82 !important; text-shadow: 0 0 12px rgba(50,170,100,0.35) !important; }
+body.tema-umbra .attr-con .attr-mod { color: #d0a050 !important; text-shadow: 0 0 12px rgba(190,140,50,0.35) !important; }
+body.tema-umbra .attr-int .attr-mod { color: #5c94dc !important; text-shadow: 0 0 12px rgba(60,130,210,0.4) !important; }
+body.tema-umbra .attr-sab .attr-mod { color: #a480e0 !important; text-shadow: 0 0 12px rgba(140,90,210,0.4) !important; }
+body.tema-umbra .attr-car .attr-mod { color: #c0c6f0 !important; text-shadow: 0 0 12px rgba(170,175,230,0.4) !important; }
+
+body.tema-umbra .skill-attr.attr-for { color: #d8707e !important; border-color: rgba(216,112,126,0.3) !important; background: rgba(180,60,80,0.10) !important; }
+body.tema-umbra .skill-attr.attr-des { color: #4cbf82 !important; border-color: rgba(76,191,130,0.3) !important; background: rgba(50,170,100,0.10) !important; }
+body.tema-umbra .skill-attr.attr-con { color: #d0a050 !important; border-color: rgba(208,160,80,0.3) !important; background: rgba(190,140,50,0.10) !important; }
+body.tema-umbra .skill-attr.attr-int { color: #5c94dc !important; border-color: rgba(92,148,220,0.3) !important; background: rgba(60,130,210,0.10) !important; }
+body.tema-umbra .skill-attr.attr-sab { color: #a480e0 !important; border-color: rgba(164,128,224,0.3) !important; background: rgba(140,90,210,0.10) !important; }
+body.tema-umbra .skill-attr.attr-car { color: #c0c6f0 !important; border-color: rgba(192,198,240,0.3) !important; background: rgba(170,175,230,0.10) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   8. TÍTULOS DE SEÇÃO — floreio prateado
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .section-title { color: var(--ink) !important; }
+/* Glifo do título: forma e cor agora vêm de css/13-identidade-temas.css
+   (meia-lua mascarada). Estilo antigo de barra removido. */
+
+/* ──────────────────────────────────────────────────────────────
+   9. TESTES DE RESISTÊNCIA / PERÍCIAS
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .save-dot.on { background: #8890c0 !important; box-shadow: 0 0 8px rgba(140,144,200,0.5) !important; }
+body.tema-umbra .save-row:hover { background: rgba(90,90,150,0.06) !important; }
+body.tema-umbra .skill-row:hover { background: rgba(90,90,150,0.06) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   10. GRANDES NÚMEROS (CA, Iniciativa, Deslocamento…)
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .big-num:hover { border-color: rgba(140,144,200,0.3) !important; }
+body.tema-umbra .big-num input:focus { color: #c8ceec !important; text-shadow: 0 0 16px rgba(140,144,200,0.4) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   11. BARRA DE PV
+────────────────────────────────────────────────────────────── */
+/* (fundo da barra de PV padronizado — transparente, ver css/01-base.css) */
+
+/* ──────────────────────────────────────────────────────────────
+   12. INSPIRAÇÃO / PROFICIÊNCIA
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .prof-card input { color: #c8ceec !important; text-shadow: 0 0 12px rgba(150,155,215,0.4) !important; }
+
+body.tema-umbra .insp-card {
+  background: linear-gradient(145deg, rgba(16,16,26,0.95) 0%, rgba(10,10,18,0.98) 100%) !important;
+  border: 2px solid rgba(120,120,180,0.18) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+body.tema-umbra .insp-card:hover { border-color: rgba(150,150,210,0.4) !important; background: rgba(90,90,150,0.12) !important; }
+body.tema-umbra .insp-card.on {
+  background: linear-gradient(135deg, rgba(90,90,150,0.65), rgba(40,38,70,0.85)) !important;
+  border-color: #8890c0 !important;
+  box-shadow: 0 0 0 2px rgba(140,144,200,0.22), var(--glow-umbra) !important;
+  animation: insp-umbra-pulse 2.5s ease-in-out infinite !important;
+}
+@keyframes insp-umbra-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(140,144,200,0.2), 0 0 20px rgba(120,120,180,0.32); }
+  50%       { box-shadow: 0 0 0 3px rgba(140,144,200,0.38), 0 0 36px rgba(120,120,180,0.5); }
+}
+body.tema-umbra .insp-card.on .insp-icon { color: #d0d4f2 !important; filter: drop-shadow(0 0 6px rgba(190,194,240,0.7)) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   13. ARMADURA
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .armadura-box {
+  background: linear-gradient(145deg, rgba(18,18,28,0.95) 0%, rgba(12,12,20,0.98) 100%) !important;
+  border: 1px solid rgba(120,120,180,0.14) !important;
+}
+body.tema-umbra .arm-input-text:focus,
+body.tema-umbra .arm-input-num:focus,
+body.tema-umbra .arm-select:focus { border-color: #8890c0 !important; box-shadow: 0 0 0 2px rgba(140,144,200,0.18) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   14. TABELAS (Ataques / Munição)
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .attacks-table th,
+body.tema-umbra .mun-table th { color: var(--parch-mid) !important; border-bottom-color: rgba(120,120,180,0.2) !important; }
+body.tema-umbra .attacks-table tbody tr:nth-child(even),
+body.tema-umbra .mun-table tbody tr:nth-child(even) { background: rgba(90,90,150,0.04) !important; }
+body.tema-umbra .attacks-table tbody tr:hover,
+body.tema-umbra .mun-table tbody tr:hover { background: rgba(90,90,150,0.08) !important; }
+body.tema-umbra .attacks-table td input,
+body.tema-umbra .mun-table td input { color: var(--ink) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   15. MAGIAS / HABILIDADES (accordion)
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .spell-level-badge { box-shadow: 0 0 8px rgba(120,120,180,0.25) !important; }
+body.tema-umbra .slot-pill:hover { border-color: rgba(140,144,200,0.4) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   16. BOTÃO ADICIONAR
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .btn-add { border-color: rgba(120,120,180,0.28) !important; color: var(--ink-mid) !important; }
+body.tema-umbra .btn-add:hover { border-color: #8890c0 !important; color: #c8ceec !important; background: rgba(90,90,150,0.1) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   17. TESTES CONTRA A MORTE
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .dcircle { background: rgba(10,10,16,0.7) !important; border-color: rgba(120,120,180,0.3) !important; }
+body.tema-umbra .dcircle.suc:checked,
+body.tema-umbra .dcircle.suc.on { background: #145a1e !important; border-color: #1c7a28 !important; box-shadow: 0 0 8px rgba(28,120,40,0.5) !important; }
+body.tema-umbra .dcircle.fail:checked,
+body.tema-umbra .dcircle.fail.on { background: #6b0f0f !important; border-color: #a81818 !important; box-shadow: 0 0 8px rgba(180,20,20,0.6) !important; }
+body.tema-umbra .death-section-title::before { background: rgba(120,120,180,0.3) !important; }
+body.tema-umbra .death-label-suc { color: #3ca878 !important; }
+body.tema-umbra .death-label-fail { color: #8a6ac0 !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   18. MOEDAS E INVENTÁRIO
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .moeda-box {
+  background: linear-gradient(145deg, rgba(16,16,26,0.95) 0%, rgba(10,10,18,0.98) 100%) !important;
+  border: 1px solid rgba(120,120,180,0.14) !important;
+}
+body.tema-umbra .moeda-box:hover { border-color: rgba(140,144,200,0.3) !important; }
+body.tema-umbra .moeda-box label { color: rgba(170,170,220,0.7) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   19. TAGS (Idiomas, Talentos, Proficiências)
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .prof-tag { background: rgba(90,90,150,0.10) !important; border-color: rgba(120,120,180,0.28) !important; color: rgba(200,204,236,0.85) !important; }
+body.tema-umbra .prof-tag:hover { border-color: rgba(150,150,210,0.55) !important; color: #c8ceec !important; background: rgba(90,90,150,0.14) !important; box-shadow: 0 0 12px rgba(140,144,200,0.22) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   20. CONDIÇÕES
+────────────────────────────────────────────────────────────── */
+body.tema-umbra .cond-btn { border-color: rgba(120,120,180,0.24) !important; color: var(--ink-light) !important; }
+body.tema-umbra .cond-btn:hover { border-color: rgba(150,150,210,0.5) !important; color: #c8ceec !important; }
+/* (cor de condição ativa padronizada — vermelho/verde semântico do base) */
+
+/* ──────────────────────────────────────────────────────────────
+   21. BARRA DE STATS RÁPIDOS
+────────────────────────────────────────────────────────────── */
+body.tema-umbra #quick-stats {
+  background: linear-gradient(180deg, rgba(10,10,16,0.95), rgba(6,6,10,0.98)) !important;
+  border-bottom: 2px solid rgba(140,144,200,0.4) !important;
+}
+body.tema-umbra .qs-label { color: var(--ink-light) !important; }
+body.tema-umbra .qs-val { color: #c8ceec !important; text-shadow: 0 0 10px rgba(140,144,200,0.35) !important; }
+body.tema-umbra .qs-sep { border-color: rgba(140,144,200,0.32) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   22. PAINÉIS FLUTUANTES (Dados / Tema) + BOTÕES
+────────────────────────────────────────────────────────────── */
+body.tema-umbra #dados-panel,
+body.tema-umbra #tema-panel {
+  background: linear-gradient(160deg, rgba(16,16,26,0.98), rgba(8,8,14,0.99)) !important;
+  border: 1px solid rgba(120,120,180,0.28) !important;
+  box-shadow: 0 12px 56px rgba(0,0,0,0.75), 0 0 0 1px rgba(140,144,200,0.06) !important;
+}
+
+body.tema-umbra .dado-btn { border-color: rgba(120,120,180,0.24) !important; color: var(--ink-mid) !important; }
+body.tema-umbra .dado-btn:hover,
+body.tema-umbra .dado-btn.ativo {
+  border-color: #8890c0 !important;
+  color: #c8ceec !important;
+  box-shadow: 0 0 12px rgba(140,144,200,0.3) !important;
+}
+
+body.tema-umbra #btn-dados,
+body.tema-umbra #btn-tema {
+  background: linear-gradient(160deg, #1a1a2a, #0e0e16) !important;
+  border: 1px solid rgba(140,144,200,0.35) !important;
+  color: #c8ceec !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5), 0 0 14px rgba(140,144,200,0.16) !important;
+}
+body.tema-umbra #btn-dados:hover,
+body.tema-umbra #btn-tema:hover {
+  border-color: rgba(180,184,230,0.6) !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6), 0 0 22px rgba(150,154,220,0.3) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   23. TOASTS
+────────────────────────────────────────────────────────────── */
+body.tema-umbra #toast-container .toast {
+  background: linear-gradient(160deg, rgba(16,16,26,0.97), rgba(8,8,14,0.99)) !important;
+  border: 1px solid rgba(140,144,200,0.3) !important;
+  color: var(--ink) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   24. IMAGEM DO PERSONAGEM
+────────────────────────────────────────────────────────────── */
+body.tema-umbra #char-img-wrap { border-color: rgba(120,120,180,0.24) !important; }
+body.tema-umbra #char-img-wrap:hover { border-color: rgba(150,150,210,0.5) !important; box-shadow: 0 0 20px rgba(140,144,200,0.25) !important; }
+
+/* ──────────────────────────────────────────────────────────────
+   25. SCROLLBAR
+────────────────────────────────────────────────────────────── */
+body.tema-umbra ::-webkit-scrollbar-track { background: #08080c; }
+body.tema-umbra ::-webkit-scrollbar-thumb { background: #34324e; border-color: #08080c; }
+body.tema-umbra ::-webkit-scrollbar-thumb:hover { background: #8890c0; }
