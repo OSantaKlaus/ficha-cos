@@ -1,0 +1,304 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS — v2 (identidade, quick-stats, fonte, paleta)
+═══════════════════════════════════════════════════════════ */
+
+/* ── --font-size-base, --pv-bar-*, --tabs-txt-* movidos para o
+      bloco :root consolidado em css/01-base-v3.css (2026-07) ── */
+
+body {
+  font-size: var(--font-size-base);
+}
+
+/* ── BARRA DE STATS RÁPIDOS ── */
+#quick-stats {
+  position: sticky;
+  top: 52px;
+  background: var(--parch);
+  border-bottom: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 5px 16px;
+  z-index: 99;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 3px 12px rgba(var(--gold-rgb, 160,100,20),0.12);
+  flex-wrap: wrap;
+}
+
+.qs-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  cursor: default;
+  transition: background 0.15s var(--ease-out);
+  border-radius: 6px;
+}
+
+.qs-item:hover {
+  background: rgba(var(--gold-rgb, 160,100,20),0.06);
+}
+
+.qs-sep {
+  color: var(--parch-border);
+  opacity: 0.4;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.qs-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.qs-label {
+  font-family: var(--font-heading);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-light);
+  text-transform: uppercase;
+}
+
+.qs-val {
+  font-family: var(--font-number);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.qs-val.pv-low  { color: var(--pv-bar-low); }
+.qs-val.pv-crit { color: var(--pv-bar-crit); animation: pvPulseTexto 1.2s ease-in-out infinite; }
+
+@keyframes pvPulseTexto {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (max-width: 480px) {
+  #quick-stats { gap: 0; padding: 4px 8px; top: 46px; }
+  .qs-item { padding: 0 8px; }
+  .qs-label { display: none; }
+}
+
+/* ── CAMPO DE IDENTIDADE PERSONALIZADA ── */
+.hfield-custom {
+  background: rgba(var(--gold-rgb, 160,100,20),0.05);
+  border-left: 2px solid var(--gold);
+}
+
+/* ── PAINEL DE TEMA: SELETOR DE FONTE ── */
+.cp-font-select {
+  background: var(--parch-mid);
+  border: 1px solid rgba(var(--gold-rgb, 160,100,20),0.25);
+  border-radius: 7px;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--ink);
+  cursor: pointer;
+  max-width: 160px;
+}
+
+.cp-font-select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* ── PAINEL DE TEMA: TOGGLE E INPUT DE TEXTO ── */
+.cp-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+
+.cp-toggle-label input[type="checkbox"] {
+  accent-color: var(--gold);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.cp-custom-input {
+  width: 100%;
+  background: var(--parch-mid);
+  border: 1px solid rgba(var(--gold-rgb, 160,100,20),0.25);
+  border-radius: 7px;
+  padding: 0.35rem 0.55rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+  transition: border-color 0.2s var(--ease-out);
+}
+
+.cp-custom-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* ── SECTION TITLE — tamanhos melhorados ── */
+.section-title {
+  font-size: 1rem !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ── LABELS GERAIS — mais legíveis ── */
+.hfield label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1.2px !important;
+}
+
+/* ── ATTR CARDS — texto maior e mais respirável ── */
+.attr-card label {
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+}
+
+.attr-card input[type="number"] {
+  font-size: 1.6rem;
+}
+
+.attr-mod {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── PERICIAS — texto mais legível ── */
+.skill-name {
+  font-size: 0.88rem !important;
+}
+
+.skill-val {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── SAVES — texto maior ── */
+.save-nome {
+  font-size: 0.88rem !important;
+}
+
+.save-bonus {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── BIG-NUM labels ── */
+.big-num label {
+  font-size: 0.65rem !important;
+  letter-spacing: 1.5px !important;
+}
+
+.big-num input {
+  font-size: 1.5rem !important;
+}
+
+/* ── NOME DO PERSONAGEM — mais expressivo ── */
+#nome-personagem {
+  font-size: clamp(2rem, 5vw, 3.2rem) !important;
+}
+
+/* ── FONTE PRESET: Legível ── */
+body.font-readable {
+  --font-title:   'Inter', 'Segoe UI', sans-serif;
+  --font-heading: 'Inter', 'Segoe UI', sans-serif;
+  --font-body:    'Inter', 'Segoe UI', sans-serif;
+  --font-number:  'Inter', 'Segoe UI', sans-serif;
+}
+
+/* ── FONTE PRESET: Clássica ── */
+body.font-classic {
+  --font-title:   'Cinzel Decorative', serif;
+  --font-heading: 'Cinzel', serif;
+  --font-body:    'Crimson Pro', serif;
+  --font-number:  'Crimson Pro', serif;
+}
+
+/* ── FONTE PRESET: Fantasia ── */
+body.font-fantasy {
+  --font-title:   'MedievalSharp', 'Cinzel Decorative', fantasy;
+  --font-heading: 'Philosopher', 'Cinzel', fantasy;
+  --font-body:    'IM Fell English', serif;
+  --font-number:  'IM Fell English', serif;
+}
+
+/* ── FONTE PRESET: Tinta ── */
+body.font-ink {
+  --font-title:   'UnifrakturMaguntia', cursive;
+  --font-heading: 'Philosopher', serif;
+  --font-body:    'Crimson Pro', serif;
+  --font-number:  'Crimson Pro', serif;
+}
+
+/* (cor da barra de PV padronizada — ver .pv-bar.pv-high/medium/critical em css/01-base.css.
+   As regras antigas aqui usavam nomes de classe que o JS nunca aplica
+   [.pv-mid, .pv-bar.pv-low] e uma cor chapada sem contraste que
+   silenciosamente vencia a versão em gradiente por causa do !important.) */
+
+/* ── ATRIBUTOS — cores aplicadas ao modificador ── */
+.attr-for .attr-mod { color: var(--for-color) !important; }
+.attr-des .attr-mod { color: var(--des-color) !important; }
+.attr-con .attr-mod { color: var(--con-color) !important; }
+.attr-int .attr-mod { color: var(--int-color) !important; }
+.attr-sab .attr-mod { color: var(--sab-color) !important; }
+.attr-car .attr-mod { color: var(--car-color) !important; }
+
+/* ── INSPIRAÇÃO — brilho pulsante quando ativa ── */
+.insp-card.on {
+  animation: inspiraPulse 2s ease-in-out infinite !important;
+}
+
+@keyframes inspiraPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--gold-rgb, 160,100,20),0); }
+  50%       { box-shadow: 0 0 18px 4px rgba(200,140,10,0.4); }
+}
+
+/* ── TABS: foco visível para acessibilidade ── */
+.tab-btn:focus-visible {
+  outline: 2px solid var(--gold-pale);
+  outline-offset: -2px;
+}
+
+/* ── BUTTONS: tamanho mínimo de toque ── */
+button, .btn-add, .save-btn, .rest-btn, .tab-btn, .cond-btn, .uso-pip {
+  min-height: 38px;
+}
+
+/* ── RIPPLE em botões de ação ── */
+.btn-add, .save-btn, .rest-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-add:active::after,
+.save-btn:active::after,
+.rest-btn:active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.35) 10%, transparent 80%);
+  animation: rippleEffect 0.4s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  from { transform: scale(0.3); opacity: 1; }
+  to   { transform: scale(2.5); opacity: 0; }
+}
+
+

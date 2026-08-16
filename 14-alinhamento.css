@@ -1,0 +1,215 @@
+/* ═══════════════════════════════════════════════════════════════
+   ALINHAMENTO — Widget de cabo de guerra (2 eixos + corrupção)
+   As cores aqui são fixas (não usam --for-color/--des-color), pois
+   esses tokens são customizáveis por tema/atributo e ficavam
+   inconsistentes nos temas Strahd e Umbra.
+═══════════════════════════════════════════════════════════════ */
+
+#alinhamento-display {
+  width: 170px;
+  font-size: 0.92rem;
+}
+
+.alin-widget {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.2rem 1.3rem;
+  border: 1px solid rgba(var(--gold-rgb, 200,32,64), .3);
+  border-radius: 4px;
+  background: rgba(var(--gold-rgb, 200,32,64), .04);
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb, 200,32,64), .1), inset 0 1px 6px rgba(0,0,0,.3);
+}
+
+/* Cantos de moldura — dão o efeito de retrato emoldurado */
+.frame-corner {
+  position: absolute;
+  width: 13px; height: 13px;
+  pointer-events: none;
+}
+.frame-corner.fc-tl { top: 5px; left: 5px; border-top: 1.5px solid var(--gold); border-left: 1.5px solid var(--gold); }
+.frame-corner.fc-tr { top: 5px; right: 5px; border-top: 1.5px solid var(--gold); border-right: 1.5px solid var(--gold); }
+.frame-corner.fc-bl { bottom: 5px; left: 5px; border-bottom: 1.5px solid var(--gold); border-left: 1.5px solid var(--gold); }
+.frame-corner.fc-br { bottom: 5px; right: 5px; border-bottom: 1.5px solid var(--gold); border-right: 1.5px solid var(--gold); }
+
+.alin-nome {
+  font-family: var(--font-heading);
+  font-size: .95rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--gold);
+  margin-bottom: .9rem;
+}
+
+.alin-nome::before, .alin-nome::after {
+  content: '◆';
+  font-size: .5rem;
+  color: rgba(var(--gold-rgb, 200,32,64), .55);
+  vertical-align: middle;
+  margin: 0 .6em;
+  position: relative;
+  top: -2px;
+}
+
+.alin-eixo { margin-bottom: .95rem; }
+.alin-eixo:last-child { margin-bottom: 0; }
+
+.alin-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-heading);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+/* Leal / Bom → claro | Caótico / Mau → escuro — sempre em escala de cinza,
+   independente do tema ativo. Cada polo leva um pequeno brasão tipográfico. */
+.alin-lado-leal, .alin-lado-bom { color: #e8e6e8; }
+.alin-lado-caotico, .alin-lado-mau { color: #8a868c; }
+
+.alin-lado-leal::before { content: '⚜'; margin-right: .45em; opacity: .8; }
+.alin-lado-bom::before  { content: '✦'; margin-right: .45em; opacity: .8; }
+.alin-lado-caotico::after { content: '✺'; margin-left: .45em; opacity: .8; }
+.alin-lado-mau::after      { content: '†'; margin-left: .45em; opacity: .8; }
+
+.alin-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 7px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.06);
+}
+
+.alin-slider-lc, .alin-slider-bm {
+  background:
+    repeating-linear-gradient(115deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px),
+    linear-gradient(90deg, #e8e6e8, #808080 50%, #181818);
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+.alin-track {
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.alin-ticks {
+  position: absolute;
+  left: 0; right: 0; top: 9px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.alin-ticks span {
+  width: 3px; height: 3px;
+  transform: rotate(45deg);
+  background: rgba(230,225,230,.4);
+}
+
+.alin-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px; height: 17px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: linear-gradient(165deg, #fff 0%, var(--parch) 55%);
+  border: 1.25px solid var(--gold);
+  box-shadow: 0 1px 3px rgba(0,0,0,.5);
+  cursor: pointer;
+  margin-top: -5px;
+}
+
+.alin-slider::-moz-range-thumb {
+  width: 11px; height: 17px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 0;
+  background: linear-gradient(165deg, #fff 0%, var(--parch) 55%);
+  border: 1.25px solid var(--gold);
+  box-shadow: 0 1px 3px rgba(0,0,0,.5);
+  cursor: pointer;
+}
+
+.alin-slider::-moz-range-track {
+  height: 7px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+/* Alinhamento: anel do marcador em prata neutra, não no dourado de marca */
+.alin-slider-lc::-webkit-slider-thumb, .alin-slider-bm::-webkit-slider-thumb { border-color: #cfcfd2; }
+.alin-slider-lc::-moz-range-thumb, .alin-slider-bm::-moz-range-thumb { border-color: #cfcfd2; }
+
+/* ───────────────────────────────────────────────────────────────
+   CORRUPÇÃO — barra de mão única, sem retorno automático.
+   Paleta própria e sombria: cinza-cinza → vinho → vermelho-sangue.
+─────────────────────────────────────────────────────────────── */
+
+.corr-nivel {
+  font-family: var(--font-heading);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #b81030;
+  float: right;
+}
+
+.corr-nivel::before {
+  content: '◆';
+  font-size: .5rem;
+  color: rgba(200,16,48,.55);
+  margin-right: .5em;
+  position: relative;
+  top: -2px;
+}
+
+.corr-lado-inicio { color: #8c8890; }
+.corr-lado-fim { color: #c81030; }
+
+.corr-lado-inicio::before { content: '✦'; margin-right: .45em; opacity: .8; }
+.corr-lado-fim::after      { content: '†'; margin-left: .45em; opacity: .8; }
+
+.corr-slider {
+  background:
+    repeating-linear-gradient(115deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px),
+    linear-gradient(90deg, #232025, #5c1024 55%, #9c0e22);
+}
+
+.corr-slider::-webkit-slider-thumb {
+  background: linear-gradient(165deg, #f0c8ce 0%, #3a1018 60%);
+  border-color: #c81030;
+  box-shadow: 0 1px 4px rgba(200,16,48,.6);
+}
+.corr-slider::-moz-range-thumb {
+  background: linear-gradient(165deg, #f0c8ce 0%, #3a1018 60%);
+  border-color: #c81030;
+  box-shadow: 0 1px 4px rgba(200,16,48,.6);
+}
+
+.corr-ticks span { background: rgba(200,16,48,.35); }
+
+/* ───────────────────────────────────────────────────────────────
+   Os temas Strahd, Umbra e Ladino têm uma regra genérica
+   "input { background: ... !important }" que também pega os
+   sliders (já que eles são <input>). As regras abaixo, com ID +
+   !important, garantem que a cor destas 3 barras não seja
+   substituída por nenhum tema.
+─────────────────────────────────────────────────────────────── */
+#alinhamento-lc, #alinhamento-bm {
+  background:
+    repeating-linear-gradient(115deg, rgba(0,0,0,.16) 0 1px, transparent 1px 3px),
+    linear-gradient(90deg, #e8e6e8, #808080 50%, #181818) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.06) !important;
+}
+
+#corrupcao {
+  background:
+    repeating-linear-gradient(115deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px),
+    linear-gradient(90deg, #232025, #5c1024 55%, #9c0e22) !important;
+  border: none !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6) !important;
+}

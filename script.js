@@ -104,6 +104,53 @@ const gA = id => parseInt(g(id)?.value) || 10                   // valor de atri
 const gP = () => parseInt(g('proficiencia')?.value) || 2       // bônus de proficiência
 
 /* ============================================================
+   2.5. ALINHAMENTO — cabo de guerra (2 eixos: Lei/Caos, Bem/Mal)
+============================================================ */
+
+function nomeAlinhamento(lc, bm) {
+    const eixoLC = lc < -33 ? 'Leal' : lc > 33 ? 'Caótico' : 'Neutro'
+    const eixoBM = bm < -33 ? 'Bom' : bm > 33 ? 'Mau' : 'Neutro'
+    if (eixoLC === 'Neutro' && eixoBM === 'Neutro') return 'Neutro'
+    return eixoLC + ' ' + eixoBM
+}
+
+// Converte fichas antigas (alinhamento salvo como texto) para os dois eixos
+function converterAlinhamentoTexto(texto) {
+    const t = (texto || '').trim().toLowerCase()
+    const mapa = {
+        'leal bom': { lc: -70, bm: -70 }, 'leal neutro': { lc: -70, bm: 0 }, 'leal mau': { lc: -70, bm: 70 },
+        'neutro bom': { lc: 0, bm: -70 }, 'neutro': { lc: 0, bm: 0 }, 'neutro e neutro': { lc: 0, bm: 0 },
+        'verdadeiro neutro': { lc: 0, bm: 0 }, 'neutro verdadeiro': { lc: 0, bm: 0 }, 'neutro mau': { lc: 0, bm: 70 },
+        'caótico bom': { lc: 70, bm: -70 }, 'caótico neutro': { lc: 70, bm: 0 }, 'caótico mau': { lc: 70, bm: 70 },
+        'sem alinhamento': { lc: 0, bm: 0 },
+    }
+    return mapa[t] || { lc: 0, bm: 0 }
+}
+
+function corrupcaoNivel(v) {
+    if (v >= 100) return 'Consumida'
+    if (v >= 75) return 'Perdida'
+    if (v >= 50) return 'Corrompida'
+    if (v >= 25) return 'Manchada'
+    return 'Ilesa'
+}
+
+function atualizarCorrupcao() {
+    const v = gN('corrupcao')
+    const el = g('corrupcao-nivel'); if (el) el.textContent = corrupcaoNivel(v)
+    salvar()
+}
+
+function atualizarAlinhamento() {
+    const lc = gN('alinhamento-lc')
+    const bm = gN('alinhamento-bm')
+    const nome = nomeAlinhamento(lc, bm)
+    const nomeEl = g('alinhamento-nome'); if (nomeEl) nomeEl.textContent = nome
+    const dispEl = g('alinhamento-display'); if (dispEl) dispEl.value = nome
+    salvar()
+}
+
+/* ============================================================
    3. ATUALIZAÇÃO CENTRAL
    ── Chamada sempre que um atributo ou proficiência muda.
       Recalcula: modificadores, saves, perícias, iniciativa
@@ -594,10 +641,16 @@ function carregarImagem(event) {
             mostrarImagem(dataUrl)
             try {
                 ls.set('ficha-dnd-img', dataUrl)
+                // Alguns navegadores (ex: aba anônima do Safari) não lançam erro
+                // no setItem mesmo quando não conseguem persistir de verdade —
+                // por isso confirmamos lendo de volta antes de dar como salvo.
+                if (ls.get('ficha-dnd-img') !== dataUrl) {
+                    throw new Error('Verificação falhou: a imagem não foi persistida')
+                }
                 mostrarToast('✦ Imagem salva', 'sucesso', 2000)
             } catch (err) {
                 console.warn('[imagem]', err)
-                mostrarToast('Não foi possível salvar a imagem (espaço insuficiente no navegador)', 'erro', 4500)
+                mostrarToast('A imagem apareceu agora, mas o navegador não conseguiu salvá-la — ela vai sumir ao recarregar a página. Tente em outra aba/navegador ou libere espaço.', 'erro', 6000)
             }
         }
         img.onerror = () => mostrarToast('Não foi possível ler essa imagem', 'erro', 3500)
@@ -740,7 +793,9 @@ function salvar() {
         nivel: gV('nivel'),
         raca: gV('raca'),
         antecedente: gV('antecedente'),
-        alinhamento: gV('alinhamento'),
+        alinhamentoLC: gN('alinhamento-lc'),
+        alinhamentoBM: gN('alinhamento-bm'),
+        corrupcao: gN('corrupcao'),
         jogador: gV('jogador'),
 
         proficiencia: gV('proficiencia'),
@@ -873,7 +928,20 @@ function carregar() {
     // Cabeçalho
     if (d.nome) g('nome-personagem').textContent = d.nome
     sV('classe', d.classe); sV('nivel', d.nivel); sV('raca', d.raca)
-    sV('antecedente', d.antecedente); sV('alinhamento', d.alinhamento); sV('jogador', d.jogador)
+    sV('antecedente', d.antecedente); sV('jogador', d.jogador)
+
+    if (d.alinhamentoLC != null || d.alinhamentoBM != null) {
+        sV('alinhamento-lc', d.alinhamentoLC || 0)
+        sV('alinhamento-bm', d.alinhamentoBM || 0)
+    } else if (d.alinhamento) {
+        const conv = converterAlinhamentoTexto(d.alinhamento)
+        sV('alinhamento-lc', conv.lc)
+        sV('alinhamento-bm', conv.bm)
+    }
+    atualizarAlinhamento()
+
+    sV('corrupcao', d.corrupcao || 0)
+    atualizarCorrupcao()
 
     // Combate
     // Proficiência: marca como manual se foi editada (para não sobrescrever pelo nível)
@@ -1978,9 +2046,9 @@ function toggleImportArea() {
 }
 
 function resetarTema() {
-    aplicarTema('Strahd')
+    aplicarTema('Umbra')
     ls.del('tema-custom')
-    mostrarFeedback('Tema Strahd restaurado.')
+    mostrarFeedback('Tema Umbra restaurado.')
 }
 
 function mostrarFeedback(msg) {
@@ -2019,9 +2087,9 @@ function renderPresets() {
     const el = document.getElementById('cp-presets')
     if (!el) return
     el.innerHTML = Object.entries(TEMAS).map(([nome, d]) => `
-        <button class="cp-preset" data-preset="${nome}" onclick="aplicarTema('${nome}')" title="${nome === 'Umbra' ? 'Homenagem ao gerenciador Umbra' : nome}">
+        <button class="cp-preset" data-preset="${nome}" onclick="aplicarTema('${nome}')" title="${nome === 'Strahd' ? 'Homenagem ao Curse of Strahd original' : nome}">
             <span class="cp-preset-dot" style="background:${d.swatch}"></span>
-            ${nome}${nome === 'Umbra' ? ' <small style="opacity:.55;font-size:.7em;">(homenagem)</small>' : ''}
+            ${nome}${nome === 'Strahd' ? ' <small style="opacity:.55;font-size:.7em;">(homenagem)</small>' : ''}
         </button>`).join('')
 }
 
@@ -2039,11 +2107,11 @@ function inicializarTemas() {
         try {
             aplicarVars(JSON.parse(custom))
             sincronizarPickers()
-        } catch(e) { aplicarTema('Strahd') }
+        } catch(e) { aplicarTema('Umbra') }
     } else if (preset && TEMAS[preset]) {
         aplicarTema(preset)
     } else {
-        aplicarTema('Strahd') // padrão do gerenciador
+        aplicarTema('Umbra') // padrão do gerenciador
     }
 
     // Fecha painel clicando fora
@@ -3547,14 +3615,14 @@ window.salvar = function() {
             if (preset && DARK_TEMAS[preset]) {
                 document.body.classList.add(DARK_TEMAS[preset])
             }
-            // Fallback: detecta o tema pela cor --page (Strahd é o padrão)
+            // Fallback: detecta o tema pela cor --page (Umbra é o padrão)
             if (!preset) {
                 const page = getComputedStyle(document.documentElement)
                     .getPropertyValue('--page').trim().toLowerCase()
-                if (page === '#050509') document.body.classList.add('tema-umbra')
-                else document.body.classList.add('tema-strahd')
+                if (page === '#080305') document.body.classList.add('tema-strahd')
+                else document.body.classList.add('tema-umbra')
             }
-            aplicarFamiliaEIcone(preset && TEMAS[preset] ? preset : 'Strahd')
+            aplicarFamiliaEIcone(preset && TEMAS[preset] ? preset : 'Umbra')
         }, 100)
     }
 

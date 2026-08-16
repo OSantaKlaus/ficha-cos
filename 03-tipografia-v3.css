@@ -1,0 +1,355 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   REVISÃO TIPOGRÁFICA v3 — tamanhos, contraste, hierarquia
+   Substitui os valores anteriores com !important cirúrgico
+═══════════════════════════════════════════════════════════ */
+
+/* ── VARIÁVEIS: bloco removido (2026-07) ──
+   Este bloco sobrescrevia --ink-light/--ink-muted/--ink-mid com
+   tons marrom-escuro pensados para um tema claro/pergaminho antigo.
+   Como o projeto hoje só tem temas escuros (Strahd, Noturno, Umbra),
+   isso deixava nome do personagem, labels e placeholders quase
+   invisíveis (marrom-escuro sobre fundo quase preto). Os valores
+   corretos para fundo escuro já estão no :root consolidado em
+   css/01-base-v3.css. ── */
+
+/* ── BASE: tamanho de raiz levemente maior ── */
+html { font-size: 17px; }
+
+/* ─────────────────────────────────────────────
+   TÍTULOS DE SEÇÃO — mais altos e com mais peso
+───────────────────────────────────────────── */
+.section-title {
+  font-size: 1.05rem !important;
+  letter-spacing: 2.5px !important;
+  color: var(--ink) !important;
+  font-weight: 600 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Barra lateral: tamanho/forma agora vêm de css/13-identidade-temas.css
+   (glifo por família de tema, 22px). Este bloco antigo forçava 4px
+   e deixava o glifo novo praticamente invisível. */
+
+/* Linha após o título — mais visível */
+.section-title::after {
+  opacity: 0.45 !important;
+  background: linear-gradient(to right, rgba(var(--gold-rgb, 160,100,20), 0.7), transparent) !important;
+}
+
+/* ─────────────────────────────────────────────
+   CABEÇALHO — nome e sub-campos
+───────────────────────────────────────────── */
+#nome-personagem {
+  font-size: clamp(2.2rem, 5vw, 3.4rem) !important;
+  color: var(--ink) !important;
+  text-shadow: 0 1px 6px rgba(var(--gold-rgb, 160,100,20), 0.2) !important;
+}
+
+#header-sub {
+  font-size: 0.7rem !important;
+  letter-spacing: 7px !important;
+  color: rgba(80, 40, 0, 0.65) !important;
+}
+
+.hfield label {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.4px !important;
+  color: var(--ink-light) !important;
+  font-weight: 600 !important;
+}
+
+.hfield input {
+  font-size: 1.15rem !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   ABAS
+───────────────────────────────────────────── */
+.tab-btn {
+  font-size: 0.9rem !important;
+  letter-spacing: 1.2px !important;
+}
+
+.tab-btn.active {
+  font-weight: 700 !important;
+  color: var(--gold-pale) !important;
+}
+
+.tab-icon {
+  font-size: 1.1rem !important;
+}
+
+/* ─────────────────────────────────────────────
+   ATRIBUTOS — cards
+───────────────────────────────────────────── */
+.attr-card label {
+  font-size: 0.78rem !important;
+  letter-spacing: 2px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.attr-card input[type="number"] {
+  font-size: 1.75rem !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+.attr-mod {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   SAVES (Testes de Resistência)
+───────────────────────────────────────────── */
+.save-nome {
+  font-size: 0.95rem !important;
+  color: var(--ink) !important;
+}
+
+.save-bonus {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   PERÍCIAS
+───────────────────────────────────────────── */
+.skill-name {
+  font-size: 1.05rem !important;
+  color: var(--ink) !important;
+  font-weight: 500 !important;
+}
+
+.skill-val {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: var(--gold) !important;
+  min-width: 32px !important;
+}
+
+.skill-attr {
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* ─────────────────────────────────────────────
+   BIG-NUM (CA, PV, Iniciativa, etc.)
+───────────────────────────────────────────── */
+.big-num label {
+  font-size: 0.68rem !important;
+  letter-spacing: 1.6px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.big-num input {
+  font-size: 1.65rem !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+}
+
+/* CA total em dourado e maior */
+#ca-total {
+  font-size: 2rem !important;
+  color: var(--gold) !important;
+}
+
+/* ─────────────────────────────────────────────
+   LABELS GERAIS DE ARMADURA, CONDIÇÕES, ETC.
+───────────────────────────────────────────── */
+.arm-label {
+  font-size: 0.8rem !important;
+  color: var(--ink-light) !important;
+  font-weight: 600 !important;
+}
+
+.death-section-title {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+.death-label-suc,
+.death-label-fail {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   PROFICIÊNCIA & INSPIRAÇÃO
+───────────────────────────────────────────── */
+.prof-card label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  color: var(--ink-light) !important;
+}
+
+.insp-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+}
+
+/* ─────────────────────────────────────────────
+   BARRA DE PV — labels e texto
+───────────────────────────────────────────── */
+.pv-bar-text {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   TABELA DE ATAQUES
+───────────────────────────────────────────── */
+.attacks-table th {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.2px !important;
+  color: var(--ink-light) !important;
+  font-weight: 700 !important;
+}
+
+.attacks-table td input {
+  font-size: 0.95rem !important;
+}
+
+/* ─────────────────────────────────────────────
+   MAGIAS — badge de nível e labels
+───────────────────────────────────────────── */
+.spell-level-badge {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+}
+
+/* Alto nível (6–9): brilho dourado */
+.spell-level-badge[data-level="6"],
+.spell-level-badge[data-level="7"],
+.spell-level-badge[data-level="8"],
+.spell-level-badge[data-level="9"] {
+  background: linear-gradient(135deg, #b87800, #e8b020) !important;
+  box-shadow: 0 0 5px rgba(200, 150, 10, 0.45) !important;
+  color: #fff !important;
+}
+
+/* ─────────────────────────────────────────────
+   RECURSOS DE CLASSE
+───────────────────────────────────────────── */
+.recurso-nome {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+/* ─────────────────────────────────────────────
+   NOTAS / TEXTAREAS
+───────────────────────────────────────────── */
+.note {
+  font-size: 1rem !important;
+  color: var(--ink) !important;
+  line-height: 1.65 !important;
+}
+
+/* ─────────────────────────────────────────────
+   BARRA INFERIOR — botões e status
+───────────────────────────────────────────── */
+.save-btn {
+  font-size: 0.85rem !important;
+  letter-spacing: 2px !important;
+  font-weight: 700 !important;
+}
+
+.rest-btn {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+}
+
+#save-status {
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ─────────────────────────────────────────────
+   QUICK-STATS BAR — tamanhos revisados
+───────────────────────────────────────────── */
+.qs-label {
+  font-size: 0.62rem !important;
+  font-weight: 700 !important;
+  color: var(--ink-muted) !important;
+}
+
+.qs-val {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   RESV (Resistências / Vuln / Imun) — títulos
+───────────────────────────────────────────── */
+.resv-col-title {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+}
+
+/* ─────────────────────────────────────────────
+   CONDIÇOES — botões
+───────────────────────────────────────────── */
+.cond-btn {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+}
+
+/* ─────────────────────────────────────────────
+   DESLOCAMENTO — labels
+───────────────────────────────────────────── */
+.deslocamento-label {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  color: var(--ink-light) !important;
+}
+
+.desl-label {
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-muted) !important;
+}
+
+.desl-input {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE — ajustes de legibilidade
+───────────────────────────────────────────── */
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+
+  .section-title { font-size: 0.98rem !important; }
+  .skill-name    { font-size: 0.98rem !important; }
+  .attr-mod      { font-size: 1.25rem !important; }
+  .big-num input { font-size: 1.4rem !important; }
+  #nome-personagem { font-size: 2rem !important; }
+
+  .tab-btn {
+    font-size: 0.78rem !important;
+    padding: 0.75rem 0.6rem !important;
+  }
+}

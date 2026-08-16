@@ -1,0 +1,187 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   MELHORIAS v3 — Ripple, Badges Alto Nível, Colapsáveis, Toast Undo
+═══════════════════════════════════════════════════════════ */
+
+/* ── 1. EFEITO RIPPLE NOS BOTÕES ─────────────────────────── */
+.btn-add,
+.save-btn,
+.rest-btn,
+.btn-rolar-ataque,
+.btn-remove,
+.tab-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes ripple-anim {
+  0%   { transform: scale(0); opacity: 0.55; }
+  60%  { transform: scale(2.5); opacity: 0.2; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ripple-anim 0.45s ease-out forwards;
+  transform-origin: center;
+  width: 80px;
+  height: 80px;
+  margin-left: -40px;
+  margin-top: -40px;
+}
+
+/* ── 2. BADGES DE MAGIA ALTO NÍVEL (6–9) ─────────────────── */
+.spell-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Estrela de alto nível */
+.spell-level-badge .spell-star {
+  font-size: 0.65em;
+  animation: star-pulse 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes star-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 1;   transform: scale(1.25) rotate(20deg); }
+}
+
+.spell-level-badge[data-level="6"] {
+  background: linear-gradient(135deg, #16a085, #1abc9c) !important;
+  box-shadow: 0 0 7px rgba(22,160,133,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="7"] {
+  background: linear-gradient(135deg, #1a6eb5, #2980b9) !important;
+  box-shadow: 0 0 7px rgba(41,128,185,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="8"] {
+  background: linear-gradient(135deg, #6c3483, #8e44ad) !important;
+  box-shadow: 0 0 7px rgba(142,68,173,0.5) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+.spell-level-badge[data-level="9"] {
+  background: linear-gradient(135deg, #7c4a00, #d4af37, #ffd966) !important;
+  box-shadow: 0 0 10px rgba(212,175,55,0.65) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,220,80,0.5) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+}
+
+/* ── 3. SEÇÕES COLAPSÁVEIS ───────────────────────────────── */
+.section-title {
+  cursor: default;
+}
+
+/* Botão de colapso */
+.section-collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gold);
+  font-size: 0.8rem;
+  padding: 0 4px 0 10px;
+  line-height: 1;
+  border-radius: 3px;
+  transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), transform 0.2s var(--ease-out);
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.section-collapse-btn:hover {
+  background: rgba(var(--gold-rgb, 160,100,20),0.12);
+  color: var(--ink);
+}
+
+.section-collapse-btn.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Container colapsável */
+.collapsible-section {
+  overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.collapsible-section.collapsed {
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Linha separadora quando colapsado */
+.section-title.has-collapse {
+  cursor: default;
+}
+
+/* ── 4. TOAST COM BOTÃO UNDO ─────────────────────────────── */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.toast-undo-btn {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: background 0.15s var(--ease-out);
+  font-family: var(--font-body);
+  min-width: 48px;
+  min-height: 26px;
+}
+
+.toast-undo-btn:hover {
+  background: rgba(255,255,255,0.32);
+}
+
+/* Barra de progresso do toast */
+.toast::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 0 0 8px 8px;
+  animation: toast-timer var(--toast-dur, 3s) linear forwards;
+  width: 100%;
+}
+
+@keyframes toast-timer {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
