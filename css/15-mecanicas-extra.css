@@ -1,0 +1,28 @@
+/* ═══════════════════════════════════════════════════════════════
+   PROGRESSÃO VITAL — selo de estágio de saúde ao lado de "Pontos de Vida"
+═══════════════════════════════════════════════════════════════ */
+
+.pv-estado-badge {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+  margin-left: 8px;
+  cursor: default;
+}
+
+.pv-est-saudavel     { color: #4a9860; }
+.pv-est-ferido       { color: #c88a30; }
+.pv-est-grave        { color: #c84030; }
+.pv-est-critico      { color: #9048c8; }
+.pv-est-incapacitado { color: #888088; }
+
+.btn-reset-esperanca {
+  cursor: pointer;
+  opacity: .6;
+  margin-left: 3px;
+}
+.btn-reset-esperanca:hover { opacity: 1; }
