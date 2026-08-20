@@ -104,6 +104,53 @@ const gA = id => parseInt(g(id)?.value) || 10                   // valor de atri
 const gP = () => parseInt(g('proficiencia')?.value) || 2       // bônus de proficiência
 
 /* ============================================================
+   2.5. ALINHAMENTO — cabo de guerra (2 eixos: Lei/Caos, Bem/Mal)
+============================================================ */
+
+function nomeAlinhamento(lc, bm) {
+    const eixoLC = lc < -33 ? 'Leal' : lc > 33 ? 'Caótico' : 'Neutro'
+    const eixoBM = bm < -33 ? 'Bom' : bm > 33 ? 'Mau' : 'Neutro'
+    if (eixoLC === 'Neutro' && eixoBM === 'Neutro') return 'Neutro'
+    return eixoLC + ' ' + eixoBM
+}
+
+// Converte fichas antigas (alinhamento salvo como texto) para os dois eixos
+function converterAlinhamentoTexto(texto) {
+    const t = (texto || '').trim().toLowerCase()
+    const mapa = {
+        'leal bom': { lc: -70, bm: -70 }, 'leal neutro': { lc: -70, bm: 0 }, 'leal mau': { lc: -70, bm: 70 },
+        'neutro bom': { lc: 0, bm: -70 }, 'neutro': { lc: 0, bm: 0 }, 'neutro e neutro': { lc: 0, bm: 0 },
+        'verdadeiro neutro': { lc: 0, bm: 0 }, 'neutro verdadeiro': { lc: 0, bm: 0 }, 'neutro mau': { lc: 0, bm: 70 },
+        'caótico bom': { lc: 70, bm: -70 }, 'caótico neutro': { lc: 70, bm: 0 }, 'caótico mau': { lc: 70, bm: 70 },
+        'sem alinhamento': { lc: 0, bm: 0 },
+    }
+    return mapa[t] || { lc: 0, bm: 0 }
+}
+
+function corrupcaoNivel(v) {
+    if (v >= 100) return 'Consumida'
+    if (v >= 75) return 'Perdida'
+    if (v >= 50) return 'Corrompida'
+    if (v >= 25) return 'Manchada'
+    return 'Ilesa'
+}
+
+function atualizarCorrupcao() {
+    const v = gN('corrupcao')
+    const el = g('corrupcao-nivel'); if (el) el.textContent = corrupcaoNivel(v)
+    salvar()
+}
+
+function atualizarAlinhamento() {
+    const lc = gN('alinhamento-lc')
+    const bm = gN('alinhamento-bm')
+    const nome = nomeAlinhamento(lc, bm)
+    const nomeEl = g('alinhamento-nome'); if (nomeEl) nomeEl.textContent = nome
+    const dispEl = g('alinhamento-display'); if (dispEl) dispEl.value = nome
+    salvar()
+}
+
+/* ============================================================
    3. ATUALIZAÇÃO CENTRAL
    ── Chamada sempre que um atributo ou proficiência muda.
       Recalcula: modificadores, saves, perícias, iniciativa
@@ -195,42 +242,81 @@ function sincronizarDadosVida() {
 }
 
 /* ============================================================
-   4. CÁLCULO DE CA (DEFESA)
-   ── Fórmula: CA Base + mod Des (com limite) + atributo extra
-              + escudo (+2) + bônus extra + def. temporária
-   ── Chamado sempre que armadura ou atributos mudam.
+   4. CÁLCULO DE CA (DEFESA) — regra "CA Reformulada"
+   ── Fórmula: 10 + mod Destreza + Bônus de Classe + Bônus Extra
+              + def. temporária. Armadura NÃO afeta mais a CA —
+              ela agora só concede Redução de Dano (RD) física.
+   ── Chamado sempre que classe, atributos, armadura ou
+      proficiência mudam.
 ============================================================ */
 
+// Bônus de CA por classe (CA Reformulada). Detecta a classe por
+// substring no campo de texto livre "classe" (cobre multiclasse
+// simples — em caso de duas classes bonificadas, usa a primeira
+// encontrada nesta ordem).
+function bonusClasseCA(temArmadura) {
+    const c = gV('classe').toLowerCase()
+    const prof = gP()
+    if (c.includes('guerreiro')) return prof
+    if (c.includes('bárbaro') || c.includes('barbaro')) return temArmadura ? 0 : calcMod(gA('con'))
+    if (c.includes('monge')) return temArmadura ? 0 : calcMod(gA('sab'))
+    if (c.includes('paladino')) return Math.floor(prof / 2)
+    if (c.includes('patrulheiro')) return Math.floor(prof / 2)
+    if (c.includes('ladino')) return Math.floor(prof / 2)
+    return 0
+}
+
 function calcularCA() {
-    // CA base da armadura
-    const base = gN('arm-ca')
-
-    // Modificador de Destreza (com limite opcional)
-    const limite = gV('arm-des-limite')
-    let desMod = calcMod(gA('des'))
-    if (limite === 'none') desMod = 0              // armadura pesada: não soma Des
-    else if (limite === '1') desMod = Math.min(1, desMod) // limite +1
-    else if (limite === '2') desMod = Math.min(2, desMod) // limite +2
-    // limite === 'full': usa desMod sem restrição
-
-    // Atributo extra (ex: Carisma para Paladino sem armadura)
-    const attrExtra = gV('arm-attr-extra')
-    const extraMod = attrExtra !== 'none' ? calcMod(gA(attrExtra)) : 0
-
-    // Escudo: +2 se marcado
-    const escudo = g('escudo')?.checked ? 2 : 0
-
-    // Bônus extra (magias, talentos, itens mágicos)
+    const desMod = calcMod(gA('des'))
+    const temArmadura = gV('arm-tipo') !== 'nenhuma' && gV('arm-tipo') !== ''
+    const classeBonus = bonusClasseCA(temArmadura)
     const bonus = gN('arm-bonus')
-
-    // Defesa temporária (ex: Escudo Arcano)
     const temp = gN('ca-temp')
-
-    const total = base + desMod + extraMod + escudo + bonus + temp
+    const total = 10 + desMod + classeBonus + bonus + temp
 
     const el = g('ca-total')
     if (el) el.value = total
+
+    // RD física total (armadura + escudo)
+    const rdBase = gN('arm-rd')
+    const rdEscudo = g('escudo')?.checked ? 1 : 0
+    const rdEl = g('arm-rd-total')
+    if (rdEl) rdEl.value = rdBase + rdEscudo
+
     try { atualizarQuickStats() } catch(e) {}
+}
+
+// Presets de armadura (Armaduras Reformuladas) — preenche nome, RD e traços
+const ARMADURAS_PRESET = {
+    'acolchoada':    { nome: 'Acolchoada',        rd: 1, tracos: 'Vantagem em testes de resistência contra Exaustão' },
+    'couro':         { nome: 'Couro',             rd: 1, tracos: 'Vantagem em testes de Furtividade em ambientes urbanos' },
+    'couro-batido':  { nome: 'Couro Batido',       rd: 2, tracos: 'Resistência a dano Perfurante' },
+    'gibao-peles':   { nome: 'Gibão de Peles',     rd: 1, tracos: 'Vantagem em testes de resistência contra Frio' },
+    'camisao-malha': { nome: 'Camisão de Malha',   rd: 2, tracos: 'Vantagem em testes de resistência contra ser Desarmado' },
+    'brunea':        { nome: 'Brunea',             rd: 2, tracos: 'Desvantagem em testes de Furtividade. Vantagem em testes de resistência contra ser Derrubado' },
+    'peitoral':      { nome: 'Peitoral',           rd: 3, tracos: 'Vantagem em testes de resistência de Destreza contra efeitos que causem metade do dano' },
+    'meia-armadura': { nome: 'Meia-Armadura',      rd: 3, tracos: 'Desvantagem em testes de Furtividade e Iniciativa' },
+    'cota-aneis':    { nome: 'Cota de Anéis',      rd: 3, tracos: 'Desvantagem em testes de Furtividade' },
+    'cota-malha':    { nome: 'Cota de Malha',      rd: 4, tracos: 'Desvantagem em testes de Furtividade. Resistência a dano Cortante' },
+    'cota-talas':    { nome: 'Cota de Talas',      rd: 4, tracos: 'Desvantagem em testes de Furtividade. Vantagem em testes de resistência contra ser Agarrado ou Empurrado' },
+    'placas':        { nome: 'Armadura de Placas', rd: 5, tracos: 'Desvantagem em testes de Furtividade e Destreza (Acrobacia). Vulnerabilidade a dano Elétrico' },
+}
+
+function aplicarPresetArmadura() {
+    const tipo = gV('arm-tipo')
+    const p = ARMADURAS_PRESET[tipo]
+    const nomeEl = g('arm-nome'), rdEl = g('arm-rd'), tracosEl = g('arm-tracos')
+    if (p) {
+        if (nomeEl) nomeEl.value = p.nome
+        if (rdEl) rdEl.value = p.rd
+        if (tracosEl) tracosEl.value = p.tracos
+    } else if (tipo === 'nenhuma') {
+        if (nomeEl) nomeEl.value = ''
+        if (rdEl) rdEl.value = 0
+        if (tracosEl) tracosEl.value = ''
+    }
+    // 'custom' → mantém os campos como estão, pro jogador preencher à mão
+    calcularCA()
 }
 
 /* ============================================================
@@ -277,6 +363,28 @@ function atualizarPVBar() {
 
     const heart = g('pv-heart')
     if (heart) heart.style.display = (cur > 0 && (cur / max) * 100 <= 25) ? 'inline' : 'none'
+
+    // Progressão Vital — estágio de saúde conforme % de PV atual
+    atualizarEstadoVital(cur, max)
+}
+
+const ESTADOS_VITAIS = [
+    { min: 76, nome: 'Saudável',   classe: 'pv-est-saudavel',   efeito: 'Sem efeitos.' },
+    { min: 51, nome: 'Ferido',     classe: 'pv-est-ferido',     efeito: 'Desvantagem em testes de Carisma e perícias envolvendo compostura/aparência.' },
+    { min: 26, nome: 'Grave',      classe: 'pv-est-grave',      efeito: 'Deslocamento reduzido em 3m. Desvantagem em testes de Concentração.' },
+    { min: 1,  nome: 'Crítico',    classe: 'pv-est-critico',    efeito: 'Deslocamento reduzido pela metade (substitui o efeito de Grave). Desvantagem em rolagens de ataque.' },
+    { min: -Infinity, nome: 'Incapacitado', classe: 'pv-est-incapacitado', efeito: 'Inconsciente. Teste de CON (DT 10) no início de cada turno: 3 sucessos estabiliza, 3 falhas mata. Nat 1 = 2 falhas. Nat 20 = recupera 1 PV e acorda. Sofrer dano = 1 falha automática (crítico = 2).' },
+]
+
+function atualizarEstadoVital(cur, max) {
+    const pct = max > 0 ? (cur / max) * 100 : 0
+    const estado = cur <= 0 ? ESTADOS_VITAIS[4] : ESTADOS_VITAIS.find(e => pct >= e.min) || ESTADOS_VITAIS[0]
+    const badge = g('pv-estado')
+    if (badge) {
+        badge.textContent = estado.nome
+        badge.title = estado.efeito
+        badge.className = 'pv-estado-badge ' + estado.classe
+    }
 }
 
 /* ============================================================
@@ -594,10 +702,16 @@ function carregarImagem(event) {
             mostrarImagem(dataUrl)
             try {
                 ls.set('ficha-dnd-img', dataUrl)
+                // Alguns navegadores (ex: aba anônima do Safari) não lançam erro
+                // no setItem mesmo quando não conseguem persistir de verdade —
+                // por isso confirmamos lendo de volta antes de dar como salvo.
+                if (ls.get('ficha-dnd-img') !== dataUrl) {
+                    throw new Error('Verificação falhou: a imagem não foi persistida')
+                }
                 mostrarToast('✦ Imagem salva', 'sucesso', 2000)
             } catch (err) {
                 console.warn('[imagem]', err)
-                mostrarToast('Não foi possível salvar a imagem (espaço insuficiente no navegador)', 'erro', 4500)
+                mostrarToast('A imagem apareceu agora, mas o navegador não conseguiu salvá-la — ela vai sumir ao recarregar a página. Tente em outra aba/navegador ou libere espaço.', 'erro', 6000)
             }
         }
         img.onerror = () => mostrarToast('Não foi possível ler essa imagem', 'erro', 3500)
@@ -740,10 +854,14 @@ function salvar() {
         nivel: gV('nivel'),
         raca: gV('raca'),
         antecedente: gV('antecedente'),
-        alinhamento: gV('alinhamento'),
+        alinhamentoLC: gN('alinhamento-lc'),
+        alinhamentoBM: gN('alinhamento-bm'),
+        corrupcao: gN('corrupcao'),
         jogador: gV('jogador'),
 
         proficiencia: gV('proficiencia'),
+        esperanca: gV('esperanca'),
+        inspiracao: g('inspiracao')?.classList.contains('on') || false,
         iniciativa: gV('iniciativa'),
         deslocamento: gV('deslocamento'),
         deslocamentoVoo: gV('deslocamento-voo'),
@@ -756,12 +874,11 @@ function salvar() {
         exaustao: gV('exaustao'),
 
         armNome: gV('arm-nome'),
-        armCA: gV('arm-ca'),
-        armDesLimite: gV('arm-des-limite'),
-        armAttrExtra: gV('arm-attr-extra'),
+        armTipo: gV('arm-tipo'),
+        armRD: gV('arm-rd'),
+        armTracos: gV('arm-tracos'),
         escudo: g('escudo')?.checked || false,
         armBonus: gV('arm-bonus'),
-        armDesv: g('arm-desv')?.checked || false,
 
         pvMax: gV('pv-max'),
         pvAtual: gV('pv-atual'),
@@ -873,11 +990,26 @@ function carregar() {
     // Cabeçalho
     if (d.nome) g('nome-personagem').textContent = d.nome
     sV('classe', d.classe); sV('nivel', d.nivel); sV('raca', d.raca)
-    sV('antecedente', d.antecedente); sV('alinhamento', d.alinhamento); sV('jogador', d.jogador)
+    sV('antecedente', d.antecedente); sV('jogador', d.jogador)
+
+    if (d.alinhamentoLC != null || d.alinhamentoBM != null) {
+        sV('alinhamento-lc', d.alinhamentoLC || 0)
+        sV('alinhamento-bm', d.alinhamentoBM || 0)
+    } else if (d.alinhamento) {
+        const conv = converterAlinhamentoTexto(d.alinhamento)
+        sV('alinhamento-lc', conv.lc)
+        sV('alinhamento-bm', conv.bm)
+    }
+    atualizarAlinhamento()
+
+    sV('corrupcao', d.corrupcao || 0)
+    atualizarCorrupcao()
 
     // Combate
     // Proficiência: marca como manual se foi editada (para não sobrescrever pelo nível)
     if (d.proficiencia) { sV('proficiencia', d.proficiencia); const pe = g('proficiencia'); if(pe) pe.dataset.manual = 'true' }
+    if (d.esperanca != null) sV('esperanca', d.esperanca)
+    if (d.inspiracao) { const ic = g('inspiracao'); if (ic) ic.classList.add('on') }
     sV('deslocamento', d.deslocamento)
     sV('deslocamento-voo', d.deslocamentoVoo)
     sV('deslocamento-nado', d.deslocamentoNado)
@@ -886,9 +1018,15 @@ function carregar() {
     if (d.visaoEscuro) { const cb = g('visao-escuro'); if (cb) { cb.checked = true; toggleVisaoEscuro() } }
 
     // Armadura
-    sV('arm-nome', d.armNome); sV('arm-ca', d.armCA)
-    sV('arm-des-limite', d.armDesLimite); sV('arm-attr-extra', d.armAttrExtra)
-    sC('escudo', d.escudo); sV('arm-bonus', d.armBonus); sC('arm-desv', d.armDesv)
+    sV('arm-nome', d.armNome)
+    if (d.armTipo != null) {
+        sV('arm-tipo', d.armTipo); sV('arm-rd', d.armRD); sV('arm-tracos', d.armTracos)
+    } else if (d.armCA != null) {
+        // Ficha antiga (CA baseada em armadura) — sem equivalente direto de RD,
+        // deixa como "personalizada" com RD 0 pro jogador ajustar.
+        sV('arm-tipo', 'custom'); sV('arm-rd', 0)
+    }
+    sC('escudo', d.escudo); sV('arm-bonus', d.armBonus)
 
     // PV
     sV('pv-max', d.pvMax); sV('pv-atual', d.pvAtual); sV('pv-temp', d.pvTemp)
@@ -1978,9 +2116,9 @@ function toggleImportArea() {
 }
 
 function resetarTema() {
-    aplicarTema('Strahd')
+    aplicarTema('Umbra')
     ls.del('tema-custom')
-    mostrarFeedback('Tema Strahd restaurado.')
+    mostrarFeedback('Tema Umbra restaurado.')
 }
 
 function mostrarFeedback(msg) {
@@ -2019,9 +2157,9 @@ function renderPresets() {
     const el = document.getElementById('cp-presets')
     if (!el) return
     el.innerHTML = Object.entries(TEMAS).map(([nome, d]) => `
-        <button class="cp-preset" data-preset="${nome}" onclick="aplicarTema('${nome}')" title="${nome === 'Umbra' ? 'Homenagem ao gerenciador Umbra' : nome}">
+        <button class="cp-preset" data-preset="${nome}" onclick="aplicarTema('${nome}')" title="${nome === 'Strahd' ? 'Homenagem ao Curse of Strahd original' : nome}">
             <span class="cp-preset-dot" style="background:${d.swatch}"></span>
-            ${nome}${nome === 'Umbra' ? ' <small style="opacity:.55;font-size:.7em;">(homenagem)</small>' : ''}
+            ${nome}${nome === 'Strahd' ? ' <small style="opacity:.55;font-size:.7em;">(homenagem)</small>' : ''}
         </button>`).join('')
 }
 
@@ -2039,11 +2177,11 @@ function inicializarTemas() {
         try {
             aplicarVars(JSON.parse(custom))
             sincronizarPickers()
-        } catch(e) { aplicarTema('Strahd') }
+        } catch(e) { aplicarTema('Umbra') }
     } else if (preset && TEMAS[preset]) {
         aplicarTema(preset)
     } else {
-        aplicarTema('Strahd') // padrão do gerenciador
+        aplicarTema('Umbra') // padrão do gerenciador
     }
 
     // Fecha painel clicando fora
@@ -2105,6 +2243,92 @@ function inicializarDados() {
 
 function toggleDados() {
     document.getElementById('dados-panel').classList.toggle('open')
+}
+
+/* ============================================================
+   DESCANSO — regra "Descanso" (Folga / Repouso)
+============================================================ */
+
+let descansoTipo = 'folga'
+
+function toggleDescanso() {
+    const painel = g('descanso-panel')
+    painel.classList.toggle('open')
+    if (painel.classList.contains('open')) {
+        const rest = g('descanso-dv-rest')
+        if (rest) rest.textContent = gN('dado-vida-rest')
+        const qtdEl = g('descanso-dados-qtd')
+        if (qtdEl) qtdEl.max = gN('dado-vida-rest')
+    }
+}
+
+function setDescansoTipo(tipo, btn) {
+    descansoTipo = tipo
+    document.querySelectorAll('.descanso-tab-btn').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+    const folgaOpts = g('descanso-folga-opts')
+    if (folgaOpts) folgaOpts.style.display = tipo === 'folga' ? 'block' : 'none'
+    const res = g('descanso-resultado')
+    if (res) res.textContent = ''
+}
+
+function aplicarDescanso() {
+    const cond = parseInt(gV('descanso-condicao'))
+    const max = Math.max(1, gN('pv-max'))
+    let cur = gN('pv-atual')
+    let resultado = ''
+
+    if (descansoTipo === 'folga') {
+        const lados = parseInt((gV('dado-vida').match(/\d+/) || [8])[0]) || 8
+        const restantes = gN('dado-vida-rest')
+        if (restantes <= 0) {
+            mostrarToast('Sem dados de vida restantes para gastar', 'erro', 3500)
+            return
+        }
+        const qtd = Math.max(1, Math.min(gN('descanso-dados-qtd'), restantes))
+        const rolls = []
+        let total = 0
+        for (let i = 0; i < qtd; i++) {
+            const r = Math.max(1, rolarUm(lados) + cond)
+            rolls.push(r)
+            total += r
+        }
+        cur = Math.min(max, cur + total)
+        const pvEl = g('pv-atual'); if (pvEl) pvEl.value = cur
+        const dvrEl = g('dado-vida-rest'); if (dvrEl) dvrEl.value = restantes - qtd
+        resultado = `Recuperou ${total} PV (dados: ${rolls.join(', ')}). Restam ${restantes - qtd} dado(s) de vida.`
+    } else {
+        if (cond <= -1) {
+            const pct = cond === -2 ? 0.25 : 0.5
+            cur = Math.max(cur, Math.round(max * pct))
+            resultado = `PV restaurado para ${cur} (${cond === -2 ? '25%' : 'metade'} do máximo).`
+        } else {
+            cur = max
+            resultado = `PV totalmente restaurado (${cur}).`
+        }
+        const pvEl = g('pv-atual'); if (pvEl) pvEl.value = cur
+
+        if (cond === 1 || cond === 2) {
+            const lados = parseInt((gV('dado-vida').match(/\d+/) || [8])[0]) || 8
+            const tempGanho = cond === 1 ? lados : 15
+            const tempEl = g('pv-temp')
+            if (tempEl) tempEl.value = Math.max(gN('pv-temp'), tempGanho)
+            resultado += ` +${tempGanho} PV temporário.`
+        }
+
+        // Repouso recupera todos os slots de magia
+        try {
+            for (let n = 1; n <= 9; n++) ls.set('slot-usado-' + n, 0)
+            renderSpellSlotsUsados()
+        } catch (e) {}
+        resultado += ' Feitiços recuperados.'
+    }
+
+    atualizarPVBar()
+    const resEl = g('descanso-resultado')
+    if (resEl) resEl.textContent = resultado
+    salvar()
+    mostrarToast('✦ Descanso aplicado', 'sucesso', 2200)
 }
 
 function selecionarDado(die) {
@@ -3547,14 +3771,14 @@ window.salvar = function() {
             if (preset && DARK_TEMAS[preset]) {
                 document.body.classList.add(DARK_TEMAS[preset])
             }
-            // Fallback: detecta o tema pela cor --page (Strahd é o padrão)
+            // Fallback: detecta o tema pela cor --page (Umbra é o padrão)
             if (!preset) {
                 const page = getComputedStyle(document.documentElement)
                     .getPropertyValue('--page').trim().toLowerCase()
-                if (page === '#050509') document.body.classList.add('tema-umbra')
-                else document.body.classList.add('tema-strahd')
+                if (page === '#080305') document.body.classList.add('tema-strahd')
+                else document.body.classList.add('tema-umbra')
             }
-            aplicarFamiliaEIcone(preset && TEMAS[preset] ? preset : 'Strahd')
+            aplicarFamiliaEIcone(preset && TEMAS[preset] ? preset : 'Umbra')
         }, 100)
     }
 
