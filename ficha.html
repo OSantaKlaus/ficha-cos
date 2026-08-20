@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Umbra — Ficha de Personagem</title>
+  <title>A Maldição de Strahd — Ficha de Personagem</title>
 
   <!-- Fontes medievais do Google Fonts -->
   <link
@@ -26,13 +26,11 @@
   <link rel="stylesheet" href="css/11-correcoes-v6.css">
   <link rel="stylesheet" href="css/12-temas-unificados.css">
   <link rel="stylesheet" href="css/13-identidade-temas.css">
-  <link rel="stylesheet" href="css/14-alinhamento.css">
-  <link rel="stylesheet" href="css/15-mecanicas-extra.css">
   <link rel="stylesheet" href="strahd-rework.css">
   <link rel="stylesheet" href="tema-umbra.css">
 </head>
 
-<body class="tema-umbra">
+<body class="tema-strahd">
 
   <!-- ════ CABEÇALHO CINEMATOGRÁFICO ════ -->
   <div id="header">
@@ -46,14 +44,12 @@
       <div id="header-ornament-right">✦</div>
     </div>
     <div id="header-fields">
-      <div class="hfield"><label>Classe</label><input id="classe" type="text" oninput="calcularCA()"></div>
+      <div class="hfield"><label>Classe</label><input id="classe" type="text"></div>
       <div class="hfield"><label>Nível</label><input id="nivel" type="number" value="1" min="1" max="20"
           oninput="atualizarTudo()"></div>
       <div class="hfield"><label>Raça</label><input id="raca" type="text"></div>
       <div class="hfield"><label>Antecedente</label><input id="antecedente" type="text"></div>
-      <div class="hfield"><label>Alinhamento</label><input id="alinhamento-display" type="text" readonly
-          style="cursor:pointer" title="Clique para ajustar em Descrição"
-          onclick="showTab('descricao', document.querySelectorAll('.tab-btn')[5])"></div>
+      <div class="hfield"><label>Alinhamento</label><input id="alinhamento" type="text"></div>
       <div class="hfield"><label>Jogador(a)</label><input id="jogador" type="text"></div>
       <div class="hfield hfield-custom" id="hfield-custom-wrap" style="display:none;">
         <label id="hfield-custom-label">Personalizado</label>
@@ -70,7 +66,7 @@
   <!-- ════ BARRA DE ABAS ════ -->
   <div id="tabs">
     <div id="tab-indicator"></div>
-    <button class="tab-btn active" onclick="showTab('atributos', this)"><span class="tab-icon">⬢</span><span class="tab-label">Atributos</span></button>
+    <button class="tab-btn active" onclick="showTab('atributos', this)"><span class="tab-icon">⬟</span><span class="tab-label">Atributos</span></button>
     <button class="tab-btn" onclick="showTab('ataques', this)"><span class="tab-icon">⚔</span><span class="tab-label">Ataques</span></button>
     <button class="tab-btn" onclick="showTab('habilidades', this)"><span class="tab-icon">✦</span><span class="tab-label">Habilidades</span></button>
     <button class="tab-btn" onclick="showTab('magias', this)"><span class="tab-icon">✧</span><span class="tab-label">Magias</span></button>
@@ -91,37 +87,37 @@
           <div class="section-title">Atributos</div>
           <div class="attr-grid">
             <div class="attr-card attr-for" data-attr="for">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>FOR</label>
               <input type="number" id="for" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="for-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('for')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-des" data-attr="des">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>DES</label>
               <input type="number" id="des" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="des-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('des')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-con" data-attr="con">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>CON</label>
               <input type="number" id="con" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="con-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('con')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-int" data-attr="int">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>INT</label>
               <input type="number" id="int" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="int-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('int')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-sab" data-attr="sab">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>SAB</label>
               <input type="number" id="sab" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="sab-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('sab')" style="cursor:pointer">+0</span>
             </div>
             <div class="attr-card attr-car" data-attr="car">
-              <div class="attr-gem">⬢</div>
+              <div class="attr-gem">⬟</div>
               <label>CAR</label>
               <input type="number" id="car" value="10" oninput="atualizarTudo()">
               <span class="attr-mod" id="car-mod" title="Clique para usar no rolador" onclick="usarModNoRolador('car')" style="cursor:pointer">+0</span>
@@ -137,13 +133,9 @@
               <input type="number" id="proficiencia" value="2" oninput="atualizarTudo()">
             </div>
             <div class="insp-card" id="inspiracao" onclick="this.classList.toggle('on')"
-              title="Clique para ativar inspiração — use pra refazer um teste ou dar vantagem a um aliado. 1 por sessão.">
+              title="Clique para ativar inspiração">
               <div class="insp-icon">✦</div>
               <div class="insp-label">INSPIRAÇÃO</div>
-            </div>
-            <div class="prof-card" title="Gaste 1 ponto ao rolar ataque/teste pra somar 1d10. Reseta no início de cada Ato.">
-              <label>ESPERANÇA <span class="btn-reset-esperanca" onclick="g('esperanca').value=3; salvar()" title="Reiniciar (novo Ato)">↺</span></label>
-              <input type="number" id="esperanca" value="3" min="0" max="3" oninput="salvar()">
             </div>
           </div>
 
@@ -240,62 +232,50 @@
                 style="cursor:default;"></div>
           </div>
 
-          <!-- Armadura (Armaduras Reformuladas — dá RD, não afeta CA) -->
+          <!-- Armadura -->
           <div class="section-title">Armadura</div>
           <div class="armadura-box">
+            <div class="arm-row">
+              <span class="arm-label">Nome</span>
+              <input type="text" class="arm-input-text" id="arm-nome">
+            </div>
             <div class="arm-row" style="gap:1rem;">
-              <div style="display:flex;align-items:center;gap:6px;flex:1;">
-                <span class="arm-label">Tipo</span>
-                <select class="arm-select" id="arm-tipo" onchange="aplicarPresetArmadura()" style="flex:1;">
-                  <option value="nenhuma">Nenhuma</option>
-                  <optgroup label="Leves">
-                    <option value="acolchoada">Acolchoada</option>
-                    <option value="couro">Couro</option>
-                    <option value="couro-batido">Couro Batido</option>
-                  </optgroup>
-                  <optgroup label="Médias">
-                    <option value="gibao-peles">Gibão de Peles</option>
-                    <option value="camisao-malha">Camisão de Malha</option>
-                    <option value="brunea">Brunea</option>
-                    <option value="peitoral">Peitoral</option>
-                    <option value="meia-armadura">Meia-Armadura</option>
-                  </optgroup>
-                  <optgroup label="Pesadas">
-                    <option value="cota-aneis">Cota de Anéis</option>
-                    <option value="cota-malha">Cota de Malha</option>
-                    <option value="cota-talas">Cota de Talas</option>
-                    <option value="placas">Armadura de Placas</option>
-                  </optgroup>
-                  <option value="custom">Personalizada…</option>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">CA Base</span>
+                <input type="number" class="arm-input-num" id="arm-ca" value="10" oninput="calcularCA()">
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">+ Des (limite)</span>
+                <select class="arm-select" id="arm-des-limite" onchange="calcularCA()">
+                  <option value="none">Não soma</option>
+                  <option value="full" selected>Completo</option>
+                  <option value="1">Máx +1</option>
+                  <option value="2">Máx +2</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span class="arm-label">+ Atributo</span>
+                <select class="arm-select" id="arm-attr-extra" onchange="calcularCA()">
+                  <option value="none">Nenhum</option>
+                  <option value="for">FOR</option>
+                  <option value="con">CON</option>
+                  <option value="int">INT</option>
+                  <option value="sab">SAB</option>
+                  <option value="car">CAR</option>
                 </select>
               </div>
               <label class="arm-check-label">
                 <input type="checkbox" class="prof-check" id="escudo" onchange="calcularCA()">
-                <span>Escudo <span style="color:var(--ink-light);font-size:0.78rem;">(+1 RD)</span></span>
+                <span>Escudo <span style="color:var(--ink-light);font-size:0.78rem;">(+2)</span></span>
               </label>
-            </div>
-            <div class="arm-row" style="gap:1rem;">
               <div style="display:flex;align-items:center;gap:6px;">
-                <span class="arm-label">Nome</span>
-                <input type="text" class="arm-input-text" id="arm-nome" oninput="salvar()">
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span class="arm-label">RD Física</span>
-                <input type="number" class="arm-input-num" id="arm-rd" value="0" oninput="calcularCA()">
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span class="arm-label">RD Total (c/ escudo)</span>
-                <input type="number" class="arm-input-num" id="arm-rd-total" value="0" readonly style="cursor:default;">
-              </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <span class="arm-label">Bônus Extra CA</span>
+                <span class="arm-label">Bônus Extra</span>
                 <input type="number" class="arm-input-num" id="arm-bonus" value="0" oninput="calcularCA()">
               </div>
-            </div>
-            <div class="arm-row">
-              <span class="arm-label">Traços</span>
-              <input type="text" class="arm-input-text" id="arm-tracos" oninput="salvar()"
-                placeholder="preenchido automaticamente pelo tipo, ou escreva o seu">
+              <label class="arm-check-label">
+                <input type="checkbox" class="prof-check" id="arm-desv">
+                <span style="font-size:0.85rem;">Desv. Furtividade</span>
+              </label>
             </div>
           </div>
 
@@ -337,7 +317,6 @@
           <!-- PV -->
           <div class="section-title">
             Pontos de Vida
-            <span id="pv-estado" class="pv-estado-badge">Saudável</span>
             <span id="pv-heart" class="heart-critical" style="display:none;" title="HP CRÍTICO!">❤</span>
           </div>
           <div style="display:flex;gap:0.75rem;margin-bottom:0.5rem;">
@@ -641,40 +620,6 @@
           <textarea class="note" id="aparencia" style="min-height:90px;"></textarea>
         </div>
         <div>
-          <div class="section-title">Alinhamento</div>
-          <div class="alin-widget">
-            <span class="frame-corner fc-tl"></span><span class="frame-corner fc-tr"></span>
-            <span class="frame-corner fc-bl"></span><span class="frame-corner fc-br"></span>
-            <div class="alin-nome" id="alinhamento-nome">Neutro</div>
-            <div class="alin-eixo">
-              <div class="alin-labels"><span class="alin-lado alin-lado-leal">Leal</span><span class="alin-lado alin-lado-caotico">Caótico</span></div>
-              <div class="alin-track">
-                <input type="range" class="alin-slider alin-slider-lc" id="alinhamento-lc" min="-100" max="100" value="0" step="20" oninput="atualizarAlinhamento()">
-                <div class="alin-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              </div>
-            </div>
-            <div class="alin-eixo">
-              <div class="alin-labels"><span class="alin-lado alin-lado-bom">Bom</span><span class="alin-lado alin-lado-mau">Mau</span></div>
-              <div class="alin-track">
-                <input type="range" class="alin-slider alin-slider-bm" id="alinhamento-bm" min="-100" max="100" value="0" step="20" oninput="atualizarAlinhamento()">
-                <div class="alin-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="section-title">Corrupção <span class="corr-nivel" id="corrupcao-nivel">Ilesa</span></div>
-          <div class="alin-widget corr-widget">
-            <span class="frame-corner fc-tl"></span><span class="frame-corner fc-tr"></span>
-            <span class="frame-corner fc-bl"></span><span class="frame-corner fc-br"></span>
-            <div class="alin-eixo">
-              <div class="alin-labels"><span class="corr-lado-inicio">Ilesa</span><span class="corr-lado-fim">Consumida</span></div>
-              <div class="alin-track">
-                <input type="range" class="alin-slider corr-slider" id="corrupcao" min="0" max="100" value="0" step="5" oninput="atualizarCorrupcao()">
-                <div class="alin-ticks corr-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-              </div>
-            </div>
-          </div>
-
           <div class="section-title">Personalidade</div>
           <div class="desc-field"><label>Traços de Personalidade</label><textarea class="note" id="personalidade"
               style="min-height:65px;"></textarea></div>
@@ -805,43 +750,6 @@
       </div>
 
     </div><!-- fim dados-scroll -->
-  </div>
-
-  <!-- ════ DESCANSO ════ -->
-  <button id="btn-descanso" onclick="toggleDescanso()" title="Descanso">💤</button>
-  <div id="descanso-panel">
-    <div class="dados-head">
-      <span class="dados-head-title">💤 Descanso</span>
-      <button class="cp-close" onclick="toggleDescanso()">✕</button>
-    </div>
-    <div class="dados-scroll">
-
-      <div class="descanso-tipos">
-        <button class="descanso-tab-btn active" id="descanso-tab-folga" onclick="setDescansoTipo('folga', this)">Folga</button>
-        <button class="descanso-tab-btn" id="descanso-tab-repouso" onclick="setDescansoTipo('repouso', this)">Repouso</button>
-      </div>
-
-      <div class="dados-mod-wrap" style="margin-top:0.75rem;">
-        <label>CONDIÇÃO DO DESCANSO</label>
-        <select id="descanso-condicao" style="width:100%;margin-top:4px;">
-          <option value="-2">Deplorável (-2 / 25%)</option>
-          <option value="-1">Ruim (-1 / metade)</option>
-          <option value="0" selected>Comum (+0 / total)</option>
-          <option value="1">Boa (+1 / total + PV temp)</option>
-          <option value="2">Excelente (+2 / total + 15 PV temp)</option>
-        </select>
-      </div>
-
-      <div class="dados-mod-wrap" id="descanso-folga-opts" style="margin-top:0.6rem;">
-        <label>DADOS DE VIDA A GASTAR (restam <span id="descanso-dv-rest">—</span>)</label>
-        <input type="number" id="descanso-dados-qtd" value="1" min="1" style="width:100%;margin-top:4px;">
-      </div>
-
-      <button id="btn-rolar-dado" style="margin-top:0.85rem;" onclick="aplicarDescanso()">💤 APLICAR DESCANSO</button>
-
-      <div id="descanso-resultado" style="margin-top:0.75rem;font-size:0.85rem;color:var(--ink);text-align:center;"></div>
-
-    </div>
   </div>
 
   <!-- ════ EDITOR DE TEMA ════ -->

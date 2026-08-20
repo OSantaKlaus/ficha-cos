@@ -819,7 +819,22 @@ body.tema-strahd .skill-row:hover {
   background: rgba(180,20,40,0.10) !important;
 }
 
-/* .skill-check agora é um checkbox customizado via var(--gold) — não precisa mais de override por tema */
+/* .skill-check usa var(--gold) por padrão, mas no tema Strahd o destaque
+   de "ativo" em todo o resto da ficha é vermelho-sangue (save-dot.on,
+   skill-val etc.) — sem este override o check dourado quase não contrasta
+   com o fundo escuro-avermelhado e a marcação parece não ter efeito. */
+body.tema-strahd .skill-check:checked,
+body.tema-strahd .prof-check:checked {
+  background: #c82040 !important;
+  border-color: #e03050 !important;
+  box-shadow: 0 0 8px rgba(200,30,60,0.55) !important;
+}
+
+body.tema-strahd .skill-check:hover,
+body.tema-strahd .prof-check:hover {
+  border-color: #e03050 !important;
+  box-shadow: 0 0 6px rgba(200,30,60,0.35) !important;
+}
 
 body.tema-strahd .skill-val {
   color: #c82040 !important;
