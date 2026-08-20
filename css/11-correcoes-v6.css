@@ -1,0 +1,74 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ════════════════════════════════════════════════════════════
+   CORREÇÕES DEFINITIVAS v6
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. Barra lateral dos section-title: tamanho/forma agora vêm de
+      css/13-identidade-temas.css (glifo por família, 22px). Este
+      bloco travava min/max-width em 4px e escondia o glifo novo.
+      Mantido só flex-shrink pra não deixar o navegador esticar. ── */
+.section-title::before {
+  flex-shrink: 0 !important;
+}
+
+/* ── section-bar injetado via JS: escondido (::before resolve) ── */
+.section-title .section-bar {
+  display: none !important;
+}
+
+/* ── 2. Coluna esquerda de Atributos (250px)
+      Zera letter-spacing para caber "TESTES DE RESISTÊNCIA".
+      Botão de colapso absolutamente posicionado. ── */
+#atributos-grid > div:first-child .section-title {
+  letter-spacing: 0px !important;
+  padding-right: 30px !important;
+}
+#atributos-grid > div:first-child .section-title .section-collapse-btn {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-left: 0 !important;
+}
+
+/* ── 3. Modo retrato: regras de estilo removidas (feature
+      desativada, ver nota em 01-base-v3.css). Mantido apenas
+      o has-image, que também vale pro modo token. ── */
+#char-img-wrap.has-image #img-placeholder {
+  display: none !important;
+}
+
+/* ── 4. Modo retrato OCULTADO — só Token disponível ── */
+#btn-modo-retrato {
+  display: none !important;
+}
+
+/* ── 5. PV no quick-stats: garante texto visível mesmo
+      quando qs-val recebe pv-low/pv-crit (cor no texto,
+      sem background colorido — esse só vai para .pv-bar). ── */
+.qs-val.pv-low,
+.qs-val.pv-crit {
+  background: transparent !important;
+}
+.qs-val.pv-low  { color: var(--pv-bar-low)  !important; }
+.qs-val.pv-crit { color: var(--pv-bar-crit) !important; }
+
+/* ── 6. Tema noturno: quick-stats usa var(--parch) do
+      próprio tema, evitando cor de fundo inconsistente. ── */
+body.tema-ladino #quick-stats {
+  background: var(--parch) !important;
+  border-bottom-color: var(--gold) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.35) !important;
+}
+body.tema-ladino .qs-item:hover {
+  background: rgba(212,175,55,0.08) !important;
+}
+body.tema-ladino .qs-val {
+  color: var(--ink) !important;
+}

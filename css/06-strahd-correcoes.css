@@ -1,0 +1,274 @@
+/* ============================================================
+   Arquivo gerado a partir da divisão do style.css original.
+   ORDEM DE CARGA IMPORTA — muitas regras aqui dependem de
+   vir depois/antes de outras (cascata CSS + !important).
+   Não reordenar os <link> no ficha.html.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   CORREÇÕES v3.1 + TEMA CURSE OF STRAHD
+═══════════════════════════════════════════════════════════ */
+
+/* ── FIX 1: Tabela de Ataques — contraste igual ao de Munições ──
+   O problema: inputs da tabela de ataques herdavam cor do tema
+   escuro mas sem o background correto, ficando "apagados".
+   Solução: forçar color:var(--ink) em todos os inputs das tabelas,
+   e garantir que o thead use a mesma paleta escura das duas tabelas.
+────────────────────────────────────────────────────────────── */
+.attacks-table td input,
+.mun-table td input {
+    color: var(--ink) !important;
+    background: transparent !important;
+}
+
+/* thead igual entre as duas tabelas */
+.attacks-table thead tr,
+.mun-table thead tr {
+    background: var(--ink-mid) !important;
+}
+
+.attacks-table th,
+.mun-table th {
+    color: var(--parch-mid) !important;
+    opacity: 1 !important;
+}
+
+/* Hover das linhas usa variável em vez de cor fixa */
+.attacks-table tbody tr:hover,
+.mun-table tbody tr:hover {
+    background: var(--parch-deep) !important;
+}
+
+/* No tema escuro especificamente */
+body.tema-ladino .attacks-table td input,
+body.tema-ladino .mun-table td input,
+body.tema-strahd .attacks-table td input,
+body.tema-strahd .mun-table td input {
+    color: var(--ink) !important;
+}
+
+/* ── FIX 2: Linhas no topo do header ──
+   border-top: 4px double cria linhas duplas que ficam estranhas
+   nos temas escuros. Substituímos por uma linha simples mais elegante
+   com pseudo-elemento que respeita o tema.
+────────────────────────────────────────────────────────────── */
+#header {
+    border-top: none !important;  /* remove o double problemático */
+    border-bottom: 2px solid var(--gold) !important;
+}
+
+/* Linha superior ornamental via pseudo-elemento — mais controlável */
+#header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--gold) 20%,
+        var(--gold-pale) 50%,
+        var(--gold) 80%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+/* ── FIX 3: Campo "PERSONAGEM" / header-sub visível ──
+   Antes usava rgba(var(--gold-rgb, 160,100,20),0.55) — hardcoded, invisível no escuro.
+   Agora usa variável de tema com opacidade adequada.
+────────────────────────────────────────────────────────────── */
+#header-sub {
+    color: var(--ink-muted) !important;
+    opacity: 0.85;
+    font-size: 0.68rem !important;
+    letter-spacing: 7px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEMA CURSE OF STRAHD
+   ── Inspirado na ficha do Adam: bordô profundo, vermelho
+      sangue, névoa violeta. Atmosfera gótica de Barovia.
+════════════════════════════════════════════════════════════ */
+body.tema-strahd {
+    background-image:
+        radial-gradient(ellipse at 30% 10%, rgba(180,20,40,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 90%, rgba(100,0,20,0.10) 0%, transparent 50%);
+}
+
+/* Inputs */
+body.tema-strahd input,
+body.tema-strahd textarea,
+body.tema-strahd select {
+    background: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+
+body.tema-strahd input:focus,
+body.tema-strahd textarea:focus,
+body.tema-strahd select:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px rgba(200,30,50,0.2) !important;
+}
+
+body.tema-strahd input::placeholder,
+body.tema-strahd textarea::placeholder {
+    color: var(--ink-muted) !important;
+    opacity: 0.65;
+}
+
+/* Cards e painéis */
+body.tema-strahd .panel,
+body.tema-strahd .exp-card,
+/* (fundo padronizado — ver css/12-temas-unificados.css) */
+
+/* ── exp-card internos: header, body e campos ── */
+body.tema-strahd .exp-header {
+    background: var(--parch-mid) !important;
+}
+body.tema-strahd .exp-header:hover {
+    background: var(--parch-deep) !important;
+}
+body.tema-strahd .exp-body {
+    background: var(--parch) !important;
+    border-top-color: rgba(180,40,60,0.18) !important;
+}
+body.tema-strahd .recurso-recarga-select {
+    background-color: var(--parch-mid) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 6px center !important;
+}
+body.tema-strahd .recurso-recarga-select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* Quick-stats */
+body.tema-strahd #quick-stats {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(30,8,12,0.92) !important;
+    border-bottom-color: rgba(200,30,50,0.5) !important;
+}
+
+/* Painéis flutuantes */
+body.tema-strahd #dados-panel,
+body.tema-strahd #tema-panel {
+    background: var(--parch) !important;
+    border-color: rgba(200,30,50,0.3) !important;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.7) !important;
+}
+
+/* Btn de tema e dados — Strahd: vermelho vivo */
+body.tema-strahd #btn-tema,
+body.tema-strahd #btn-dados {
+    background: var(--gold) !important;
+    border: 2px solid var(--gold-light) !important;
+    color: #f0e0e4 !important;
+    box-shadow: 0 4px 20px rgba(200,32,58,0.6), 0 2px 8px rgba(0,0,0,0.7) !important;
+}
+body.tema-strahd #btn-tema:hover,
+body.tema-strahd #btn-dados:hover {
+    background: var(--gold-light) !important;
+    box-shadow: 0 6px 28px rgba(200,32,58,0.8), 0 2px 8px rgba(0,0,0,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+/* Scrollbar */
+body.tema-strahd ::-webkit-scrollbar-track { background: #0d0508; }
+body.tema-strahd ::-webkit-scrollbar-thumb { background: #3a1018; border-color: #0d0508; }
+body.tema-strahd ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Condições */
+body.tema-strahd .cond-btn {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    color: var(--ink) !important;
+}
+body.tema-strahd .cond-btn:hover,
+/* (cor de condição ativa padronizada — usa var(--red)/var(--green)
+   semânticos do base, não a cor do tema; ver css/01-base.css) */
+
+/* Tags */
+body.tema-strahd .prof-tag {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+    color: var(--ink) !important;
+}
+
+/* Armadura box */
+body.tema-strahd .armadura-box {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.2) !important;
+}
+
+/* Inspiração */
+body.tema-strahd .insp-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.3) !important;
+}
+body.tema-strahd .insp-card.on {
+    background: rgba(200,30,50,0.2) !important;
+    border-color: var(--gold) !important;
+}
+
+/* Proficiência */
+body.tema-strahd .prof-card {
+    background: var(--parch-mid) !important;
+    border-color: rgba(180,40,60,0.22) !important;
+}
+
+/* PV bar wrap */
+/* (fundo da barra de PV padronizado — transparente, ver css/01-base.css) */
+
+/* Toasts */
+body.tema-strahd #toast-container .toast {
+    background: var(--parch-mid) !important;
+    border-color: rgba(200,30,50,0.35) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
+/* Ornamentos do header mais suaves */
+body.tema-strahd #header-ornament-left,
+body.tema-strahd #header-ornament-right {
+    color: var(--gold) !important;
+    opacity: 0.45;
+}
+
+/* Select options */
+body.tema-strahd select option {
+    background: var(--parch-mid);
+    color: var(--ink);
+}
+
+/* Death circles */
+body.tema-strahd .dcircle {
+    background: var(--parch-mid) !important;
+}
+
+/* ── Cargas de habilidades: legibilidade agora universal (ver .card-field em css/01-base-v3.css) ── */
+body.tema-strahd .card-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c82032' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+}
+body.tema-strahd .card-field label {
+    color: var(--ink-light) !important;
+}
+/* .cargas-badge legibilidade agora universal (ver css/01-base-v3.css) */
+body.tema-strahd .recurso-recarga-select,
+body.tema-strahd .recurso-dado-input,
+body.tema-strahd .recurso-desc {
+    background: var(--parch) !important;
+    color: var(--ink) !important;
+    border-color: rgba(180,40,60,0.25) !important;
+}
+
+/* Attr cards */
+/* (fundo padronizado — ver css/12-temas-unificados.css) */
+
