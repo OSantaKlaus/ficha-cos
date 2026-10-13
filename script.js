@@ -31,9 +31,9 @@ const personagemId = new URLSearchParams(location.search).get('id') || 'personag
 
 // Helper: acessa o localStorage sempre com prefixo do personagem
 const ls = {
-    get: k   => localStorage.getItem(personagemId + ':' + k),
-    set: (k, v) => localStorage.setItem(personagemId + ':' + k, v),
-    del: k   => localStorage.removeItem(personagemId + ':' + k),
+    get: k   => appStorage.getItem(personagemId + ':' + k),
+    set: (k, v) => appStorage.setItem(personagemId + ':' + k, v),
+    del: k   => appStorage.removeItem(personagemId + ':' + k),
 }
 
 /* ============================================================

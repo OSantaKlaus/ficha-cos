@@ -400,6 +400,7 @@
       .wstep span:not(.wstep-num) { display: none; }
     }
   </style>
+<script src="storage-ns.js"></script>
 </head>
 <body>
 
@@ -445,6 +446,9 @@
           <span>⇧</span> Restaurar
         </button>
         <input type="file" id="input-restaurar-backup" class="input-arquivo-oculto" accept="application/json,.json" onchange="importarBackupCompleto(event)">
+        <button class="btn-secundario" id="btn-limpar-antigos" style="display:none" onclick="limparDadosAntigos()" title="Apaga as cópias antigas (sem separação) de personagens que já foram importados">
+          <span>🗑</span> Limpar antigos
+        </button>
         <button class="btn-criar" onclick="abrirWizard()">
           <span>✦</span> Criar Personagem
         </button>
@@ -681,15 +685,15 @@
 
   function listarPersonagens() {
     const lista = []
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
+    for (let i = 0; i < appStorage.length; i++) {
+      const key = appStorage.key(i)
       if (!key || !key.endsWith(':ficha-dnd')) continue
       try {
-        const d = JSON.parse(localStorage.getItem(key))
+        const d = JSON.parse(appStorage.getItem(key))
         const id = key.slice(0, -':ficha-dnd'.length)
-        const img = localStorage.getItem(id + ':ficha-dnd-img') || null
+        const img = appStorage.getItem(id + ':ficha-dnd-img') || null
         let condicoes = []
-        try { condicoes = JSON.parse(localStorage.getItem(id + ':condicoes') || '[]') } catch(e) {}
+        try { condicoes = JSON.parse(appStorage.getItem(id + ':condicoes') || '[]') } catch(e) {}
         lista.push({
           id, img, condicoes,
           nome: d.nome || id, classe: d.classe || '—',
@@ -759,11 +763,11 @@
   function excluirPersonagem(id, nome) {
     if (!confirm(`Excluir permanentemente o personagem "${nome}"?\n\nIsso apagará todos os dados salvos.`)) return
     const toDelete = []
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
+    for (let i = 0; i < appStorage.length; i++) {
+      const key = appStorage.key(i)
       if (key && key.startsWith(id + ':')) toDelete.push(key)
     }
-    toDelete.forEach(k => localStorage.removeItem(k))
+    toDelete.forEach(k => appStorage.removeItem(k))
     renderPersonagens()
   }
 
@@ -773,9 +777,9 @@
     if (!lista.length) { alert('Nenhum personagem para fazer backup ainda.'); return }
 
     const dados = {}
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      dados[key] = localStorage.getItem(key)
+    for (let i = 0; i < appStorage.length; i++) {
+      const key = appStorage.key(i)
+      dados[key] = appStorage.getItem(key)
     }
 
     const backup = {
@@ -815,7 +819,7 @@
         if (!confirm(aviso)) { event.target.value = ''; return }
 
         Object.keys(backup.dados).forEach(key => {
-          localStorage.setItem(key, backup.dados[key])
+          appStorage.setItem(key, backup.dados[key])
         })
 
         alert('Backup restaurado com sucesso!')
@@ -1016,7 +1020,7 @@
     const id   = base + '-' + Date.now().toString(36)
     const key  = id + ':ficha-dnd'
 
-    if (localStorage.getItem(key)) {
+    if (appStorage.getItem(key)) {
       if (!confirm(`Já existe um personagem com o slug "${id}". Deseja substituí-lo?`)) return
     }
 
@@ -1028,8 +1032,8 @@
       'Ladino':'Ladino','Mago':'Mago','Monge':'Monge',
       'Paladino':'Paladino','Patrulheiro':'Patrulheiro',
     }
-    localStorage.setItem(id + ':tema-preset', CLASS_THEME[classe] || 'Strahd')
-    localStorage.setItem(key, JSON.stringify(ficha))
+    appStorage.setItem(id + ':tema-preset', CLASS_THEME[classe] || 'Strahd')
+    appStorage.setItem(key, JSON.stringify(ficha))
     window.location.href = 'ficha.html?id=' + id
   }
 
